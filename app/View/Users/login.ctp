@@ -9,10 +9,10 @@
 	<?= $this->Form->input("password",array('type'=>'password','Xsize'=>30)); ?>
 	<div class='row'>
 	<div class='col-md-6 center_align'>
-		<?= $this->Form->save("Sign In",array('divclass'=>'center_align','cancel'=>false)); ?>
+		<?= $this->Form->save("Sign In",array('name'=>'submit','divclass'=>'center_align','cancel'=>false)); ?>
 	</div>
 	<div class='col-md-6 center_align'>
-		<?#= $this->Form->save("Create Account",array('divclass'=>'center_align','cancel'=>false,'class'=>'btn-primary')); ?>
+		<?= $this->Form->submit("Create Account",array('name'=>'submit','divclass'=>'center_align','cancel'=>false,'class'=>'btn btn-primary')); ?>
 	</div>
 	</div>
 	<br/>

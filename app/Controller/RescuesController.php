@@ -3,7 +3,7 @@ class RescuesController extends AppController
 {
 	var $uses = array('Rescue');
 
-	var $globalActions = array('index','search','rescuer_add','rescuer_edit'); # What doesn't require the rescue to be specified.
+	var $globalActions = array('index','search','search_bar','rescuer_add','rescuer_edit'); # What doesn't require the rescue to be specified.
 
 	function beforeFilter()
 	{
@@ -15,9 +15,17 @@ class RescuesController extends AppController
 		return parent::beforeFilter();
 	}
 
+	function search_bar()
+	{
+		parent::search_bar();
+		$this->Rescue->autoid = false;
+		# Within certain radius? Near you?
+		$this->set("rescueCount", $this->Rescue->count());
+	}
+
 	function index()
 	{
-		# Dashboard/intro page
+		$this->setAction("search");
 	}
 
 	function rescuer_edit() # Signup/edit
@@ -25,8 +33,14 @@ class RescuesController extends AppController
 		# Prompt for Rescue record.
 		if(!empty($this->request->data))
 		{
-			if($this->Rescue->save($this->request->data))
+			if($this->Rescue->save($this->request->data)) # Should save user_id to me automatically.
 			{
+				# Update user account too, link to this rescue...
+				#
+				if(!$this->user("manager"))
+				{
+					$this->user("rescue_id", $this->Rescue->id); # Updates session too.
+				}
 				$rescue = $this->Rescue->read();
 				return $this->setSuccess(
 					(!empty($this->request->params['rescue']) ? 
@@ -82,7 +96,13 @@ class RescuesController extends AppController
 		Configure::load("Rescue.breeds");
 		$breeds = Configure::read("Breeds");
 		$this->set("breeds", $breeds);
-		$species = array_combine(array_keys($breeds), array_keys($breeds));
+		$species = array();
+		# Pluralize species...
+		foreach(array_keys($breeds) as $spec)
+		{
+			$species[$spec] = Inflector::pluralize($spec);
+		}
+
 		$this->set("species",$species);
 
 		return parent::beforeRender();

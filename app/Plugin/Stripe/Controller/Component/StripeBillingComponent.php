@@ -2,7 +2,7 @@
 # Stripe may take 7 days to pay, but at least they can deposit into a personal checking account
 # Braintree pays out in 3 days but requires a business account, requiring monthly fees, business license ($), etc...
 #
-App::uses("Vendor", "Stripe.Vendor", array('file'=>"init.php"));
+App::import("Vendor", "Stripe.Stripe", array('file'=>"Stripe/init.php"));
 
 class StripeBillingComponent extends Component
 {
@@ -355,7 +355,5 @@ class StripeBillingComponent extends Component
 		}
 		return $charge;
 	}
-
-	function chargeOA
 
 }

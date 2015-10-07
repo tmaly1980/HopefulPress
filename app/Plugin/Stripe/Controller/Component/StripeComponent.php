@@ -99,7 +99,7 @@ class StripeComponent extends Component {
 		);
 
 		if (!class_exists('Stripe')) {
-			throw new CakeException('Stripe API Libaray is missing or could not be loaded.');
+			throw new CakeException('Stripe API Library is missing or could not be loaded.');
 		}
 
 		// if mode is set in bootstrap.php, use it. otherwise, Test.

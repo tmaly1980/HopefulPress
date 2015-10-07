@@ -1,7 +1,5 @@
-<? $rescue = $this->Site->get("rescue_enabled"); ?>
-<? $animals = $rescue ? "adoptables" : "animal profiles"; ?>
+<? $animals = "adoptables" ?>
 <? $id = $adoptable['Adoptable']['id']; ?>
-<? if($rescue) { ?>
 <? $this->start("post_title_header");?>
 <?
 $statusClasses = array(
@@ -14,10 +12,9 @@ $statusClass = $statusClasses[$status];
 ?>
 	<small class='white <?= $statusClass ?> padding5 inline-block'><?= strtoupper($adoptable['Adoptable']['status']); ?></small>
 <? $this->end("post_title_header");?>
-<? } ?>
 <? $this->start("title_controls");?>
 <? if($this->Html->can_edit()) { ?>
-	<?= $this->Html->edit("Update", array('rescuer'=>1,'action'=>'edit','id'=>$id,'rescue'=>$rescuename)); ?>
+	<?= $this->Html->edit("Update", array('rescuer'=>1,'action'=>'edit','id'=>$id,'rescue'=>$adoptable['Rescue']['hostname'])); ?>
 <? } ?>
 <? $this->end("title_controls");?>
 <? $this->start("subtitle_nav"); ?>
@@ -25,23 +22,37 @@ $statusClass = $statusClasses[$status];
 		<?= $this->Share->share(true); ?>
 	</div>
 	
-	<? if(!empty($this->request->params['prefix'])) { ?>
+	<? /* if(!empty($this->request->params['prefix'])) { ?>
 		<?= $this->Html->back("Search Database", array('action'=>'search')); ?>
-	<? } else { ?>
+	<? } else { */ ?>
 		<?= $this->Html->back("View all $animals", array('action'=>'index','rescue'=>$rescuename)); ?>
-	<? } ?>
+	<? # } # XXX TODO 'back to search' - w/session saved search criteria... ?>
 <? $this->end("subtitle_nav"); ?>
 
 
 <? $this->start("post_details_content");?>
-<div align='center'>
-	<? if($rescue) { ?>
-		<?= $this->Html->link("Adopt Me", "/rescue/adoptables/adopt/$id", array('class'=>'dialog controls btn btn-primary btn-lg bold')); ?>
+<div>
+	<? if(empty($rescuename)) { # Not on rescue page ?>
+	<div class='border rounded padding25 margin25'>
+		<h4>Courtesy of</h4>
+		<?= $this->Html->link($adoptable['Rescue']['title'], array('controller'=>'rescues','action'=>'view','rescue'=>$adoptable['Rescue']['hostname'])); ?>
+		<br/>
+		<? if(!empty($adoptable['Rescue']['city'])) { ?>
+		Location: <?= $adoptable['Rescue']['city'] ?>, <?= $adoptable['Rescue']['state'] ?>
+		<? } else if(!empty($adoptable['Rescue']['zip_code'])) { ?>
+			<!-- XXX DETERMINE CITY FROM ZIP CODE -->
+		<? } ?>
+
+		<? # XXX CALCULATE DISTANCE FROM SEARCH  CRITERIA OR GPS ?>
+	</div>
 	<? } ?>
-		<? if(!$rescue || !empty($adoptable['Adoptable']['enable_sponsorship'])) { ?>
+</div>
+<div align='center'>
+		<?= $this->Html->link("Adopt Me", array('action'=>'adopt','id'=>$id,'rescue'=>$rescuename), array('class'=>'controls btn btn-primary btn-lg bold')); ?>
+		<? if(!empty($adoptable['Adoptable']['enable_sponsorship'])) { ?>
 		&nbsp;
 		&nbsp;
-			<?= $this->Html->link("Sponsor Me", ($rescue?"/rescue/adoptables":"/sanctuary/animals")."/sponsor/$id", array('class'=>'controls btn btn-warning btn-lg')); ?>
+			<?= $this->Html->link("Sponsor Me", array('action'=>'sponsor','id'=>$id,'rescue'=>$rescuename), array('class'=>'controls btn btn-warning btn-lg')); ?>
 		<? } ?>
 		<?#= $this->Html->link("Foster Me", "/mockup/adoptables/foster/$id", array('class'=>'dialog controls btn btn-success btn-lg')); ?>
 </div>

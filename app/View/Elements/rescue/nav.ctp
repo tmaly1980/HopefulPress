@@ -42,17 +42,17 @@
 				<li><?= $this->Html->link("Current Adoptables", array('controller'=>'adoptables','rescue'=>$rescuename)); ?></li>
 				<? } ?>
 				<? if(!empty($nav['adoptableFormEnabled'])) { ?>
-				<li><?= $this->Html->link("Adoption Form", '/adoption/form'); ?></li>
+				<li><?= $this->Html->link("Adoption Form", array('controller'=>'adoption_forms','rescue'=>$rescuename)); ?></li>
 				<? } ?>
 				<? if(!empty($nav['adoptionStoryCount'])) { ?>
-				<li><?= $this->Html->link("Success Stories", '/adoption/stories'); ?></li>
+				<li><?= $this->Html->link("Success Stories", array('controller'=>'adoption_stories','rescue'=>$rescuename)); ?></li>
 				<?  } ?>
 			</ul>
 		</li>
 		<?  } ?>
 		<? if(!empty($nav['donationsEnabled'])) { ?>
 		<li class=''>
-			<?= $this->Html->link("Donate", "/donation"); ?>
+			<?= $this->Html->link("Donate", array('plugin'=>'donation','controller'=>'donations','rescue'=>$rescuename)); ?>
 		</li>
 		<? } ?>
 		<? if(!empty($nav['volunteerEnabled'])) { ?>

@@ -1,9 +1,11 @@
 <? $this->assign("page_title", "Local Rescues"); ?>
-<? if($this->Html->me()) { ?>
 <? $this->start("title_controls"); ?>
-	<?= $this->Html->add("Add a rescue", array('rescuer'=>1,'action'=>'add')); ?>
-<? $this->end(); ?>
+<? if($this->Html->me() && ($myrescue = $this->Html->user("Rescue.hostname"))) { ?>
+	<?= $this->Html->link("My rescue", array('action'=>'view',$myrescue),array('class'=>'btn btn-primary')); ?>
+<? } else { ?>
+	<?= $this->Html->add("Add my rescue", array('rescuer'=>1,'action'=>'add')); ?>
 <? } ?>
+<? $this->end(); ?>
 <div class='index'>
 <? if(empty($rescues)) { ?>
 <div class='nodata'>

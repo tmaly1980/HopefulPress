@@ -42,6 +42,7 @@ form .radio label
 	font-weight: bold;
 }
 
+.form-inline label,
 form .inline-radio label,
 form .inline-checkbox label.form-control,
 form .inline-checkbox fieldset label
@@ -75,11 +76,13 @@ form .required fieldset label:after
 	display: none;
 }
 
+/*
 form div.submit {
 	border: 0;
-	/*clear: both;*/
+	//clear: both;
 	margin-top: 10px;
 }
+*/
 form label {
 	margin-right: 5px;
 	display: block; /* bootstrap handles better */
@@ -309,7 +312,7 @@ p.error em {
 }
 
 /* Buttons and button links */
-input[type=submit],
+/* input[type=submit], */
 .actions ul li a,
 .actions a {
 	font-weight:normal;
@@ -341,7 +344,7 @@ input[type=submit],
 	border-color: #acacac;
 	text-decoration: none;
 }
-input[type=submit]:active,
+/*input[type=submit]:active, */
 .actions ul li a:active,
 .actions a:active {
 	background: #eee;

@@ -4,6 +4,9 @@ App::uses('AuthComponent','Controller/Component');
 
 class UserAuthComponent extends AuthComponent # PASS THRU!
 {
+	var $errorMsg = 'Email or password is incorrect';
+
+	# This happens for even logins!
 	var $authError = 'Please sign in to continue';
 	var $flash = array(
 		'element'=>'alert',
@@ -168,11 +171,13 @@ class UserAuthComponent extends AuthComponent # PASS THRU!
 		return $this->id();
 	}
 
+
 	function beforeRender(Controller $controller)
 	{
 		if(empty($controller)) { return; } # Error.
 
-		$controller->set("current_user", $this->user()); #  returns array within Session.Auth.User
+		$controller->set("current_user", $this->user($this->userModel)); #  returns array within Session.Auth.User
+		# Can always call $this->Session->user() or $this->Html->user() to get other objects, ie Rescue, etc.
 		$controller->set("me", $this->me());
 	}
 

@@ -3,8 +3,8 @@ App::uses("Paypal", "Paypal.Lib");
 
 class DonationsController extends AppController
 {
-	var $components = array('Stripe.Stripe');
-	var $uses = array('Donation.Donation','Paypal.PaypalCredential','Stripe.StripeCredential','Donation.DonationPage','Stripe.StripeCredential');
+	var $components = array();#'Stripe.Stripe');
+	var $uses = array('Donation.Donation','Donation.DonationPage');#,'Paypal.PaypalCredential','Stripe.StripeCredential','Donation.DonationPage','Stripe.StripeCredential');
 	var $helpers = array('Stripe.Stripe','Paypal.Paypal');
 
 	function ipn() # Paypal response.
@@ -303,11 +303,13 @@ class DonationsController extends AppController
 	}
 	function _credentials_stripe()
 	{
+		if(empty($this->StripeCredential)) { return null; }
 		return $this->StripeCredential->count() ? $this->StripeCredential->first() : null;
 	}
 
 	function _credentials_paypal()
 	{
+		if(empty($this->PaypalCredential)) { return null; }
 		#$pp = Configure::read("Paypal"); # FOR NOW...
 		#return $pp;
 		return $this->PaypalCredential->count() ? $this->PaypalCredential->first() : null;

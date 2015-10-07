@@ -80,6 +80,14 @@ class AdoptablesController extends AppController
 
 	}
 
+	function search_bar()
+	{
+		parent::search_bar();
+
+		$this->Adoptable->autoid = false;
+		$this->set("adoptableCount", $this->Adoptable->count(array("status"=>'Available')));
+	}
+
 	function view($id=null)
 	{
 		if(empty($id) && !empty($this->request->params['id'])) { $id =$this->request->params['id']; } 

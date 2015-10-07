@@ -53,7 +53,7 @@ if(!HostInfo::site_specified())
 	Router::connect('/adopt', array('controller' => 'adoptables', 'action' => 'index')); 
 
 	Configure::write("www",true);
-	Configure::write("layout",'portal');
+	Configure::write("layout",'default'); # Moved to default...
 	Configure::write("portal",true);
 	# Multisite is off.
 
@@ -64,8 +64,11 @@ if(!HostInfo::site_specified())
 	Router::connect('/rescue/:rescue', array('controller' => 'rescues', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
 	Router::connect('/rescue/:rescue/about', array('controller' => 'rescues', 'action' => 'about'),array('rescue'=>'[\w_-]+'));
 	Router::connect('/rescue/:rescue/contact', array('controller' => 'rescues', 'action' => 'contact'),array('rescue'=>'[\w_-]+'));
+	Router::connect('/rescue/:rescue/donate', array('plugin'=>'donation','controller' => 'donation_pages', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
+	Router::connect('/rescue/:rescue/donate/*', array('plugin'=>'donation','controller' => 'donations'),array('rescue'=>'[\w_-]+')); # IPN
 
 	# Adoptable.
+	Router::connect('/adoptable/:id', array('controller'=>'adoptables','action'=>'view'),array('id'=>'\d+'));
 	Router::connect('/rescue/:rescue/adoptable/:id', array('controller'=>'adoptables','action'=>'view'),array('rescue'=>'[\w_-]+','id'=>'\d+'));
 	Router::connect('/rescue/:rescue/adoptable/:id/:action', array('controller'=>'adoptables'),array('rescue'=>'[\w_-]+','id'=>'\d+'));#View
 	Router::connect('/rescuer/rescue/:rescue/adoptable/:id/:action', array('rescuer'=>1,'controller'=>'adoptables'),array('rescue'=>'[\w_-]+','id'=>'\d+')); # Edit

@@ -97,7 +97,7 @@ class UserCoreController extends UserCoreAppController {
 
 	public function admin_index() {
 		$this->model()->recursive = 0;
-		$this->set($this->things(), $this->model()->findAll(array("email IS NOT NULL AND email != ''")));
+		$this->set($this->things(), $this->model()->findAll(array("{$this->modelClass}.email IS NOT NULL AND {$this->modelClass}.email != ''")));
 		$this->set("site_owner", $this->model()->read(null, $this->Multisite->get("user_id")));
 	}
 
@@ -153,7 +153,7 @@ class UserCoreController extends UserCoreAppController {
 			$this->setFlash("Sorry, that link is invalid.", array('action'=>'login'));
 		}
 
-		$user = $this->model()->first(array('email'=>$email,'invite'=>$code));
+		$user = $this->model()->first(array("{$this->modelClass}.email"=>$email,'invite'=>$code));
 
 		if(empty($user)) { 
 			$this->setFlash("Sorry, that link is no longer valid.", array('action'=>'login'));
@@ -175,7 +175,7 @@ class UserCoreController extends UserCoreAppController {
 				$this->redirect($this->loginHome);
 			} else {
 			*/
-				$this->Auth->login($user[$this->modelClass]); # Methinks I need to get closer.
+				$this->Auth->login($user);#[$this->modelClass]); # Methinks I need to get closer.
 
 				#error_log("GOING TO /initialize");
 				# Delay clearing invite only until once they have password set.
@@ -237,7 +237,7 @@ class UserCoreController extends UserCoreAppController {
 			if($this->model()->save($this->request->data))
 			{
 				$user = $this->model()->read();
-				$this->Auth->login($user[$this->modelClass]); # Refresh session.
+				$this->Auth->login($user);#[$this->modelClass]); # Refresh session.
 				$this->_post_initialize($oldUser, $user); # App level definition
 				$this->redirect($this->loginHome);#setFlash("Your account has been created", "/admin");
 				# Should have tip with first-time login stuff... how to login again...
@@ -261,7 +261,7 @@ class UserCoreController extends UserCoreAppController {
 				$user = $this->model()->read();
 				#$this->Auth->login($user['User']); # Update session.
 				# This might be ok XXX
-				$this->Auth->login($user[$this->modelClass]); # Update session.
+				$this->Auth->login($user);#[$this->modelClass]); # Update session.
 				$redirect = $this->Auth->accountSaveRedirect;
 				error_log("ACTSAVE_REDIR=$redirect");
 				if($redirect === true) { 
@@ -312,12 +312,12 @@ class UserCoreController extends UserCoreAppController {
 				}
 				$this->loadModel($model);
 				list($plugin,$model) = pluginSplit($model);
-				$conditions[$userField] = $this->request->data['User'][$userField];
+				$conditions["{$model}.$userField"] = $this->request->data['User'][$userField];
 				$conditions[$passwordField] = $this->$model->hash($this->request->data['User'][$passwordField]);
 
 				if($this->$model->hasField("disabled"))
 				{
-					$conditions[] = "(disabled IS NULL OR disabled = 0)";
+					$conditions[] = "({$model}.disabled IS NULL OR {$model}.disabled = 0)";
 				}
 
 				$user = $this->$model->find('first', array('recursive'=>2,'conditions'=>$conditions));
@@ -327,12 +327,11 @@ class UserCoreController extends UserCoreAppController {
 				}
 			}
 
-			if(!empty($user) && $this->Auth->login($user['User']))
+			if(!empty($user) && $this->Auth->login($user))#['User']))
 			{
 				$this->postLogin(); # Implement custom redirect here?
-				$this->redirect($this->Auth->redirectUrl());
 			} else {
-				$this->setError("Email or password is incorrect");
+				$this->setError(!empty($this->Auth->errorMsg) ? $this->Auth->errorMsg : "Email or password is incorrect");
 			}
 		}
 		return false;
@@ -356,6 +355,8 @@ class UserCoreController extends UserCoreAppController {
 				), array('User.id'=>$this->Auth->user('id'))
 			);
 		}
+
+		return $this->redirect($this->Auth->redirectUrl());
 	}
 
 	function manager_login()
@@ -389,7 +390,7 @@ class UserCoreController extends UserCoreAppController {
 
 		if(!empty($this->request->data[$this->modelClass][$userField]))
 		{
-			$user = $this->model()->first(array($userField=>$this->request->data[$this->modelClass][$userField]));
+			$user = $this->model()->first(array("{$this->modelClass}.$userField"=>$this->request->data[$this->modelClass][$userField]));
 			if(!empty($user))
 			{
 				$this->model()->id = $user[$this->modelClass][$this->model()->primaryKey];
@@ -433,7 +434,7 @@ class UserCoreController extends UserCoreAppController {
 				}
 
 				if((empty($id) && $this->autoinvite) || !empty($this->request->data[$this->modelClass]['invite'])) { # Creating OR explicit notification.
-					$id = $this->{$this->modelClass}->field($this->{$this->modelClass}->primaryKey,array($userField=>$this->request->data[$this->modelClass][$userField])); # Better way since saveAll() doesnt keep ->id
+					$id = $this->{$this->modelClass}->field($this->{$this->modelClass}->primaryKey,array("{$this->modelClass}.$userField"=>$this->request->data[$this->modelClass][$userField])); # Better way since saveAll() doesnt keep ->id
 					$this->_send_invite($id);
 				} else {
 					$this->setSuccess("The user account has been ".(!empty($id)?"updated":"created"),array('action'=>'index'));

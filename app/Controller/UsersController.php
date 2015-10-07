@@ -5,7 +5,7 @@ class UsersController extends UserCoreController {
 #
 	var $uses = array('User');
 
-	var $layout = 'admin';
+	#var $layout = 'admin';
 
 	var $loginHome = '/'; # For post-initialize
 
@@ -18,11 +18,50 @@ class UsersController extends UserCoreController {
 	);
 	*/
 
-	function rescuer_login() { 
-		# If they clicked on 'create account', make it for them, if it doesn't exist.
-		return $this->login(); 
+	function user_setup()  # Same as stuff in account()
+	{
+		if(!empty($this->request->data))
+		{
+			$this->User->id = $this->me();
+			if($this->User->save($this->request->data))
+			{
+				$user = $this->User->read();
+				$this->Auth->login($user);
+
+				$redirect = $this->Auth->redirect();
+				if(empty($redirect))
+				{
+					$redirect = '/'; # Fail safe.
+				}
+				return $this->setSuccess("Your account details have been updated.",$redirect);
+			} else {
+				$this->setError("Could not update account: ".$this->User->errorString());
+			}
+		}
 	}
-	# Add volunteer, etc...
+	
+	# Facebook login should be able to grab email and name
+
+	function login()
+	{
+		$submit = !empty($this->request->data['submit']) ? $this->request->data['submit'] : null;
+		error_log("S=".print_r($this->request->data,true));
+		error_log("SUB=$submit");
+		if(preg_match("/Create/", $submit))
+		{
+			# Encrypt password...
+			$this->request->data['User']['password'] = $this->User->hash($this->request->data['User']['password']);
+			if($this->User->save($this->request->data)) # Checks for duplicate email, lousy password,etc
+			{
+				$user = $this->User->read();
+				$this->Auth->login($user);
+				$this->setSuccess("Your account has been created.",array('user'=>1,'action'=>'setup'));
+			} else {
+				return $this->setError("Could not create account: ".$this->User->errorString());
+			}
+		}
+		return parent::login();
+	}
 
 	function admin_index()
 	{

@@ -23,12 +23,14 @@
 		<?= $this->Form->input("phone",array('div'=>'col-md-6')); ?>
 		<?= $this->Form->input("address",array('div'=>'col-md-6')); ?>
 		<?= $this->Form->input("address_2",array('div'=>'col-md-6','label'=>'Apt, Suite, etc')); ?>
-		<?= $this->Form->input("city",array('div'=>'col-md-6','required'=>1)); ?>
-		<?= $this->Form->input("state",array('div'=>'col-md-6','required'=>1)); ?>
+		<?= $this->Form->input("city",array('div'=>'col-md-6','required'=>1,'default'=>$this->Session->read("location.city"))); ?>
+		<?= $this->Form->input("state",array('div'=>'col-md-6','required'=>1,'default'=>$this->Session->read("location.region_code"))); ?>
 		<?= $this->Form->input("country",array('div'=>'col-md-4')); ?>
-		<?= $this->Form->input("zip_code",array('div'=>'col-md-4','required'=>1)); ?>
-		<?= $this->Form->input("service_area",array('div'=>'col-md-4','type'=>'number','label'=>'Service Area (mi)','note'=>'How far away do you accept or adopt animals?')); ?>
+		<?#= $this->Form->input("zip_code",array('div'=>'col-md-4','required'=>0)); ?>
+		<?#= $this->Form->input("service_area",array('div'=>'col-md-4','type'=>'number','label'=>'Service Area (mi)','note'=>'How far away do you accept or adopt animals?')); ?>
+
 		</div>
+
 	</div>
 	<div class='col-md-6'>
 
@@ -43,21 +45,19 @@
 		$('#TwitterUrl').autoprepend('http:\/\/');
 		</script>
 
+		<?= $this->Form->input_group("paypal_email",array('before'=>$this->Html->fa('gift'),'note'=>'To enable donations, please provide your PayPal email')); ?>
 
-		<h3>Species, Breeds &amp; Capacity</h3>
-		specific species or breeds you mainly work with, plus how many you can care for at one time
+
+		<h3>Restrictions</h3>
+			Specific species or breeds you mainly work with, plus how many you can care for at one time
 		<div>
 			<? foreach($species as $spec=>$specName) { ?>
-				<?= $this->Form->radio("restrictions.species",array($spec=>$specName)); ?>
+				<?= $this->Form->checkbox("restrictions.species",array('value'=>$spec,'label'=>$specName)); ?>
 				<div style='display: none;'>
 					<?= $this->Form->input("restrictions.capacity",array('note'=>'How many of this species/breed')); ?>
 					something species as a whole, and/or breed specific.
 					<?= $this->Form->input("restrictions.0.breed",array('options'=>$species,'type'=>'checkbox','class'=>'species')); ?>
 					<?= $this->Form->input("restrictions.0.capacity",array('note'=>'How many of this species/breed')); ?>
-				</div>
-				<div class='alert alert-info'>
-					Your current availability is determined by # of active listings and your capacity listed here. If you have animals
-					under your care not listed on this site, change your capacity listed here to reflect that.
 				</div>
 				<!-- do we ask how many they have currently? will site automatically-->
 			<? } ?>

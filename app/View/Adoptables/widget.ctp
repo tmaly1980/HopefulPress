@@ -15,11 +15,15 @@
 <div class='<?= !empty($carousel) ? "carousel-inner" : "" ?>' role="listbox">
 <? for($i  = 0;  $i < count($adoptables); $i++) { 
 	$adoptable = $adoptables[$i]; 
-	$imgid = !empty($adoptable['Adoptable']['page_photo_id']) ? $adoptable['Adoptable']['page_photo_id'] : null;
+	$imgid = !empty($adoptable['Adoptable']['rescue_photo_id']) ? $adoptable['Adoptable']['rescue_photo_id'] : null;
+	if(empty($imgid) && !empty($adoptable['Photos'][0]['id']))
+	{
+		$imgid = $adoptable['Photos'][0]['id'];
+	}
 ?>
 <div class='item <?= empty($i) ? "active" : "" ?> <?= $carousel ? "" : "left" ?> width200 maxheight300 center_align <?= empty($carousel) ? "padding25":""?>'>
 	<div class='maxheight225'>
-	<?= $this->Html->link($this->Html->image(!empty($imgid)?"/page_photos/page_photos/thumb/$imgid/200x150/1":"/rescue/images/nophoto.png", array('class'=>'border')), 
+	<?= $this->Html->link($this->Html->image(!empty($imgid)?array('controller'=>'adoptable_photos','action'=>'thumb',$imgid,'200x200',1,'rescue'=>$adoptable['Rescue']['hostname']):"/rescue/images/nophoto.png", array('class'=>'border')), 
 		array('action'=>'view',$adoptable['Adoptable']['id'],'rescue'=>$adoptable['Rescue']['hostname'])); ?> 
 	</div>
 	<div class='minheight75'>

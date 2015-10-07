@@ -14,6 +14,9 @@ class CoreAppHelper extends Helper
 		$user = $this->Session->read("Auth.User");
 		list($model,$key) = pluginSplit($fullKey);
 
+		# user('Rescue') will grab Auth.User.Rescue
+		# user('rescuer') will try Auth.User.rescuer (and fail), then try Auth.User.User.rescuer as fail-safe 
+
 		# If no explicit model, try 'User', IF key not directly set in var. (worst case, will be null as expected)
 		if(empty($model) && !isset($user[$key]))
 		{

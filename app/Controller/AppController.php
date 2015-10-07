@@ -25,6 +25,7 @@ class AppController extends AppCoreController {
 			'loginRedirect'=>'/',#user/dashboard',
 			'logoutRedirect'=>'/',
 			'publicAllowed'=>true,
+			'errorMsg'=>"Email or password is incorrect. If you don't think you have an account, you can sign up below",
 			'accountSaveRedirect'=>true, # after own account is saved; true = referer
 			'prefixes'=>array( # Map prefixes to access levels
 				'user'=>true, # /user/* for logged in users
@@ -126,6 +127,8 @@ class AppController extends AppCoreController {
 		# Load possible rescue details
 		$this->loadRescue();
 
+		$this->loadUser(); # Location, etc.
+
 		# XXX TODO Auth should implement site_id scope if not manager prefix
 		return parent::beforeFilter();
 	}
@@ -144,11 +147,6 @@ class AppController extends AppCoreController {
 	{
 		if(empty($this->Multisite)) { return null; }
 		return $this->Multisite->site($var);
-	}
-	function user($key)
-	{
-		#return $this->Auth->user("User.$key");
-		return $this->Auth->user($key); # User is stored as Session.Auth, NOT Session.Auth.User
 	}
 
 	function beforeRender()
@@ -530,8 +528,44 @@ class AppController extends AppCoreController {
 				$nav['adoptionEnabled']=true;
 			}
 
+			if(!empty($rescue['Rescue']['paypal_email']))
+			{
+				$nav['donationsEnabled'] = true;
+
+			}
+
 			$this->set("nav", $nav);
 		}
+	}
+
+	# Generic search bar, re-usable for rescue or adoptable search...
+
+	function search_bar()
+	{
+		# ??? how can I reset the search to be near ME? 'clear search' option?
+		if(!empty($this->request->query['clear']))
+		{
+			$this->Session->delete("Search");
+		}
+		# Get/save my location into session.
+		if(!$this->Session->read("Search.location"))
+		{
+			# Use IP search for now.
+			$location = $this->geoip();
+			if(!empty($location))
+			{
+				#print_r($location);
+				$city_state = join(", ", array($location['city'], $location['region_code']));
+				$this->Session->write("Search.location",$city_state);
+			}
+		}
+	}
+
+	function loadUser()
+	{
+		# Get from session or account if better (allow them to change???)
+		$this->Session->write("location", $this->geoip());
+		# This can be retrieved for searches on initial  page load, etc.
 	}
 
 }

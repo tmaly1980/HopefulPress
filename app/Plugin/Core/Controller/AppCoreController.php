@@ -366,6 +366,20 @@ class AppCoreController extends Controller
 		return $this->Auth->me(); # in UserCore Auth
 	}
 
+	function user($key,$val=null) # Retrieve OR UPDATE user session info
+	{
+		if(!isset($val))
+		{
+			return $this->Auth->user($key);
+		} else if(!empty($key) && isset($val) && $this->Auth->me()) { # Update account
+			$this->{$this->Auth->userModel}->id = $this->Auth->me();
+			$this->{$this->Auth->userModel}->saveField($key,$val);
+			$user = $this->{$this->Auth->userModel}->read();
+			return $this->Auth->login($user); 
+			# issues with keeping keys??? but we want to access Rescue for User...
+		}
+	}
+
 	function validateField($model,$field = null)
 	{
 		if(empty($field)) { $field = $model; $model = null; }
@@ -627,6 +641,27 @@ class AppCoreController extends Controller
 	function isAuthorized() # $this->Auth->prefixes is likely good enough.
 	{
 		return true;
+	}
+
+	function geoip()  # Location of user, kinda.
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+
+		# Functions.
+		$rc = App::import("Vendor", "Tracker.geoip");
+		$rc = App::import("Vendor", "Tracker.geoipcity");
+                $gi = geoip_open(APP."/Plugin/Tracker/Vendor/GeoLiteCity.dat", GEOIP_STANDARD);
+                $result = geoip_record_by_addr($gi, $ip);
+                geoip_close($gi);
+		if(empty($result)) { # FAKE
+			$result = new Object();
+			$result->ip = $ip;
+			$result->country_code = 'US';
+			$result->city = 'Cherry Hill';
+			$result->region_code = 'NJ';
+		}
+                $geoip = get_object_vars($result);
+		return $geoip;
 	}
 
 }

@@ -2,8 +2,8 @@
 App::uses("SingletonController", "Singleton.Controller");
 class DonationPagesController extends SingletonController
 {
-	var $components = array('Stripe.StripeBilling');
-	var $uses = array('Donation.DonationPage','Donation.Donation','Stripe.StripeCredential');
+	var $components = array();#'Stripe.StripeBilling');
+	var $uses = array('Donation.DonationPage','Donation.Donation');#,'Stripe.StripeCredential');
 	var $helpers = array('Stripe.Stripe');
 
 	function view($id=null)
@@ -18,7 +18,7 @@ class DonationPagesController extends SingletonController
 		# After donation, go back to non-ssl (passed to paypal)
 		# Also interpret all links
 
-		$this->set("donationsEnabled", $this->StripeCredential->count());
+		$this->set("donationsEnabled", !empty($this->StripeCredential) ? $this->StripeCredential->count() : null);
 
 		return parent::view($id);
 	}

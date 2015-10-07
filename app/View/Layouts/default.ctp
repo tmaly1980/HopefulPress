@@ -8,19 +8,21 @@ if($admin_controls = $this->fetch("admin_controls")) {
 } 
 ?>
 <?  $this->prepend("before_maincol"); # ALL ADMIN STUFF GETS MENTIONED HERE, SO main.ctp CAN RELOAD PREVIEWS OF PAZGE ?>
-	<?= !$this->fetch("login_disabled") ? $this->element("admin/login") : null; ?>
+	<?= $this->element("portal/header"); ?>
 	<?= $this->fetch("before_maincol_postlogin"); ?>
 <? $this->end(); ?>
-<? if($this->Html->me()) { # Admin wrapper content ?>
 <? $this->start("prepend_body"); ?>
+<? $this->end(); ?>
+<? if($this->Html->me()) { # Admin wrapper content ?>
+<? /* $this->start("prepend_body"); ?>
 	<input type='checkbox' id='leftnav-trigger' class='nav-trigger push'/>
 	<input type='checkbox' id='rightnav-trigger' class='nav-trigger'/>
-<? $this->end("prepend_body"); ?>
+<? $this->end("prepend_body"); */ ?>
 <? $this->start("prepend_maincol"); ?>
 	<?= $this->element("admin/notices"); ?>
 <? $this->end("prepend_maincol"); ?>
 <?  $this->start("before_maincol"); # LEFT ADMIN BAR ?>
-<? if(!$this->fetch("leftnav_disabled")) { ?>
+<? if(false && !$this->fetch("leftnav_disabled")) { ?>
 	<label for="leftnav-trigger">
 		<?= $this->Html->g("menu-hamburger btn btn-primary"); ?>
 	</label>
