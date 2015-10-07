@@ -1,0 +1,175 @@
+dovecot/dovecot.conf:
+
+mail_location = maildir:/var/mail/vhosts/%d/%n
+
+mail_privileged_group = mail
+
+passdb sql {
+	args = /etc/dovecot/dovecot-sql-users.conf
+}
+passdb sql {
+	args = /etc/dovecot/dovecot-sql-mail_users.conf
+}
+passdb sql {
+	args = /etc/dovecot/dovecot-sql-volunteers.conf
+}
+passdb sql {
+	args = /etc/dovecot/dovecot-sql-fosters.conf
+}
+userdb sql {
+        args = /etc/dovecot/dovecot-sql-users.conf
+}
+userdb sql {
+        args = /etc/dovecot/dovecot-sql-mail_users.conf
+}
+userdb sql {
+        args = /etc/dovecot/dovecot-sql-volunteers.conf
+}
+userdb sql {
+        args = /etc/dovecot/dovecot-sql-fosters.conf
+}
+
+===================================
+mysql:
+
+grant all on hp.* to mail@localhost identified by  'mail1';
+
+=================================
+
+dovecot/dovecot-sql-users.conf:
+
+connect = host=127.0.0.1 dbname=hp user=mail password=mail1
+default_pass_scheme = SHA
+password_query = SELECT NULL AS password, 'Y' AS nopassword, CONCAT(username,'@',domain) AS username FROM users JOIN sites ON users.site_id = sites.id WHERE sites.email_enabled = 1 AND users.username = '%n' AND sites.domain = '%d' AND users.password = SHA2(CONCAT('AKSLJASKLjlkd393kllasdKLAJKL29sklalkASKL','%w'),256)
+user_query = SELECT 5000 AS uid, 5000 AS gid FROM users JOIN sites ON users.site_id = sites.id WHERE sites.email_enabled = 1 AND users.username = '%n' AND sites.domain = '%d'
+
+################################
+dovecot-sql-mail_users.cf
+
+connect = host=127.0.0.1 dbname=hp user=mail password=mail1
+default_pass_scheme = SHA
+password_query = SELECT NULL AS password, 'Y' AS nopassword, CONCAT(username,'@',domain) AS username FROM mail_users JOIN sites ON mail_users.site_id = sites.id WHERE sites.email_enabled = 1 AND mail_users.username = '%n' AND sites.domain = '%d' AND mail_users.password = SHA2(CONCAT('AKSLJASKLjlkd393kllasdKLAJKL29sklalkASKL','%w'),256)
+user_query = SELECT 5000 AS uid, 5000 AS gid FROM mail_users JOIN sites ON mail_users.site_id = sites.id WHERE sites.email_enabled = 1 AND mail_users.username = '%n' AND sites.domain = '%d'
+
+################################
+dovecot-sql-fosters.cf
+
+connect = host=127.0.0.1 dbname=hp user=mail password=mail1
+default_pass_scheme = SHA
+password_query = SELECT NULL AS password, 'Y' AS nopassword, CONCAT(username,'@',domain) AS username FROM rescue_fosters JOIN sites ON rescue_fosters.site_id = sites.id WHERE sites.email_enabled = 1 AND rescue_fosters.username = '%n' AND sites.domain = '%d' AND rescue_fosters.password = SHA2(CONCAT('AKSLJASKLjlkd393kllasdKLAJKL29sklalkASKL','%w'),256)
+user_query = SELECT 5000 AS uid, 5000 AS gid FROM rescue_fosters JOIN sites ON rescue_fosters.site_id = sites.id WHERE sites.email_enabled = 1 AND rescue_fosters.username = '%n' AND sites.domain = '%d'
+
+
+################################
+dovecot-sql-volunteers.cf
+
+connect = host=127.0.0.1 dbname=hp user=mail password=mail1
+default_pass_scheme = SHA
+password_query = SELECT NULL AS password, 'Y' AS nopassword, CONCAT(username,'@',domain) AS username FROM rescue_volunteers JOIN sites ON rescue_volunteers.site_id = sites.id WHERE sites.email_enabled = 1 AND rescue_volunteers.username = '%n' AND sites.domain = '%d' AND rescue_volunteers.password = SHA2(CONCAT('AKSLJASKLjlkd393kllasdKLAJKL29sklalkASKL','%w'),256)
+user_query = SELECT 5000 AS uid, 5000 AS gid FROM rescue_volunteers JOIN sites ON rescue_volunteers.site_id = sites.id WHERE sites.email_enabled = 1 AND rescue_volunteers.username = '%n' AND sites.domain = '%d'
+
+===================================
+postfix/main.cf:
+
+mail_spool_directory = /var/mail/vhosts/
+
+virtual_mailbox_domains = mysql:/etc/postfix/mysql-domains.cf, hash:/etc/postfix/virtual-domains
+virtual_mailbox_base = /var/mail/vhosts
+virtual_mailbox_maps = mysql:/etc/postfix/mysql-users.cf, mysql:/etc/postfix/mysql-mail_users.cf, mysql:/etc/postfix/mysql-volunteers.cf, mysql:/etc/postfix/mysql-fosters.cf, hash:/etc/postfix/virtual-users
+virtual_minimum_uid = 100
+virtual_uid_maps = hash:/etc/postfix/virtual-uid static:5000
+virtual_gid_maps = static:5000
+virtual_alias_maps = mysql:/etc/postfix/mysql-aliases.cf, hash:/etc/postfix/virtual-aliases
+
+==================================
+postfix/mysql-domains.cf:
+
+user = mail
+password = mail1
+dbname = hp
+hosts = 127.0.0.1
+query = SELECT domain FROM sites WHERE email_enabled = 1 AND domain = '%s'
+
+
+
+=================================
+postfix/virtual-domains:
+
+worldpeacewebsites.com worldpeacewebsites.com/
+
+
+================================
+postfix/mysql-users.cf:
+
+user = mail
+password = mail1
+dbname = hp
+hosts = 127.0.0.1
+query = SELECT CONCAT(sites.domain, '/', users.username,'/') FROM users JOIN sites ON users.site_id = sites.id WHERE users.username  = '%u' AND sites.domain = '%d'
+
+================================
+postfix/mysql-mail_users.cf:
+
+user = mail
+password = mail1
+dbname = hp
+hosts = 127.0.0.1
+query = SELECT CONCAT(sites.domain, '/', mail_users.username,'/') FROM mail_users JOIN sites ON mail_users.site_id = sites.id WHERE mail_users.username  = '%u' AND sites.domain = '%d'
+
+================================
+postfix/mysql-volunteers.cf:
+
+user = mail
+password = mail1
+dbname = hp
+hosts = 127.0.0.1
+query = SELECT CONCAT(sites.domain, '/', rescue_volunteers.username,'/') FROM rescue_volunteers JOIN sites ON rescue_volunteers.site_id = sites.id WHERE rescue_volunteers.username  = '%u' AND sites.domain = '%d'
+
+================================
+postfix/mysql-fosters.cf:
+
+user = mail
+password = mail1
+dbname = hp
+hosts = 127.0.0.1
+query = SELECT CONCAT(sites.domain, '/', rescue_fosters.username,'/') FROM rescue_fosters JOIN sites ON rescue_fosters.site_id = sites.id WHERE rescue_fosters.username  = '%u' AND sites.domain = '%d'
+
+
+=============================
+postfix/virtual-users:
+
+tomas@worldpeacewebsites.com worldpeacewebsites.com/tomas/
+
+
+===============================
+postfix/virtual-uid:
+
+tomas@worldpeacewebsites.com 500
+
+
+===============================
+postfix/mysql-aliases.cf:
+
+user = mail
+password = mail1
+dbname = hp
+hosts = 127.0.0.1
+query = SELECT recipients FROM mail_aliases JOIN sites ON mail_aliases.site_id = sites.id WHERE sites.email_enabled = 1 AND mail_aliases.alias = '%u' AND sites.domain = '%d'
+
+
+
+===============================
+postfix/virtual-aliases:
+
+.... (doesnt matter)
+
+================================
+/etc/passwd:
+
+vmail:x:5000:5000::/home/vmail:
+
+================================
+/etc/group:
+
+vmail:x:5000:dovecot
+

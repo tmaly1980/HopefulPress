@@ -1,0 +1,39 @@
+DROP TABLE IF EXISTS forum_discussions;
+CREATE TABLE IF NOT EXISTS forum_discussions
+(
+	id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	title VARCHAR(255),
+	user_id INTEGER UNSIGNED,
+	idurl VARCHAR(255),
+
+	description TEXT,
+
+	created DATETIME,
+	modified DATETIME
+);
+
+DROP TABLE IF EXISTS forum_messages;
+CREATE TABLE IF NOT EXISTS forum_messages
+(
+	id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	discussion_id INTEGER UNSIGNED,
+	user_id INTEGER UNSIGNED,
+	notified BOOL DEFAULT FALSE,
+
+	message TEXT,
+
+	created DATETIME,
+	modified DATETIME
+);
+
+DROP TABLE IF EXISTS forum_message_likes;
+CREATE TABLE IF NOT EXISTS forum_message_likes
+(
+	id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	message_id INTEGER UNSIGNED,
+	user_id INTEGER UNSIGNED, # Who did the liking
+
+	created DATETIME,
+	modified DATETIME
+);
+

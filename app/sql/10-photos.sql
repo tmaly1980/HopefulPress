@@ -1,0 +1,46 @@
+#DROP TABLE IF EXISTS photos;
+CREATE TABLE IF NOT EXISTS photos
+(
+	id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	site_id INTEGER UNSIGNED NOT NULL,
+	user_id INTEGER UNSIGNED,
+	photo_album_id INTEGER UNSIGNED,
+	ix INTEGER UNSIGNED NULL,
+
+	photo_url VARCHAR(255), # from internet
+
+	title VARCHAR(255),
+	path VARCHAR(255),
+	filename VARCHAR(255),
+	ext VARCHAR(6),
+	type VARCHAR(24), # MIME
+	size INTEGER UNSIGNED,
+
+	caption TEXT,
+
+	created DATETIME,
+	modified DATETIME
+);
+
+#DROP TABLE IF EXISTS photo_albums;
+CREATE TABLE IF NOT EXISTS photo_albums
+(
+	id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	site_id INTEGER UNSIGNED,
+	user_id INTEGER UNSIGNED,
+
+	url VARCHAR(255),
+
+
+	title VARCHAR(255),
+	description TEXT,
+
+	created DATETIME,
+	modified DATETIME
+);
+
+ALTER TABLE photo_albums ADD sticky BOOL DEFAULT FALSE;
+
+# Nov 18th 2013
+ALTER TABLE photos ADD rotate INTEGER; # positive or negative ok
+

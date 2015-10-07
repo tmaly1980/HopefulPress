@@ -1,0 +1,1 @@
+	<?= $this->Html->link($this->Html->image("/rescue/images/features/thumbs/$src.png",array('class'=>''))."<br/>".(!empty($caption)?$caption:''), "/rescue/images/features/$src.png", array('class'=>'lightbox','title'=>(!empty($caption)?$caption:null))); ?>

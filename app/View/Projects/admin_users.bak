@@ -1,0 +1,34 @@
+<?#= $this->Admin->unloadWarn(); ?>
+<? $pid = !empty($this->data['Project']['id']) ? $this->data['Project']['id'] : null; ?>
+<?= $this->assign("page_title", "Project Users"); ?>
+<? $this->start("admin_controls"); ?>
+	<?= $this->Html->add("Add User", array('admin'=>1,'action'=>'user_add','project_id'=>$pid)); ?>
+	<?= $this->Html->back("View project", array('admin'=>false,'action'=>'view','project_id'=>$pid)); ?>
+<? $this->end("admin_controls"); ?>
+<div class="projects form">
+<?php echo $this->Form->create('Project'); ?>
+	<?= $this->Form->hidden('id'); ?>
+
+<div class='row'>
+	<div class='right'>
+	</div>
+
+	<h3>Project Members</h3>
+
+	<div class='col-md-6'>
+		<h3>Project Admins</h3>
+		XXX TODO
+
+		<h3>Project Members</h3>
+		XXX TODO 
+	</div>
+</div>
+
+<div align='center'>
+	<?= $this->Form->save("Update Settings", array('Xclass'=>'block marginbottom10 margintop25')); ?>
+</div>
+
+<div class='clear'></div>
+<?php echo $this->Form->end(); ?>
+</div>
+

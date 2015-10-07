@@ -1,0 +1,9 @@
+<? $this->assign("page_title", "Information About Your Website"); ?>
+<div  class='form'>
+	<div  class='alert alert-info'>
+	</div>
+	<?= $this->Form->create("IntakeSurvey"); ?>
+
+	<?= $this->Form->save("Submit information",array('cancel'=>false)); ?>
+	<?= $this->Form->end(); ?>
+</div>

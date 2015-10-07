@@ -1,0 +1,42 @@
+#DROP TABLE IF EXISTS donation_pages;
+CREATE TABLE IF NOT EXISTS donation_pages
+(
+	id INTEGER UNSIGNED  NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	site_id INTEGER UNSIGNED,
+
+	title VARCHAR(200),
+
+	page_photo_id INTEGER UNSIGNED,
+
+	introduction TEXT,
+
+	wishlist TEXT,
+
+	created DATETIME,
+	modified DATETIME
+);
+
+
+#DROP TABLE IF EXISTS donations;
+CREATE TABLE IF NOT EXISTS donations
+(
+	id INTEGER UNSIGNED  NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	site_id INTEGER UNSIGNED,
+
+	stripeToken VARCHAR(128),
+
+	campaign_id INTEGER UNSIGNED,
+	adoptable_id INTEGER UNSIGNED,
+
+	name VARCHAR(128),
+	email VARCHAR(128),
+	amount INTEGER UNSIGNED,
+
+	recurring BOOL DEFAULT FALSE,
+
+	note TEXT,
+
+	created DATETIME,
+	modified DATETIME
+);
+

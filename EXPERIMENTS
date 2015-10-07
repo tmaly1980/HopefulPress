@@ -1,0 +1,32 @@
+IF YOU CANT BE OKAY WITH THINGS BEING TOTALLY BROKEN, YOURE EXPECTING TOO MUCH. *** LAUNCH WITHOUT TESTING - "Im _WORKING ON_ this project and I'd like some feedback..." ***
+
+* I DONT NEED TO HAVE EVERYTHING FIGURED OUT - I CAN THROW TOGETHER MY BEST GUESS AND THEN **EXPERIMENT** TO FIGURE OUT SOMETHING BETTER...
+
+test at the last SECOND - or AFTER the fact
+
+INSIST on a deadline - cut out the excess
+
+**** there will be LOTS of possibilities - many HARD choices to make - do not feel the need to implement EVERYTHING.... time will be spent on making those choices, and experimenting.
+
+##############################
+THINGS TO CONSIDER
+
+- for possible features to further develop - list publically so people can discuss.... show screenshots from other templates and start a discussion... what people say might not be right (ie "yeah that sounds good") - always think/decide afterward.... ask for input but make own decisions
+
+##############################
+DECENT TEST CASES - things I just dont know about, maybe so/not - only worth bothering with work AFTER I have some customers
+
+* even if something is "a good idea", hold off until exact ideas can be verified with real customers - so time not wasted on the wrong solution
+
+RESIST MAKING CHANGES NOW - every scenario is a legitimate experiment, and can be measured.
+------------------------
+
+- Making all pages (home, contact, about, etc) inline edit style (somehow with page photo add - small corner icon?)? or keeping as separate edit - or changing all other pages (downloads/links/etc) to edit separate
+
+- Access control - how customizable? how restrictive? can all users modify everything? add topics? homepage? about page? links/downloads? - do each section have custom access levels assigned? (with defaults)
+
+- User profiles/branding - does it make sense for users to have their own title (self-editable), and access to a user list page - ie to contact? should there be further contact info, more profile details, etc...? will this help collaboration? email/phone for questions/contact help? read-only profile pages for users? list of recent content?
+
+- Pages/news/projects/etc separate summary from detailed content? (auto-extract summary may be confusing)
+
+- Mobile optimization!!!!!! wait until someone asks!

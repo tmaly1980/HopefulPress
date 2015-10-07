@@ -1,0 +1,21 @@
+[submodule "app/Plugin/Core"]
+	path = app/Plugin/Core
+	url = /local/sites/repo/Core
+[submodule "app/Plugin/UserCore"]
+	path = app/Plugin/UserCore
+	url = /local/sites/repo/UserCore
+[submodule "app/Plugin/Chart"]
+	path = app/Plugin/Chart
+	url = /local/sites/repo/Chart
+[submodule "app/Plugin/Multisite"]
+	path = app/Plugin/Multisite
+	url = /local/sites/repo/Multisite
+[submodule "app/Plugin/CakeLess"]
+	path = app/Plugin/CakeLess
+	url = /local/sites/repo/CakeLess
+[submodule "app/Plugin/BoostCake"]
+	path = app/Plugin/BoostCake
+	url = /local/sites/repo/BoostCake
+[submodule "app/Plugin/Core/Core"]
+	path = app/Plugin/Core/Core
+	url = /local/sites/repo/Core

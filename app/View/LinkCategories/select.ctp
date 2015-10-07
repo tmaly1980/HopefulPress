@@ -1,0 +1,1 @@
+<?= $this->Form->input("Link.link_category_id", array('label'=>'Category (optional)', 'empty'=>'- None -','options'=>$linkCategories, 'label_alt'=>"or <a href='/link_categories/add' class='json' data-update='LinkCategory'>Add new category</a>")); ?>

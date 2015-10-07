@@ -1,0 +1,46 @@
+#DROP TABLE IF EXISTS site_designs;
+CREATE TABLE IF NOT EXISTS site_designs (
+	id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	site_id INTEGER UNSIGNED,
+
+	title VARCHAR(64),
+	subtitle VARCHAR(64),
+
+	theme VARCHAR(32),
+	color1 VARCHAR(6),
+	color2 VARCHAR(6),
+
+	facebook_url VARCHAR(255),
+	twitter_url VARCHAR(255),
+	right_text TEXT,
+
+	created DATETIME,
+	modified DATETIME
+);
+
+ALTER TABLE site_designs ADD site_design_logo_id INTEGER UNSIGNED;
+
+#DROP TABLE IF EXISTS site_design_logos;
+CREATE TABLE IF NOT EXISTS site_design_logos
+(
+	id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	site_id INTEGER UNSIGNED NOT NULL,
+	user_id INTEGER UNSIGNED,
+
+	title VARCHAR(255),
+	path VARCHAR(255),
+	thumb_path VARCHAR(255),
+	caption TEXT,
+	filename VARCHAR(255),
+	ext VARCHAR(6),
+	type VARCHAR(24), # MIME
+	size INTEGER UNSIGNED,
+	ix INTEGER UNSIGNED NULL,
+	crop_x INTEGER UNSIGNED, 
+	crop_y INTEGER UNSIGNED,
+	crop_w INTEGER UNSIGNED, 
+	crop_h INTEGER UNSIGNED,
+
+	created DATETIME,
+	modified DATETIME
+);

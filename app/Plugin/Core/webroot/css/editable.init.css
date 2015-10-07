@@ -1,0 +1,14 @@
+.editable-container.editable-inline
+{
+	display: block;
+}
+
+.editable-inline .editableform .form-control
+{
+	width: 100%;
+}
+
+.editable.editable-click
+{
+	border-bottom: none;
+}

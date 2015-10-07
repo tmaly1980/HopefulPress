@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   width="895.28125"
+   height="683.875"
+   >
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3148">
+      <stop
+         style="stop-color:#d4d6db;stop-opacity:1;"
+         offset="0"
+         id="stop3150" />
+      <stop
+         style="stop-color:#d4d6db;stop-opacity:0;"
+         offset="1"
+         id="stop3152" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3148"
+       id="linearGradient3154"
+       x1="491.42856"
+       y1="500.93362"
+       x2="1034.2858"
+       y2="518.07648"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3148"
+       id="linearGradient3162"
+       gradientUnits="userSpaceOnUse"
+       x1="277.14285"
+       y1="509.50507"
+       x2="708.57147"
+       y2="506.64792" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3148"
+       id="linearGradient3170"
+       gradientUnits="userSpaceOnUse"
+       x1="228.57143"
+       y1="506.64792"
+       x2="622.85718"
+       y2="509.50507" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3148"
+       id="linearGradient3176"
+       gradientUnits="userSpaceOnUse"
+       x1="228.57143"
+       y1="506.64792"
+       x2="622.85718"
+       y2="509.50507" />
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask3172">
+      <rect
+         style="fill:url(#linearGradient3176);fill-opacity:1;stroke:#000000;stroke-opacity:1"
+         id="rect3174"
+         width="894.28571"
+         height="682.85712"
+         x="-51.42857"
+         y="169.50504" />
+    </mask>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(51.9375,-169)">
+    <image
+       y="248.64792"
+       x="42.928543"
+       id="image3143"
+       xlink:href="file:///home/tomas/Desktop/406962_3659721693145_260849638_n.jpg"
+       height="507.42856"
+       width="665.35278"
+       mask="url(#mask3172)" />
+  </g>
+</svg>

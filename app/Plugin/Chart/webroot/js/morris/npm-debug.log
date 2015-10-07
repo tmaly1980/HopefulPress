@@ -1,0 +1,127 @@
+45452 silly gunzTarPerm extractEntry tst/ctf/tst.int.js
+45453 silly gunzTarPerm extractEntry tst/ctf/tst.psinfo.js
+45454 silly gunzTarPerm extractEntry tst/ctf/tst.struct.js
+45455 silly gunzTarPerm extractEntry tst/ctf/tst.typedef.js
+45456 silly gunzTarPerm extractEntry tst/ctf/psinfo.json
+45457 silly gunzTarPerm extractEntry tst/ctf/struct.json
+45458 silly gunzTarPerm extractEntry lib/less/browser.js
+45459 silly gunzTarPerm extractEntry lib/less/extend-visitor.js
+45460 silly gunzTarPerm extractEntry tst/ctf/float.json
+45461 silly gunzTarPerm extractEntry tst/ctf/int.json
+45462 silly gunzTarPerm extractEntry tst/ctf/typedef.json
+45463 silly gunzTarPerm extractEntry tst/ctio/float/tst.rfloat.js
+45464 silly lockFile 85348d5b-ts-strip-json-comments-0-1-3-tgz https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-0.1.3.tgz
+45465 silly lockFile 85348d5b-ts-strip-json-comments-0-1-3-tgz https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-0.1.3.tgz
+45466 silly lockFile d41b126a-strip-json-comments-0-1-3 strip-json-comments@0.1.3
+45467 silly lockFile d41b126a-strip-json-comments-0-1-3 strip-json-comments@0.1.3
+45468 silly lockFile 3b74c8e8-strip-json-comments-0-1-x strip-json-comments@0.1.x
+45469 silly lockFile 3b74c8e8-strip-json-comments-0-1-x strip-json-comments@0.1.x
+45470 verbose about to build /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/latest-version/node_modules/package-json/node_modules/registry-url/node_modules/rc
+45471 info /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/latest-version/node_modules/package-json/node_modules/registry-url/node_modules/rc unbuild
+45472 info preuninstall rc@0.5.4
+45473 info uninstall rc@0.5.4
+45474 verbose false,/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules,/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/latest-version/node_modules/package-json/node_modules/registry-url/node_modules unbuild rc@0.5.4
+45475 verbose /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/latest-version/node_modules/package-json/node_modules/registry-url/node_modules/.bin,[object Object] binRoot
+45476 info postuninstall rc@0.5.4
+45477 silly gunzTarPerm extractEntry lib/less/functions.js
+45478 silly gunzTarPerm extractEntry lib/less/import-visitor.js
+45479 verbose about to build /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/latest-version/node_modules/package-json/node_modules/registry-url
+45480 info /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/latest-version/node_modules/package-json/node_modules/registry-url unbuild
+45481 info preuninstall registry-url@2.0.0
+45482 info uninstall registry-url@2.0.0
+45483 verbose false,/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules,/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/latest-version/node_modules/package-json/node_modules unbuild registry-url@2.0.0
+45484 info postuninstall registry-url@2.0.0
+45485 silly gunzTarPerm extractEntry tst/ctio/float/tst.wfloat.js
+45486 silly gunzTarPerm extractEntry tst/ctio/int/tst.64.js
+45487 verbose about to build /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/latest-version/node_modules/package-json
+45488 info /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/latest-version/node_modules/package-json unbuild
+45489 info preuninstall package-json@1.0.1
+45490 info uninstall package-json@1.0.1
+45491 verbose false,/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules,/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/latest-version/node_modules unbuild package-json@1.0.1
+45492 info postuninstall package-json@1.0.1
+45493 silly gunzTarPerm extractEntry tst/ctio/int/tst.rint.js
+45494 silly gunzTarPerm extractEntry tst/ctio/int/tst.wbounds.js
+45495 silly gunzTarPerm extractEntry tst/ctio/int/tst.wint.js
+45496 silly gunzTarPerm extractEntry tst/ctio/uint/tst.64.js
+45497 verbose about to build /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/latest-version
+45498 info /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/latest-version unbuild
+45499 info preuninstall latest-version@1.0.0
+45500 info uninstall latest-version@1.0.0
+45501 silly gunzTarPerm extractEntry tst/ctio/uint/tst.roundtrip.js
+45502 silly gunzTarPerm extractEntry tst/ctio/uint/tst.ruint.js
+45503 verbose false,/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules,/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules unbuild latest-version@1.0.0
+45504 verbose /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier/node_modules/.bin,[object Object] binRoot
+45505 info postuninstall latest-version@1.0.0
+45506 silly gunzTarPerm extractEntry tst/ctio/uint/tst.wuint.js
+45507 silly gunzTarPerm extractEntry tst/ctype/tst.basicr.js
+45508 verbose about to build /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier
+45509 info /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/update-notifier unbuild
+45510 info preuninstall update-notifier@0.2.2
+45511 info uninstall update-notifier@0.2.2
+45512 verbose false,/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules,/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules unbuild update-notifier@0.2.2
+45513 info postuninstall update-notifier@0.2.2
+45514 silly gunzTarPerm extractEntry tst/ctype/tst.basicw.js
+45515 silly gunzTarPerm extractEntry tst/ctype/tst.char.js
+45516 silly gunzTarPerm extractEntry tst/ctype/tst.endian.js
+45517 silly gunzTarPerm extractEntry tst/ctype/tst.oldwrite.js
+45518 silly gunzTarPerm extractEntry tst/ctype/tst.readSize.js
+45519 silly gunzTarPerm extractEntry tst/ctype/tst.structw.js
+45520 http 200 https://registry.npmjs.org/next-tick
+45521 silly registry.get cb [ 200,
+45521 silly registry.get   { date: 'Sun, 30 Nov 2014 04:55:36 GMT',
+45521 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+45521 silly registry.get     etag: '"CCXAMB6YD36MPAC352UEWRVFU"',
+45521 silly registry.get     'content-type': 'application/json',
+45521 silly registry.get     'cache-control': 'max-age=60',
+45521 silly registry.get     'content-length': '5640',
+45521 silly registry.get     'accept-ranges': 'bytes',
+45521 silly registry.get     via: '1.1 varnish',
+45521 silly registry.get     age: '0',
+45521 silly registry.get     'x-served-by': 'cache-sjc3129-SJC',
+45521 silly registry.get     'x-cache': 'HIT',
+45521 silly registry.get     'x-cache-hits': '1',
+45521 silly registry.get     'x-timer': 'S1417323336.666935,VS0,VE150',
+45521 silly registry.get     vary: 'Accept',
+45521 silly registry.get     'keep-alive': 'timeout=10, max=50',
+45521 silly registry.get     connection: 'Keep-Alive' } ]
+45522 silly gunzTarPerm extractEntry tst/ctype/tst.writeStruct.js
+45523 silly addNameRange number 2 { name: 'next-tick', range: '>=0.1.0-0 <0.2.0-0', hasData: true }
+45524 silly addNameRange versions [ 'next-tick', [ '0.1.0', '0.2.0', '0.2.1', '0.2.2' ] ]
+45525 verbose addNamed [ 'next-tick', '0.1.0' ]
+45526 verbose addNamed [ '0.1.0', '0.1.0' ]
+45527 silly lockFile 7d1aeced-next-tick-0-1-0 next-tick@0.1.0
+45528 verbose lock next-tick@0.1.0 /home/tomas/.npm/7d1aeced-next-tick-0-1-0.lock
+45529 silly lockFile 2ddd4b00-rg-next-tick-next-tick-0-1-0-tgz https://registry.npmjs.org/next-tick/-/next-tick-0.1.0.tgz
+45530 verbose lock https://registry.npmjs.org/next-tick/-/next-tick-0.1.0.tgz /home/tomas/.npm/2ddd4b00-rg-next-tick-next-tick-0-1-0-tgz.lock
+45531 verbose addRemoteTarball [ 'https://registry.npmjs.org/next-tick/-/next-tick-0.1.0.tgz',
+45531 verbose addRemoteTarball   '1912cce8eb9b697d640fbba94f8f00dec3b94259' ]
+45532 info retry fetch attempt 1 at 20:55:37
+45533 verbose fetch to= /home/tomas/tmp/npm-10252-Dwe33LCt/1417323337252-0.5809837514534593/tmp.tgz
+45534 http GET https://registry.npmjs.org/next-tick/-/next-tick-0.1.0.tgz
+45535 verbose about to build /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower
+45536 info /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower unbuild
+45537 info preuninstall bower@1.3.8
+45538 info uninstall bower@1.3.8
+45539 verbose true,/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules,/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules unbuild bower@1.3.8
+45540 verbose /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/.bin,[object Object] binRoot
+45541 info postuninstall bower@1.3.8
+45542 http 200 https://registry.npmjs.org/traverse/-/traverse-0.3.9.tgz
+45543 error Error: ENOENT, lstat '/local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/insight/node_modules/inquirer/node_modules/cli-color/node_modules/es5-ext/test/Object/reduce.js'
+45544 error If you need help, you may report this log at:
+45544 error     <http://github.com/isaacs/npm/issues>
+45544 error or email it to:
+45544 error     <npm-@googlegroups.com>
+45545 error System Linux 3.13.0-39-generic
+45546 error command "/usr/bin/nodejs" "/usr/bin/npm" "install"
+45547 error cwd /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris
+45548 error node -v v0.10.25
+45549 error npm -v 1.3.10
+45550 error path /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/insight/node_modules/inquirer/node_modules/cli-color/node_modules/es5-ext/test/Object/reduce.js
+45551 error fstream_path /local/sites/cvsd/app/Plugin/Chart/webroot/js/morris/node_modules/bower/node_modules/insight/node_modules/inquirer/node_modules/cli-color/node_modules/es5-ext/test/Object/reduce.js
+45552 error fstream_type File
+45553 error fstream_class FileWriter
+45554 error code ENOENT
+45555 error errno 34
+45556 error fstream_stack /usr/lib/nodejs/fstream/lib/writer.js:284:26
+45556 error fstream_stack Object.oncomplete (fs.js:107:15)
+45557 verbose exit [ 34, true ]

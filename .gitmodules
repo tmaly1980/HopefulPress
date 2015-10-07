@@ -1,0 +1,3 @@
+[submodule "app/Plugin/Editable"]
+	path = app/Plugin/Editable
+	url = /local/sites/repo/Editable

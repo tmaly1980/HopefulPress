@@ -1,0 +1,9 @@
+<?= $this->Html->script("Core.ie8_node_enum"); ?>
+<?= $this->Html->script("Core.jquery.scrollWindowTo"); ?>
+<?= $this->Html->script("Core.underscore"); ?>
+<?= $this->Html->script("Core.underscore.mixin.deepExtend"); ?>
+<?= $this->Html->script("Core.backbone"); ?>
+<?= $this->Html->script("Core.deep-model"); ?>
+<?= $this->Html->script("Core.rivets.bundled.min"); ?>
+<?= $this->Html->script("Core.formbuilder/dist/formbuilder"); ?>
+<?= $this->Html->css("Core.../js/formbuilder/dist/formbuilder"); ?>

@@ -1,0 +1,47 @@
+.uppercase()
+{
+	text-transform: uppercase;
+}
+
+.shadowbox()
+{
+	border: solid #ccc 1px;
+	border-radius: 0em 0em 1em 1em;
+	box-shadow: 2px 2px 1px 1px #ccc;
+}
+.rotate(@deg)
+{
+	transform: rotate(@deg);
+	-moz-transform: rotate(@deg);
+	-webkit-transform: rotate(@deg);
+	-ms-transform: rotate(@deg);
+	-o-transform: rotate(@deg);
+}
+
+/* DOESNT REALLY WORK, :before has zero height and pattern doesnt stretch with angle
+.rotatedbg_container()
+{
+	position: relative;
+	overflow: hidden;
+}
+
+.rotatedbg_before(@deg, @url, @color)
+{
+	content: "";
+	position: absolute;
+	width: 200%;
+	height: 200%;
+	top: -50%;
+	left: -50%;
+	z-index: -1;
+
+	transform: rotate(@deg);
+	-moz-transform: rotate(@deg);
+	-webkit-transform: rotate(@deg);
+	-ms-transform: rotate(@deg);
+	-o-transform: rotate(@deg);
+
+	background: @color url(@url) 0 0 repeat;
+
+}
+*/

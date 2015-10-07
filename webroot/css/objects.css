@@ -1,0 +1,141 @@
+.tagselect .btn-text
+{
+	min-width: 150px;
+	text-align: left;
+}
+
+.tagselect ul
+{
+	max-height: 200px;
+	overflow-y: scroll;
+	overflow-x: auto;
+}
+.tagselect-container 
+{
+	margin: 5px 0px;
+}
+
+.tip
+{
+	color: #666;
+	font-style: italic;
+	font-size: 0.9em;
+}
+
+.form-group
+{
+	margin-bottom: 10px;
+}
+
+/* Loading spinner */
+.loading
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 5000;
+	top: 0;
+	left: 0;
+}
+.loading div.background
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #CCC;
+	opacity: 0.1;
+	z-index: 5000;
+	top: 0;
+	left: 0;
+}
+
+.loading button.btn
+{
+	position: absolute;
+	font-size: 4em;
+	left: 50%;
+	top: 50%;
+	margin-left: -0.75em;
+	margin-top: -0.75em;
+	z-index: 5001;
+	border-radius: 5px;
+	line-height: 1.0;
+	padding: 0.25em;
+}
+
+.loading i.fa-spinner
+{
+
+}
+
+.spinner {
+    -animation: spin 1s infinite linear;
+    -webkit-animation: spin2 1s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+body .page-header
+{
+	margin-top: 0px;
+}
+
+/* corrections to form-validator css */
+.form-group.col-xs-1 .form-control-feedback, .form-group.col-sm-1 .form-control-feedback, .form-group.col-md-1 .form-control-feedback, .form-group.col-lg-1 .form-control-feedback, .form-group.col-xs-2 .form-control-feedback, .form-group.col-sm-2 .form-control-feedback, .form-group.col-md-2 .form-control-feedback, .form-group.col-lg-2 .form-control-feedback, .form-group.col-xs-3 .form-control-feedback, .form-group.col-sm-3 .form-control-feedback, .form-group.col-md-3 .form-control-feedback, .form-group.col-lg-3 .form-control-feedback, .form-group.col-xs-4 .form-control-feedback, .form-group.col-sm-4 .form-control-feedback, .form-group.col-md-4 .form-control-feedback, .form-group.col-lg-4 .form-control-feedback, .form-group.col-xs-5 .form-control-feedback, .form-group.col-sm-5 .form-control-feedback, .form-group.col-md-5 .form-control-feedback, .form-group.col-lg-5 .form-control-feedback, .form-group.col-xs-6 .form-control-feedback, .form-group.col-sm-6 .form-control-feedback, .form-group.col-md-6 .form-control-feedback, .form-group.col-lg-6 .form-control-feedback, .form-group.col-xs-7 .form-control-feedback, .form-group.col-sm-7 .form-control-feedback, .form-group.col-md-7 .form-control-feedback, .form-group.col-lg-7 .form-control-feedback, .form-group.col-xs-8 .form-control-feedback, .form-group.col-sm-8 .form-control-feedback, .form-group.col-md-8 .form-control-feedback, .form-group.col-lg-8 .form-control-feedback, .form-group.col-xs-9 .form-control-feedback, .form-group.col-sm-9 .form-control-feedback, .form-group.col-md-9 .form-control-feedback, .form-group.col-lg-9 .form-control-feedback, .form-group.col-xs-10 .form-control-feedback, .form-group.col-sm-10 .form-control-feedback, .form-group.col-md-10 .form-control-feedback, .form-group.col-lg-10 .form-control-feedback, .form-group.col-xs-11 .form-control-feedback, .form-group.col-sm-11 .form-control-feedback, .form-group.col-md-11 .form-control-feedback, .form-group.col-lg-11 .form-control-feedback, .form-group.col-xs-12 .form-control-feedback, .form-group.col-sm-12 .form-control-feedback, .form-group.col-md-12 .form-control-feedback, .form-group.col-lg-12 
+{
+	margin-right: 15px;
+	top: 25px;
+}
+.has-feedback label ~ .form-control-feedback
+{
+	top: 30px;
+}
+
+.has-feedback .form-control
+{
+	padding-right: 1%;
+}
+
+.has-feedback .input-group
+{
+	padding-right: 42.5px;
+}
+
+/* dropdown hacks; desktop will hover to subnav; mobile will have to click to see on next page */
+.dropdown:hover .dropdown-menu
+{
+	display: block;
+}
+.dropdown.toggle:hover .dropdown-menu /* click toggle only */
+{
+	display: none;
+}
+
+.alert
+{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.nodata
+{
+	font-style: italic;
+	color: #999;
+	font-weight: bold;
+}
+	
+
+
+.icons-only span.text
+{
+	display: none;
+}
+

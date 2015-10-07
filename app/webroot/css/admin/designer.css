@@ -1,0 +1,29 @@
+#admin_designer
+{
+	position: absolute;
+	z-index: 1000;
+	top: 150px;
+	background-color: #EEE;
+	border: solid #CCC 2px;
+	width: 200px;
+	right: -200px;
+}
+
+#admin_designer.active
+{
+	right: 0px;
+}
+
+#admin_designer .toggler
+{
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: -37px;
+	width: 37px;
+	height: 37px;
+	background-color: #EEE;
+	border: solid 2px #CCC;
+	border-right: none;
+	padding: 5px;
+}

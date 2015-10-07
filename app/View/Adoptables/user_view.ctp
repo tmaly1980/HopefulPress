@@ -1,0 +1,1 @@
+<?=$this->element("../Adoptables/view"); ?>

@@ -1,0 +1,17 @@
+(function($) {
+	$.fn.editableform.buttons = 
+		'<button type="submit" class="btn btn-primary btn-sm editable-submit"><i class="glyphicon glyphicon-ok"></i> Save</button>'+
+		'<button type="button" class="btn btn-default btn-sm editable-cancel"><i class="glyphicon glyphicon-remove"></i> Cancel</button>';
+
+	$.fn.editableform.loading =
+		"<div class='loading jumbotron jumbotron-icon'><div class='background'></div><button class='btn btn-primary'><i class='fa fa-spinner fa-spin'></i></div></div>";
+
+	$.fn.editableform.template = 
+		'<form class="form editableform">'+
+			'<div class="control-group form-group">'+
+				'<div><div class="editable-input block"></div><div class="editable-buttons"></div></div>'+
+				'<div class="editable-error-block"></div>'+
+			'</div>'+
+		'</form>';
+
+})(jQuery);

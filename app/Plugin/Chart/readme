@@ -1,0 +1,13 @@
+NEEDS:
+
+- X AND Y LABELS ???
+
+- Pinch to zoom, drag to pan
+- Easy numeric vs dates vs categories/text
+* - Formatted dates in UNIX timestamps
+* - X-axis categories (when bars)
+* - Multiple colored bars side-by-side (year yield comparison)
+* - Rotation of ticks/labels (45 deg)
+* - Click point to new page/chart
+* - Custom format tooltips (decent defaults)
+

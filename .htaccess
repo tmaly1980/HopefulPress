@@ -1,0 +1,15 @@
+#FallbackResource /app/webroot/index.php
+
+<IfModule mod_rewrite.c>
+   RewriteEngine on
+
+   RewriteBase "/"
+
+   # Make mail.WHATEVER go  to roundcube...
+   # Alias needs to be set in main config!
+   RewriteCond %{HTTP_HOST} ^mail\. [NC]
+   RewriteRule ^$ /webmail [L,R]
+
+   RewriteRule    ^$ app/webroot/    [L]
+   RewriteRule    (.*) app/webroot/$1 [L]
+</IfModule>

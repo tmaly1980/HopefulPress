@@ -1,0 +1,42 @@
+#DROP TABLE IF EXISTS resource_pages;
+CREATE TABLE IF NOT EXISTS resource_pages (
+	id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	site_id INTEGER UNSIGNED,
+	title VARCHAR(128),
+
+	introduction TEXT,
+
+	created DATETIME,
+	modified DATETIME
+);
+
+#DROP TABLE IF EXISTS resources;
+CREATE TABLE IF NOT EXISTS resources (
+	id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	site_id INTEGER UNSIGNED,
+	user_id INTEGER UNSIGNED,
+	resource_category_id INTEGER UNSIGNED,
+	url VARCHAR(255),
+	title VARCHAR(128),
+	description TEXT,
+
+	address VARCHAR(250),
+	phone VARCHAR(16),
+
+	ix INTEGER UNSIGNED,
+
+	created DATETIME,
+	modified DATETIME
+);
+
+#DROP TABLE IF EXISTS resource_categories;
+CREATE TABLE IF NOT EXISTS resource_categories (
+	id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	site_id INTEGER UNSIGNED,
+	user_id INTEGER UNSIGNED,
+	title VARCHAR(128),
+	ix INTEGER UNSIGNED,
+
+	created DATETIME,
+	modified DATETIME
+);

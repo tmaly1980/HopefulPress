@@ -1,0 +1,77 @@
+<? $controller = $this->request->params['controller']; ?>
+<? $settingsControllers = array('sites','site_designs','users','stripe_billing'); ?>
+
+<?  $pid = !empty($project['Project']['id']) ? $project['Project']['id'] : null; ?>
+    <div class="navbar navbar-default navbar-inverse Xnavbar-fixed-top">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse sidebar-navbar-collapse">
+          <ul class="nav navbar-nav">
+
+	  <? if(!empty($project) || $controller == 'projects' || !empty($memberPage) || in_array($controller, $settingsControllers)) { ?>
+	  <li>
+	  	<a href="/" class=''><?= $this->Html->g("chevron-left") ?> Back to Main Website</a>
+	  </li>
+	  <? } ?>
+
+	  <li class='dropdown toggle'>
+	  	<a href='Javascript:void(0);' class='large bold'>
+			<? if (!empty($project)) { ?>
+				<?= $this->Html->g("briefcase"); ?> <?= $project['Project']['title'] ?>
+			<? } else if($controller == 'projects') { ?>
+				<?= $this->Html->g("briefcase"); ?> Projects
+			<? } else if (!empty($memberPage)) { ?>
+				<?= $this->Html->g("lock"); ?> Member Only 
+			<? } else if (in_array($controller, $settingsControllers)) { ?>
+				<?= $this->Html->g("cog"); ?> Site Settings 
+			<? } else { ?>
+				<?= $this->Html->fa("globe"); ?> Main 
+			<? } ?>
+		<?= $this->Html->s("caret"); ?></a>
+		<ul class='dropdown-menu'>
+	            <li><a href="/"><?= $this->Html->g("globe"); ?> Main Website</a></li>
+	            <li><a href="/projects"><?= $this->Html->g("briefcase"); ?> Projects</a></li>
+	            <li><a href="/members"><?= $this->Html->g("lock"); ?> Member Only</a></li>
+	            <li><a href="/admin/sites/view"><?= $this->Html->g("cog"); ?> Site Settings</a></li>
+		</ul>
+	  </li>
+	  <?
+	  $prefix = '';
+	  if(!empty($memberPage)) { $prefix = "/members"; }
+	  if(!empty($pid)) { $prefix = "/project/$pid"; }
+	  ?>
+	  <? if($controller == 'projects' && empty($pid)) { ?>
+	  	<? foreach($nav['projects'] as $pid=>$ptitle) { ?>
+		<li class='<?= (!empty($project) && $project['Project']['id'] == $pid) ? 'active' : '' ?>'>
+			<a href='/project/<?= $pid ?>'><?= $ptitle ?></a>
+		</li>
+		<? } ?>
+	<? } else if (in_array($controller, $settingsControllers)) { ?>
+	        <li class='<?= $controller == 'sites' ? 'active' : '' ?>'><a href="/admin/sites/view"><?= $this->Html->g("globe"); ?> Site Details</a></li>
+	        <li class='<?= $controller == 'stripe_billing' ? 'active' : '' ?>'><a href="/admin/billing"><?= $this->Html->fa("credit-card"); ?> Billing</a></li>
+	        <li class='<?= $controller == 'site_designs' ? 'active' : '' ?>'><a href="/admin/site_designs/view"><?= $this->Html->fa("paint-brush"); ?> Theme/Design</a></li>
+	        <li class='<?= $controller == 'users' ? 'active' : '' ?>'><a href="/admin/users"><?= $this->Html->fa("user-plus"); ?> Users</a></li>
+	  <? } else { ?>
+	  	<? if(empty($memberPage) && empty($pid)) { ?>
+	 	    <li class='<?= $controller == 'homepages' ? 'active' : '' ?>'><a href="/"><?= $this->Html->g("home"); ?> Home Page</a></li>
+		<? } ?>
+	            <li class='<?= $controller == 'news_posts' ? 'active' : '' ?>'><a href="<?=$prefix?>/news"><?= $this->Html->fa("newspaper-o"); ?> News</a></li>
+	            <li class='<?= $controller == 'events' ? 'active' : '' ?>'><a href="<?=$prefix?>/events"><?= $this->Html->g("calendar"); ?> Events</a></li>
+	            <li class='<?= in_array($controller, array('photos','photo_albums')) ? 'active' : '' ?>'><a href="<?=$prefix?>/photos"><?= $this->Html->g("picture"); ?> Photos</a></li>
+	            <li class='<?= $controller == 'pages' ? 'active' : '' ?>'><a href="<?=$prefix?>/pages"><?= $this->Html->g("file"); ?> Pages</a></li>
+	            <li class='<?= $controller == 'link_pages' ? 'active' : '' ?>'><a href="<?=$prefix?>/links"><?= $this->Html->g("globe"); ?> Links</a></li>
+	            <li class='<?= $controller == 'download_pages' ? 'active' : '' ?>'><a href="<?=$prefix?>/downloads"><?= $this->Html->g("download-alt"); ?> Downloads</a></li>
+	  <? } ?>
+
+	  <? if(empty($memberPage) && empty($pid) && !in_array($controller, $settingsControllers)) { ?>
+	            <li class='<?= $controller == 'about_pages' ? 'active' : '' ?>'><a href="/about"><?= $this->Html->fa("university"); ?> About Us</a></li>
+	            <li class='<?= $controller == 'contact_pages' ? 'active' : '' ?>'><a href="/contact"><?= $this->Html->g("phone-alt"); ?> Contact Us</a></li>
+	  <? } ?>
+          </ul>
+        </div><!--/.nav-collapse -->
+    </div>
