@@ -44,10 +44,18 @@ class RescuesController extends AppController
 					$this->user("rescue_id", $this->Rescue->id); # Updates session too.
 				}
 				$rescue = $this->Rescue->read();
+
+				if($goto = $this->Session->read("process.redirect")) { # PREFER, ie newly adding adoptables.
+					$goto['rescue'] = $rescue['Rescue']['hostname'];
+					$this->Session->delete("process.redirect");
+				} else {
+					$goto = array('rescuer'=>false,'action'=>'view','rescue'=>$rescue['Rescue']['hostname']); 
+				}
+
 				return $this->setSuccess(
 					(!empty($this->request->params['rescue']) ? 
 						"Rescue listing updated!":"Rescue listing created!")
-					,array('rescuer'=>false,'action'=>'view','rescue'=>$rescue['Rescue']['hostname']));
+					,$goto);
 			} else {
 				return $this->setError("Could not create rescue listing: ".$this->Rescue->errorString());
 			}

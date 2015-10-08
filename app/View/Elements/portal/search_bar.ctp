@@ -25,9 +25,15 @@ $where = $this->Session->read("Geo.where");
 $defaultLocation = !empty($where) ? join(", ", array($where['city'], $where['region_code'])) : null; # IP Guess... or previous capture of GPS
 ?>
 <div>
+	<? if(!empty($controls)) { ?>
+	<div class='right padding5'>
+		<?= $controls?>
+	</div>
+	<? } ?>
 	<? if(!empty($heading)) { ?>
 	<h3 class='margin0 padding10'><?= $heading ?></h3>
 	<? } ?>
+	<div class='clear'></div>
 
 <nav class="navbar navbar-default">
   <div class="container-fluid">

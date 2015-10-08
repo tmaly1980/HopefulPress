@@ -118,7 +118,7 @@ class AppController extends AppCoreController {
 
 	function beforeFilter()
 	{
-		error_log("I_AM=".print_r($this->request->params,true));
+		#error_log("I_AM=".print_r($this->request->params,true));
 
 		Configure::write("in_admin", $this->me()); # Is user logged in? (do we show editing controls) XXX TODO
 
@@ -618,6 +618,26 @@ class AppController extends AppCoreController {
 		# Get from session or account if better (allow them to change???)
 		$this->Session->write("location", $this->geoip());
 		# This can be retrieved for searches on initial  page load, etc.
+	}
+
+	function require_rescue() # This page needs a rescue specified (ie adding adoptable)
+	{
+		if(empty($this->rescuename))
+		{
+			# GUESS FROM USER
+			# (someday implement multiple rescues?)
+			if($rhostname = $this->user("Rescue.hostname"))
+			{
+				$goto = $this->request->params;
+				$goto['rescue'] = $rhostname;
+				return $this->redirect($goto);
+			#} else if (!$this->user("User.rescuer")) {  # TODO only rescuers allowed to do this.
+			} else { # No rescue for user. ASK THEM TO FILL OUT
+				$this->Session->write("process.redirect",$this->request->params);
+				$this->redirect(array('rescuer'=>1,'controller'=>'rescues','action'=>'add'));
+			}
+		}
+		# ELSE OK
 	}
 
 }

@@ -124,6 +124,8 @@ class AdoptablesController extends AppController
 
 	function rescuer_edit($id=null)
 	{
+		$this->require_rescue(); 
+
 		if(empty($id) && !empty($this->request->params['id'])) { $id =$this->request->params['id']; } 
 
 		if(!empty($this->request->data))

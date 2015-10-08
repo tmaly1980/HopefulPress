@@ -2028,7 +2028,6 @@ class FormHelper extends AppHelper {
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
  */
 	public function select($fieldName, $options = array(), $attributes = array()) {
-		error_log("FN=$fieldName");
 		$select = array();
 		$style = null;
 		$tag = null;

@@ -20,5 +20,8 @@ if(!empty($rescuename)) { # Already in one, just show browse all...
 	$browse = $this->Html->link("Browse All Rescues",array('controller'=>'rescues','action'=>'search'),array('class'=>'btn btn-default')); 
 	$heading = "Find a local rescue: $rescueCount rescues nearby";
 	$sortby=array('distance'=>'Closest','title_asc'=>'Alphabetical');
-	echo $this->element("portal/search_bar",array('model'=>'Rescue','sortby'=>$sortby, 'browse'=>$browse,'heading'=>$heading));
+
+	$controls = empty($this->Html->user("Rescue.id")) ? "<b>Manage a rescue?</b> ".$this->Html->add("Create a FREE rescue account","/rescuer/rescues/add",array('class'=>'btn-primary')) : null;
+
+	echo $this->element("portal/search_bar",array('model'=>'Rescue','sortby'=>$sortby, 'browse'=>$browse,'heading'=>$heading,'controls'=>$controls));
 }

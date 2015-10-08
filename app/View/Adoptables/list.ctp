@@ -20,6 +20,8 @@
 	<div class='center_align'>
 		<?= $this->Html->link($adoptable['Adoptable']['name'], array('controller'=>'adoptables','action'=>'view','id'=>$adoptable['Adoptable']['id'],'rescue'=>$rescuename), array('class'=>'bold medium')); ?>
 		<br/>
+			<b><?= $this->Time->timeago($adoptable['Adoptable']['created']); ?></b>
+		<br/>
 		<?= $this->element("../Adoptables/item_stats", array('adoptable'=>$adoptable)); ?>
 		<? if(empty($rescuename) && !empty($adoptable['Rescue']['city'])) { ?>
 		<div>

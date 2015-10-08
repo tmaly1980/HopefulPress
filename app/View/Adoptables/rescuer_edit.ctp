@@ -1,4 +1,5 @@
 <? $animal = 'adoptable'; ?>
+<? $this->assign("search_disabled",true); ?>
 <? $id = !empty($this->request->data['Adoptable']['id']) ? $this->request->data['Adoptable']['id'] : null; ?>
 <? $this->assign("page_title", $id?"Update Adoptable Details":"Add Adoptable Listing");# .(!empty($this->request->data['Adoptable']['name']) ? " &mdash;  ".$this->request->data['Adoptable']['name']:"")); ?>
 <? $this->start("title_controls"); ?>

@@ -1,8 +1,8 @@
 <? #$this->layout = 'default'; ?>
 <? $this->assign("search_disabled",true); ?>
 <?#= $this->element("UserCore.login"); ?>
-<? $this->assign("page_title", "You must have an account to continue"); ?>
-<div class="users form border lightgreybg center">
+<? $this->assign("page_title", "Sign in or create an account to continue");  ?>
+<div class="users form border lightgreybg center maxwidth500">
 	<?= $this->Session->flash("auth"); ?>
 	<?= $this->Form->create("User"); ?>
 

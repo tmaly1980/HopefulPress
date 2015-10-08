@@ -1,5 +1,9 @@
 <?
 $heading = "Find your next furry companion: $adoptableCount adoptables available now";
+$controls = (empty($this->Html->user("Rescue.id")) ? 
+	"<b>Manage a rescue?</b> ":"").
+	$this->Html->add("Add an FREE adoptable listing","/rescuer/adoptables/add",array('class'=>'btn-primary'));
+	#.$this->Html->add("Create a FREE rescue account","/rescuer/rescues/add",array('class'=>'btn-primary'))):
 
 $sortby = array(
 	'distance'=>'Closest',
@@ -7,5 +11,5 @@ $sortby = array(
 	'created_desc'=>'Recently added',
 	# OTHER STUFF???
 );
-echo $this->element("portal/search_bar",array('model'=>'Adoptable','sortby'=>$sortby,'heading'=>$heading));
+echo $this->element("portal/search_bar",array('model'=>'Adoptable','sortby'=>$sortby,'heading'=>$heading,'controls'=>$controls));
 

@@ -71,6 +71,7 @@ if(!HostInfo::site_specified())
 	# OTHER PAGES
 	Router::connect('/rescue/:rescue/about', array('controller' => 'rescues', 'action' => 'about'),array('rescue'=>'[\w_-]+'));
 	Router::connect('/rescue/:rescue/contact', array('controller' => 'rescues', 'action' => 'contact'),array('rescue'=>'[\w_-]+'));
+	Router::connect('/rescue/:rescue/resources', array('controller' => 'resource_pages', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
 	Router::connect('/rescue/:rescue/donate', array('plugin'=>'donation','controller' => 'donation_pages', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
 	Router::connect('/rescue/:rescue/donate/:action', array('plugin'=>'donation','controller' => 'donations'),array('rescue'=>'[\w_-]+')); # IPN and form
 	Router::connect('/rescue/:rescue/donate/:action/*', array('plugin'=>'donation','controller' => 'donations'),array('rescue'=>'[\w_-]+')); # IPN and form
