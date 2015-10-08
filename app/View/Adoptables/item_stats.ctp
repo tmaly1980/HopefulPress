@@ -18,6 +18,9 @@
 			if(!empty($adoptable['Adoptable']['birthdate'])) {
 				$stats[] = $this->Time->age($adoptable['Adoptable']['birthdate']);
 			}
+			if(!empty($adoptable['Adoptable']['age_group'])) {
+				$stats[] = $adoptable['Adoptable']['age_group'];
+			}
 		?>
 		<?= join(", ", $stats); ?>
 

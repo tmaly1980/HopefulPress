@@ -7,9 +7,9 @@
 <?= $this->assign("page_title", !empty($id) ? 'Edit News Post'.(!empty($project_title)?" From $project_title":"") : 'Add News Post'.(!empty($project_title)?" To $project_title":"")); ?>
 <? $this->start("admin_controls"); ?>
 	<? if(empty($id)) { ?>
-		<?= $this->Html->back("All News Posts", array("action"=>"index")); ?>
+		<?= $this->Html->back("All News Posts", array("prefix"=>false,"action"=>"index")); ?>
 	<? } else { ?>
-		<?= $this->Html->back("View News Post", array("action"=>"view",$id)); ?>
+		<?= $this->Html->back("View News Post", array("prefix"=>false,"action"=>"view",$id)); ?>
 	<? } ?>
 <? $this->end(); ?>
 
@@ -21,7 +21,7 @@
 		echo $this->Form->hidden('draft_id');
 		echo $this->Form->hidden('project_id');
 	?>
-	<?= $this->Form->input("created",array('size'=>'10','type'=>'text','placeholder'=>'mm/dd/yyyy','label'=>'Post Date','default'=>date("m/d/Y"),'class'=>'datepicker','div'=>'right')); ?>
+	<?= $this->Form->input("created",array('size'=>'12','type'=>'text','placeholder'=>'mm/dd/yyyy','label'=>'Post Date','default'=>date("m/d/Y"),'class'=>'datepicker','div'=>'form-inline')); ?>
 	<div class='clear'></div>
 	<div class='row'>
 		<div class='col-md-3 right'>

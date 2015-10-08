@@ -6,8 +6,8 @@
 	<? if(!empty($adoptable_id)) { ?>
 		<?= $this->Form->hidden(false,array('name'=>'custom','value'=>$adoptable_id)); #($adoptable_id);#hidden("adoptable_id", array('value'=>$adoptable_id)); ?>
 	<? } ?>
-		<?= $this->Form->hidden(false,array('name'=>'business','value'=>$paypalCredentials['PaypalCredential']['account_email'])); ?>
-		<?= $this->Form->hidden(false,array('name'=>'item_name','value'=>"Donation to ".$current_site['Site']['title'])); ?>
+		<?= $this->Form->hidden(false,array('name'=>'business','value'=>$paypalCredentials['PaypalCredential']['paypal_email'])); ?>
+		<?= $this->Form->hidden(false,array('name'=>'item_name','value'=>"Donation to ".$rescue['Rescue']['title'])); ?>
 
 		<?= $this->Paypal->input('amount', array('default'=>$defaultAmount)); ?>
 		<?= $this->Form->input("amount_option", array('type'=>'radio','options'=>$amounts,'default'=>$defaultAmount,'class'=>'DonateAmounts','div'=>'inline-radio')); ?>
@@ -23,8 +23,8 @@
 	<? if(!empty($adoptable_id)) { ?>
 		<?= $this->Form->hidden(false,array('name'=>'custom','value'=>$adoptable_id)); #($adoptable_id);#hidden("adoptable_id", array('value'=>$adoptable_id)); ?>
 	<? } ?>
-		<?= $this->Form->hidden(false,array('name'=>'business','value'=>$paypalCredentials['PaypalCredential']['account_email'])); ?>
-		<?= $this->Form->hidden(false,array('name'=>'item_name','value'=>"Recurring Donation to ".$current_site['Site']['title'])); ?>
+		<?= $this->Form->hidden(false,array('name'=>'business','value'=>$paypalCredentials['PaypalCredential']['paypal_email'])); ?>
+		<?= $this->Form->hidden(false,array('name'=>'item_name','value'=>"Recurring Donation to ".$rescue['Rescue']['title'])); ?>
 
 		<?= $this->Paypal->input('amount', array('name'=>'a3','default'=>$defaultAmount)); ?>
 		<?= $this->Form->hidden(false,array('name'=>'p3','value'=>'1')); # Subscription duration ?>

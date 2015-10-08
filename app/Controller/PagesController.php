@@ -69,7 +69,7 @@ class PagesController extends AppController {
 	}
 
 	public function view($id = null) {
-		$this->Tracker->track();
+		$this->track();
 		/*
 		if(!empty($id) && !empty($this->templates[$id]))
 		{

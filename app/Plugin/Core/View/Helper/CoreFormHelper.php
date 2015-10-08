@@ -8,9 +8,12 @@ class CoreFormHelper extends BoostCakeFormHelper
 	var $validateFields = array();
 	var $validate = true;
 
-	var $yesnona = array(null=>'- N/A -',0=>'No',1=>'Yes');
-	var $yesnoblank = array(null=>' - ',0=>'No',1=>'Yes');
-	var $yesno = array(0=>'No',1=>'Yes');
+	var $yesnobool = array(0=>'No',1=>'Yes');
+
+	# No difference between blanks and 0, so must use words.
+	var $yesno = array('No'=>'No','No'=>'Yes');
+	var $yesnona = array(''=>'- N/A -','No'=>'No',"Yes"=>'Yes');
+	var $yesnoblank = array(''=>' - ','No'=>'No','Yes'=>'Yes');
 
 	public $months = array(
 			'01'=>'01 - January',
@@ -285,6 +288,7 @@ class CoreFormHelper extends BoostCakeFormHelper
 		$opts['class'] .= ' btn save';
 		if(!preg_match("/btn-/", $opts['class'])) { $opts['class'] .= ' btn-success'; }
 		$opts['escape'] = false;
+		if(!isset($opts['cancel']) && !$this->id()) { $opts['cancel'] = false; } # DOnt show cancel on new records.
 		$icon = "<span class='glyphicon glyphicon-play'></span> ";
 		return ($opts['div'] !== false ? "<div class='{$opts['div']}'>":"").
 			$this->button("$label $icon", $opts).
@@ -307,7 +311,8 @@ class CoreFormHelper extends BoostCakeFormHelper
 			$options['cancel'] = 'javascript:void(0)';
 			$options['cancel_onclick'] = '$.dialogclose();';
 		} else if(empty($options['cancel'])) {
-			$options['cancel'] = array('controller'=>$controller);
+			# FOR NOW LETS ASSUME VIEW PAGE IS PUBLIC...
+			$options['cancel'] = array('prefix'=>false,'controller'=>$controller);
 			$options['cancel']['action'] = 'index'; # If singleton, index should redirect to view
 		}
 
@@ -820,7 +825,7 @@ class CoreFormHelper extends BoostCakeFormHelper
 			.thumbs a.thumb img
 			{
 				margin: 2px;
-				border: solid #EEE 5px;
+				border: solid #AAA 5px;
 				border-radius: 5px;
 				width: 150px;
 				height: 150px;

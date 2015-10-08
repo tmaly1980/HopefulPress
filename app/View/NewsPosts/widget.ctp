@@ -6,7 +6,7 @@
 
 <div class='widget'>
 <h3>
-	<?= $this->Html->link("Recent News", array($prefix=>1,'plugin'=>null,'controller'=>'news_posts','action'=>'index')); ?>
+	<?= $this->Html->link("Recent News", array('controller'=>'news_posts','action'=>'index')); ?>
 </h3>
 <? if(false && $this->Html->can_edit()) { ?>
 <div class='alert-warning dashed border2'>
@@ -17,7 +17,7 @@
 	<? if($this->Html->me()) { ?>
 	<div class='dashed alert alert-info'>
 		You have no news posts yet.
-		<?= $this->Html->add("Add a news post", array('user'=>1,'controller'=>'news_posts','action'=>'add')); ?>
+		<?= $this->Html->add("Add a news post", array('rescuer'=>1,'controller'=>'news_posts','action'=>'add')); ?>
 	</div>
 	<? } ?>
 <? } else { ?>
@@ -44,7 +44,7 @@
 	<? } ?>
 	<? if(!empty($updates['newsPosts'])) { ?>
 	<div align='right'>
-	<?= $this->Html->link("More news ".$this->Html->g("chevron-right"), array('plugin'=>null,'controller'=>"news"), array('class'=>'btn more right_align medium bold')); ?>
+	<?= $this->Html->link("More news ".$this->Html->g("chevron-right"), array('plugin'=>null,'controller'=>"news_posts"), array('class'=>'btn more right_align medium bold')); ?>
 	</div>
 	<? } ?>
 	</div>

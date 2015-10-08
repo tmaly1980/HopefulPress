@@ -3,7 +3,7 @@
 <? $this->start("admin_controls"); ?>
 	<?= $this->Html->back("All events", array('action'=>'index')); ?>
 	<? if($this->Html->can_edit($event['Event'])) { ?>
-		<?= $this->Html->edit("Edit event", array('user'=>1,'action'=>'edit',$id)); ?>
+		<?= $this->Html->edit("Edit event", array('rescuer'=>1,'action'=>'edit',$id)); ?>
 	<? } ?>
 <? $this->end("admin_controls"); ?>
 <? $this->set('crumbs', true); ?>

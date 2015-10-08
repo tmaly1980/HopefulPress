@@ -6,7 +6,7 @@ class ResourcePagesController extends SingletonController
 
 	function view()
 	{
-		$this->Tracker->track();
+		$this->track();
 		$this->set("resourceCount", $this->Resource->findCount()); # Even those in cateogires, whether to show sort or not.
 		$this->set("resources", $this->Resource->findAll(array('resource_category_id'=>null)));
 		$this->set("resourceCategories", $this->ResourceCategory->findAll());

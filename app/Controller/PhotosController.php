@@ -11,7 +11,7 @@ class PhotosController extends AppController {
 	}
 
 	public function view($id = null) {
-		$this->Tracker->track();
+		$this->track();
 	 	if (!$this->{$this->modelClass}->count($id)) { return $this->invalid(); }
 		$photo = $this->{$this->modelClass}->read(null, $id);
 		$this->set('photo', $photo);

@@ -1,11 +1,25 @@
 <?
-App::uses("PhotosController", "Controller");
+#App::uses("PhotosController", "Controller");
+App::uses("PagePhotosController", "PagePhotos.Controller");
 
-class AdoptablePhotosController extends PhotosController
+# FIX to use dual-purpose....
+# PagePhoto style in main photo
+# But also photo_album style upload, per PhotosController
+# ajax container upload passed to 'upload'
+
+# XXX WE NEED DISTINCT METHODS
+# uploading is fine, but now for page_photo upload, we also need access to crop, etc methods...
+#
+# Rendering of pic is what we need.... lets hope it's the same function calls.
+
+# We need to implement PagePhoto (crop, upload, edit, image/$id/wh, fullimage, thumb, delete/PARENT/$id, etc)
+# ALSO behave as album/list style uploader
+
+class AdoptablePhotosController extends PagePhotosController
 {
 	var $uses = array('AdoptablePhoto');
 
-	function upload($adoptable_id=null)
+	function listupload($adoptable_id=null) # Needs unique name, so PagePhoto upload doesn't interfere....
 	{
 		if(!empty($this->request->data))
 		{

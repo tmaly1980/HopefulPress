@@ -1,3 +1,9 @@
+<?= $this->element("../Adoptables/search"); return; # NOT USED ANYMORE?>
+
+
+
+
+
 <? $this->assign("page_title", "Animal Rescuers"); ?>
 <div class='index'>
 	<div class='row'>

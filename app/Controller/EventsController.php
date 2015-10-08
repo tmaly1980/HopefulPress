@@ -12,8 +12,8 @@ class EventsController extends AppController {
 	function leftnav() { return $this->leftnav_media(); }
 
 	public function index() {
-		$this->Tracker->track();
-		#$this->Tracker->track();
+		$this->track();
+		#$this->track();
 	 	#if (!$this->Event->count()) { return $this->noContent(); }
 
 		$this->Event->recursive = 1;
@@ -25,7 +25,7 @@ class EventsController extends AppController {
 	}
 
 	public function view($id = null) {
-		$this->Tracker->track();
+		$this->track();
 	 	if (!$this->Event->count($id)) { return $this->invalid(); }
 		$this->set('event', $this->Event->read(null, $id));
 	}

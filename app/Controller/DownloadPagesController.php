@@ -6,7 +6,7 @@ class DownloadPagesController extends SingletonController
 
 	function view()
 	{
-		$this->Tracker->track();
+		$this->track();
 		$this->set("downloads", $this->Download->findAll());
 		return parent::view();
 	}

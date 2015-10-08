@@ -1,4 +1,5 @@
 <? #$this->layout = 'default'; ?>
+<? $this->assign("search_disabled",true); ?>
 <?#= $this->element("UserCore.login"); ?>
 <? $this->assign("page_title", "You must have an account to continue"); ?>
 <div class="users form border lightgreybg center">

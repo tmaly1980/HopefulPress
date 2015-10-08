@@ -52,7 +52,12 @@ class SingletonController extends AppController
 	{
 		if($this->_edit())
 		{
-			$this->redirect(array('action'=>'view'));
+			$url = array('action'=>'view');
+			if(!empty($this->request->params['prefix']))
+			{
+				$url[$this->request->params['prefix']] = null;
+			}
+			$this->redirect($url);
 		}
 	}
 
@@ -63,7 +68,7 @@ class SingletonController extends AppController
 		if(!empty($this->request->data))
 		{
 			# We should try to SET ->id FIRST, s
-			error_log("SAVING {$this->modelClass}=".print_r($this->request->data,true));
+			#error_log("SAVING {$this->modelClass}=".print_r($this->request->data,true));
 			if($this->{$this->modelClass}->save($this->request->data))
 			{
 				$this->setSuccess($this->ucThing()." updated");

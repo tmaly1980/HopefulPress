@@ -91,7 +91,8 @@ class AdoptablesController extends AppController
 	function view($id=null)
 	{
 		if(empty($id) && !empty($this->request->params['id'])) { $id =$this->request->params['id']; } 
-		if(empty($id) || !($adoptable = $this->Adoptable->read(null,$id))) { return $this->setError("No such adoptable",array('action'=>'index','rescue'=>$this->rescue)); }
+		if(empty($id) && !empty($this->request->named['id'])) { $id =$this->request->named['id']; }  # In case no exact route
+		if(empty($id) || !($adoptable = $this->Adoptable->read(null,$id))) { return $this->setError("No such adoptable $id",array('action'=>'index','rescue'=>$this->rescuename)); }
 
 		$this->set("adoptable", $adoptable);
 	}
@@ -135,19 +136,21 @@ class AdoptablesController extends AppController
 
 			if($this->Adoptable->saveAll($this->request->data))
 			{
+				# HOW DO WE GET ID???
 				$newid = $this->Adoptable->id;
+				error_log("SAVEDALL,ID=$newid");
 				#return $this->setSuccess("Adoptable information saved", array('user'=>null,'action'=>'view',$id));
 				$msg = '';
 				if($this->request->data['Adoptable']['status'] == 'Adopted')
 				{
 					$msg .= " The adopted animal has been saved to the Adoption Database";
-					return $this->setSuccess($msg, array('action'=>'search','rescue'=>$this->rescue)); 
+					return $this->setSuccess($msg, array('action'=>'search','rescue'=>$this->rescuename)); 
 				} else if($this->request->data['Adoptable']['status'] == 'Available') { 
 					$msg .= empty($id) ? "Adoptable listing shared. " : "Adoptable listing saved. ";
 					#$msg .= " <a class='underline' href='".Router::url(array('rescuer'=>false,'action'=>'view','id'=>$newid,'rescue'=>$this->rescue))."'>View adoptable listing</a>&nbsp; ";
-					$msg .= "<a href='".Router::url(array('action'=>'add','rescue'=>$this->rescue))."' class='btn btn-sm btn-warning'><span class='glyphicon glyphicon-plus'></span> Add another adoptable</a>";
+					$msg .= "<a href='".Router::url(array('action'=>'add','rescue'=>$this->rescuename))."' class='controls btn btn-warning'><span class='glyphicon glyphicon-plus'></span> Add another adoptable</a>";
 
-					return $this->setSuccess($msg, array('action'=>'view','id'=>$newid,'rescue'=>$this->rescue)); 
+					return $this->setSuccess($msg, array('rescuer'=>false,'action'=>'view','id'=>$newid,'rescue'=>$this->rescuename)); 
 				}
 				
 			} else {
@@ -159,6 +162,7 @@ class AdoptablesController extends AppController
 		}
 
 		$this->set("genders", $this->Adoptable->dropdown("genders"));
+		$this->set("ageGroups", $this->Adoptable->dropdown("age_groups"));
 		$this->set("adultSizes", $this->Adoptable->dropdown("adult_sizes"));
 		$this->set("statuses", $this->Adoptable->dropdown("statuses"));
 		$this->set("childFriendlies", $this->Adoptable->dropdown("yesno"));
@@ -207,7 +211,7 @@ class AdoptablesController extends AppController
 		{
 			if($this->AdoptionStory->save($this->request->data))
 			{
-				return $this->setSuccess("Success story saved",array('action'=>'edit','id'=>$adoptable_id,'rescue'=>$this->rescue));
+				return $this->setSuccess("Success story saved",array('action'=>'edit','id'=>$adoptable_id,'rescue'=>$this->rescuename));
 			} else  {
 				$this->setError("Could not save success story.  ".$this->AdoptionStory->errorString());
 			}

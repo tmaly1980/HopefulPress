@@ -48,12 +48,13 @@ if($plugin == 'volunteer') { $active = 'volunteer'; }
 	    	<a href='javascript:void(0);' class='btn btn-default'>
 			<?= !empty($current_user['first_name']) ? $current_user['first_name'] : 'No name' ?> <?= $this->Html->s("caret hidden-sm hidden-xs"); ?></a>
 
-		<ul class='dropdown-menu dropdown-menu-right right_align'>
-	    		<li><a href="/user/users/account">Account</a></li>
+		<ul class='dropdown-menu dropdown-menu-right'>
+	    		<li><a href="/user/users/account">User Account</a></li>
 			<? if(($myrescue = $this->Html->user("Rescue")) && !empty($myrescue['id'])) { ?>
-	    		<li><?= $this->Html->blink("fa-paw", $myrescue['title'], array('controller'=>'rescues','action'=>'view','rescue'=>$myrescue['hostname'])); ?></li>
+	    		<li><a class='bold' href="/rescue/<?= $myrescue['hostname'] ?>"><?= $this->Html->fa("paw"); ?> <?=$myrescue['title'] ?></a></li>
+	    		<li><a href="/rescuer/rescue/<?= $myrescue['hostname'] ?>/edit"><?= $this->Html->g("cog"); ?> My rescue's profile</a></li>
 			<? } else if($this->Html->user("rescuer")) {  ?>
-	    		<li><?= $this->Html->glink("add", "Add my rescue", array('rescuer'=>1,'controller'=>'rescues','action'=>'add')); ?></li>
+	    		<li><a href="/rescuer/rescues/add"><?= $this->Html->g("plus"); ?> Add rescue</a></li>
 			<? } ?>
 	    		<li><a href="/user/users/logout"><?= $this->Html->g("log-out"); ?> Sign Out</a></li>
 		</ul>
@@ -65,12 +66,12 @@ if($plugin == 'volunteer') { $active = 'volunteer'; }
 </nav>
 
 <? if($active == 'adopt' || (empty($prefix) && in_array($controller,array('adoptables')))) { ?>
-	<?= $this->requestAction(array('controller'=>'adoptables','action'=>'search_bar'),array('return')); ?>
+	<?= !$this->fetch("search_disabled") ? $this->requestAction("/adoptables/search_bar",array('return')) : null; # We get redirect loop if we omit  prefix, since this shows up on user login page ?>
 <? } ?>
 <? if($active == 'rescue') { 
 	if(empty($prefix))
 	{
-		echo $this->requestAction(array('controller'=>'rescues','action'=>'search_bar','rescue'=>$rescuename),array('return')); 
+		echo $this->requestAction(array('prefix'=>null,'plugin'=>null,'controller'=>'rescues','action'=>'search_bar','rescue'=>$rescuename),array('return')); 
 	}
 
 # Someone may have stumbled upon some listings on a rescue site, and they want to look for others..
@@ -82,6 +83,9 @@ if($plugin == 'volunteer') { $active = 'volunteer'; }
 # *** perhaps have a way to list adoptables in a global (unbranded) context vs a rescue-specific (branded) context....
 # In that case, hide 'search' bar as well. but offer a way to find more or go global
 # ie go off '$rescuename' rather than $adoptable['Rescue']['hostname']....
+/*
+
+HEADER DONE BY LAYOUT now...
 ?>
 <div>
 
@@ -89,4 +93,4 @@ if($plugin == 'volunteer') { $active = 'volunteer'; }
 		<?= $this->element("rescue/header"); ?>
 	<? } ?>
 </div>
-<? } ?>
+<? */ } ?>

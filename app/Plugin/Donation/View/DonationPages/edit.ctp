@@ -1,6 +1,6 @@
 <? $this->assign("page_title", "Edit Donation Overview"); ?>
 <? $this->start("title_controls"); ?>
-	<?= $this->Html->back("View Donation Page", array('action'=>'view')); ?>
+	<?= $this->Html->back("View Donation Page", array('rescuer'=>false,'action'=>'view','rescue'=>$rescuename)); ?>
 <? $this->end("title_controls"); ?>
 
 <div class='form'>
@@ -8,7 +8,7 @@
 	<?= $this->Form->hidden("id"); ?>
 
 <div class='row'>
-	<?= $this->Form->title(); ?>
+	<?#= $this->Form->title(); ?>
 
 	<h3>Introduction</h3>
 	<div class='alert alert-info'>
@@ -24,6 +24,6 @@
 
 	<div class='clear'></div>
 
-	<?= $this->Form->save("Update overview",array('cancel'=>true)); ?>
+	<?= $this->Form->save("Update overview",array('cancel'=>false)); ?>
 <?= $this->Form->end(); ?>
 </div>

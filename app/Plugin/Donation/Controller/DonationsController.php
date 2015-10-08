@@ -7,6 +7,8 @@ class DonationsController extends AppController
 	var $uses = array('Donation.Donation','Donation.DonationPage');#,'Paypal.PaypalCredential','Stripe.StripeCredential','Donation.DonationPage','Stripe.StripeCredential');
 	var $helpers = array('Stripe.Stripe','Paypal.Paypal');
 
+	var $rescue_required = true;
+
 	function ipn() # Paypal response.
 	{
 		error_log("IPN =".print_r($this->request->data,true));
@@ -293,10 +295,9 @@ class DonationsController extends AppController
 			\Stripe\Stripe::setApiKey($stripe['StripeCredential']['access_token']); # Simpler than using public key (don't seem to have)
 			return $stripe;
 		} else if($paypal = $this->_credentials_paypal()) {
-			# XXX TODO
-			# we also need to pass 
+			#
 			$paypal['sandboxMode'] = Configure::read("prod") ? false : true;
-			$this->Paypal = new Paypal($paypal);
+			#$this->Paypal = new Paypal($paypal);
 			$this->set("paypalCredentials", $paypal); # 
 			return $paypal;
 		}
@@ -309,6 +310,13 @@ class DonationsController extends AppController
 
 	function _credentials_paypal()
 	{
+		#  HACKED
+		if(!empty($this->rescue('paypal_email')))
+		{
+			$rescue = $this->rescue();
+			$rescue['PaypalCredential'] = $rescue['Rescue'];
+			return $rescue;
+		}
 		if(empty($this->PaypalCredential)) { return null; }
 		#$pp = Configure::read("Paypal"); # FOR NOW...
 		#return $pp;

@@ -6,7 +6,7 @@ class LinkPagesController extends SingletonController
 
 	function view()
 	{
-		$this->Tracker->track();
+		$this->track();
 		$this->set("linkCount", $this->Link->findCount()); # Even those in cateogires, whether to show sort or not.
 		$this->set("links", $this->Link->findAll(array('link_category_id'=>null)));
 		$this->set("linkCategories", $this->LinkCategory->findAll());

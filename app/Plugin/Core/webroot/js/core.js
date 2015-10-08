@@ -496,13 +496,17 @@
 		return row;
 	};
 
-	$.fn.duplicateFormRow = function(src, container) { // Adds row of same values (minor mods) immediately after
+	$.fn.addFormRow = function(preserveValue) { // Adds row of same values (blank or minor mods) immediately after
 		var srcRow = this;
 		var row = $(srcRow).clone();
-		var cloneIndex = $(container).find(src).length;
+		var cloneIndex = $(srcRow).siblings().length;
 		row.find(':input').each(function() {
-			this.id = this.id.replace(/^(\d+)/, cloneIndex);// 0.Model.fieldName
-			this.name = this.name.replace(/^data\[(\d+)\]/, "data["+cloneIndex+"]");
+			// this needs to be adjusted for different things.... ie data[name][n] also
+			this.id = this.id.replace(/(\d+)/, cloneIndex);// 0ModelFieldName or Model0FieldName
+			this.name = this.name.replace(/\[(\d+)\]/, "["+cloneIndex+"]");
+			if(!preserveValue) { 
+				$(this).val(''); // Leave empty. 
+			}
 		});
 		row.insertAfter(srcRow);
 		return row;

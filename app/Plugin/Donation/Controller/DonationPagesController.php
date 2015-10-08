@@ -6,6 +6,8 @@ class DonationPagesController extends SingletonController
 	var $uses = array('Donation.DonationPage','Donation.Donation');#,'Stripe.StripeCredential');
 	var $helpers = array('Stripe.Stripe');
 
+	var $rescue_required = true;
+
 	function view($id=null)
 	{
 		if(!empty($this->request->query['initialized']))

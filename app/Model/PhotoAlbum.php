@@ -56,6 +56,7 @@ class PhotoAlbum extends AppModel {
 
 	var $default_title = 'Untitled Album';
 
+	/*
 	function beforeFind($query)
 	{
 		if(in_array($this->findQueryType, array('first'))) { return $query; } # Ignore direct lookups.
@@ -76,5 +77,6 @@ class PhotoAlbum extends AppModel {
 
 		return $query;
 	}
+	*/
 
 }

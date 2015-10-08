@@ -29,7 +29,12 @@
 		<? } ?>
 		<? if(!empty($adoptable['Adoptable']['birthdate'])) { ?>
 		<span>
-			<?= $this->Time->timebetween($adoptable['Adoptable']['birthdate']); ?> 
+			<?= $this->Time->age($adoptable['Adoptable']['birthdate']); ?> 
+		</span>
+		<? } ?>
+		<? if(!empty($adoptable['Adoptable']['age_group'])) { ?>
+		<span>
+			<?= $adoptable["Adoptable"]['age_group']; ?>
 		</span>
 		<? } ?>
 		<? if(!empty($adoptable['Adoptable']['child_friendly'])) { ?>

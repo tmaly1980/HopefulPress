@@ -1,4 +1,5 @@
 <? 
+# IT SEEMS WE DO NEED TO KNOW IN THE MODALS WHO CALLED US TO CUSTOMIZE THEIR EXPERIENCE
 if(empty($modelClass)) { echo "ERROR: Unable to determine photo page settings"; return; }
 # Support per-model customization in app's config file
 Configure::load("pagePhoto");

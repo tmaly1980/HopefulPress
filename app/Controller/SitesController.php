@@ -186,7 +186,7 @@ class SitesController extends AppController {
 				$this->setError('The site could not be created');
 			}
 		} else {
-			$this->Tracker->track('Marketing'); # Page view tracked
+			$this->track('Marketing'); # Page view tracked
 		}
 
 		Configure::load("Stripe.billing");

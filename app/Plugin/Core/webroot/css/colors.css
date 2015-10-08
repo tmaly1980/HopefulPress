@@ -80,7 +80,7 @@ a.color.white:hover
 .lightbluebg { padding: 5px; background-color: #C2F6F6 !important; }
 .orangebg { padding: 5px; background-color: #FF8800 !important; }
 .lightorangebg { padding: 5px; background-color: #FFAA44 !important; }
-.lightgreybg { padding: 5px; background-color: #EEEEEE !important; }
+.lightgreybg { padding: 5px; background-color: #F0F0F0 !important; }
 .greybg { padding: 5px; background-color: #DDDDDD !important; }
 .semigreybg { padding: 5px; background-color: #DDDDDD !important; opacity: 0.8; filter:alpha(opacity: 80); -moz-opacity: 0.8; }
 .darkgreybg { padding: 5px; background-color: #999999 !important; }
@@ -89,7 +89,7 @@ a.color.white:hover
 
 .greyborder { border: solid 1px #999; }
 .lightgreyborder { border: solid 1px #BBB; }
-.darkgreyborder { border: solid 1px #333; }
+.darkgreyborder,.darkborder { border: solid 1px #666; }
 
 .odd { background-color: #EEE; }
 

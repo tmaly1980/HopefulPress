@@ -38,6 +38,7 @@ class UsersController extends UserCoreController {
 				$this->setError("Could not update account: ".$this->User->errorString());
 			}
 		}
+		$this->request->data = $this->User->read(null,$this->me());
 	}
 	
 	# Facebook login should be able to grab email and name
@@ -45,12 +46,8 @@ class UsersController extends UserCoreController {
 	function login()
 	{
 		$submit = !empty($this->request->data['submit']) ? $this->request->data['submit'] : null;
-		error_log("S=".print_r($this->request->data,true));
-		error_log("SUB=$submit");
 		if(preg_match("/Create/", $submit))
 		{
-			# Encrypt password...
-			$this->request->data['User']['password'] = $this->User->hash($this->request->data['User']['password']);
 			if($this->User->save($this->request->data)) # Checks for duplicate email, lousy password,etc
 			{
 				$user = $this->User->read();

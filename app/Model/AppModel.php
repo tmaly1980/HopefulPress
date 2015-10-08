@@ -7,7 +7,9 @@ class AppModel extends CoreAppModel {
 		'AutoId'=>array( # Might be rescue_id, etc.
 			'fields'=>array('rescue_id'), # More???
 		),
-		'UserCore.Autouser','Project.Projectable','Members.MembersOnly','Chart.Chartable','Core.FieldDefault');
+		'UserCore.Autouser',
+		#'Project.Projectable','Members.MembersOnly','Chart.Chartable',
+		'Core.FieldDefault');
 	var $autouser = true;
 
 }

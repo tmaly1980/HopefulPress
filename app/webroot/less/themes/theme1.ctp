@@ -33,7 +33,7 @@ if(empty($color1)) { $color1 = '559522'; }
 
 }
 
-#main a
+#main a:not(.controls)
 {
 	color: @linkcolor;
 }
@@ -50,13 +50,15 @@ if(empty($color1)) { $color1 = '559522'; }
 {
 	border-bottom: solid #ddd 1px;
 	margin: 0.5em;
-	padding: 0.1em;
+	padding: 0.5em;
 }
 
 #main #header
 {
+	/*
 	padding-top: 0px;
 	padding-bottom: 0px;
+	*/
 }
 
 #topics,

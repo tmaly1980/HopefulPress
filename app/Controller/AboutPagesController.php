@@ -8,7 +8,7 @@ class AboutPagesController extends SingletonController
 
 	function view()
 	{
-		$this->Tracker->track();
+		$this->track();
 		$this->set("aboutPageBios", $this->AboutPageBio->findAll());
 		return parent::view();
 	}

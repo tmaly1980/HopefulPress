@@ -21,7 +21,7 @@ class AppController extends AppCoreController {
 			'className'=>'UserCore.UserAuth',
 			'authError'=>false,
 			'managerField'=>'manager', # Users with 'manager' flag set can log into any site.
-			'loginAction'=>array('plugin'=>false,'controller'=>'users','action'=>'login'), # keeps prefix, ie custom sign in page w/details #'/user/users/login',
+			'loginAction'=>'/user/users/login', # Causes redirect loop if we pass array and not specific with prefix...
 			'loginRedirect'=>'/',#user/dashboard',
 			'logoutRedirect'=>'/',
 			'publicAllowed'=>true,
@@ -52,7 +52,7 @@ class AppController extends AppCoreController {
 			'devEmail'=>'tomas@malysoft.com',
 			'support'=>'support@hopefulpress.com'
 		),
-		'Project.Projectable',
+		#'Project.Projectable',
 		#'Tracker.Tracker',
 		'Editable.Editable',
 	);
@@ -71,6 +71,7 @@ class AppController extends AppCoreController {
 		'User',
 		'Rescue',
 		'Adoptable',
+		"Newsletter.MailchimpCredential",
 		/*
 		'Page',
 		'AboutPage',
@@ -81,7 +82,7 @@ class AppController extends AppCoreController {
 		'Resource',
 		'DownloadPage',
 		'Download',
-		'Project.Project',
+		#'Project.Project',
 		'Members.MemberPage',
 		'SiteDesign',
 		'Rescue.Adoptable',
@@ -95,7 +96,6 @@ class AppController extends AppCoreController {
 		'Rescue.VolunteerForm',
 		"Stripe.StripeCredential",
 		"Paypal.PaypalCredential",
-		"Newsletter.MailchimpCredential",
 		*/
 	);
 
@@ -113,8 +113,13 @@ class AppController extends AppCoreController {
 	var $rescue = null; # Current rescue?
 	var $rescue_id = null; # Current rescue?
 
+	var $rescue_required = false; # Pages which MUST have rescue specified (ie news, donations, etc); may become obsolete.
+	# For sake of nice URL - otherwise we could just imply from rescue_id
+
 	function beforeFilter()
 	{
+		error_log("I_AM=".print_r($this->request->params,true));
+
 		Configure::write("in_admin", $this->me()); # Is user logged in? (do we show editing controls) XXX TODO
 
 		Configure::write("hostname", $this->Session->read("CurrentSite.Site.hostname")); # Might be  used in helpers,etc.
@@ -325,7 +330,7 @@ class AppController extends AppCoreController {
 			"fosterEnabled"=>$this->FosterOverview->count(array('disabled'=>0)),
 			"fosterFormEnabled"=>$this->FosterForm->count(array('disabled'=>0)),
 
-			"projects"=>$this->Project->idurllist(),
+			#"projects"=>$this->Project->idurllist(),
 			"subtopics"=>$subtopics,
 			"other_pages"=>$this->Page->idurllist(array('parent_id'=>0)),
 			"pageidurls"=>$this->Page->find('list',array('fields'=>array('id','url'))) # Provide mapping if needed
@@ -347,11 +352,31 @@ class AppController extends AppCoreController {
 		$parsedUrl = Router::parse(Router::url($url));
 		$controller = !empty($parsedUrl['controller']) ? $parsedUrl['controller'] : null;
 
-		if(in_array($controller, $projectable_controllers) && ($pid = Configure::read("project_id")) && !isset($url['project_id'])) # Bypass project if pass id/false
+		/*if(in_array($controller, $projectable_controllers) && ($pid = Configure::read("project_id")) && !isset($url['project_id'])) # Bypass project if pass id/false
 		{
 			$url['project_id'] = $pid;
 		}
+		*/
 		#error_log("REDIRECT@=".print_r($this->request->params,true)."=".print_r($url,true));
+
+		# ALWAYS ASSUME THAT IF RESCUE SET, PASS ALONG....
+		if(is_array($url) && !empty($this->rescuename) && !isset($url['rescue'])) # Can be
+		{
+			#error_log("ADDING RESCUE....@".print_r($this->request->params,true));
+			$url['rescue'] = $this->rescuename;
+		} else if (isset($url['rescue']) && $url['rescue'] == false) { 
+			unset($url['rescue']);
+		}
+
+		# Fix if we pass prefix=>false/null, then remove whatever prefix there is. Otherwise, we have to be explicit, admin=>false, user=>false, rescuer=>false,etc.
+		if(isset($url['prefix']) && empty($url['prefix']) && !empty($this->request->params['prefix']))
+		{
+			$prefix = $this->request->params['prefix'];
+			unset($url[$prefix]);
+		}
+		#error_log("RED_URL=".print_r($url,true));
+		#error_log("FINAL=".Router::url($url));
+
 		return parent::redirect($url, $status, $exit);
 	}
 
@@ -484,22 +509,45 @@ class AppController extends AppCoreController {
 
 		$this->set("rescuename",null); # So var always exists.
 
+		$rescuename = null;
 		if(!empty($this->request->params['rescue']))
 		{
-			$rescue = $this->Rescue->findByHostname($this->request->params['rescue']);
+			$rescuename = $this->request->params['rescue'];
+		} else if(!empty($this->request->named['rescue'])) { # IN case not routed right
+			$rescuename = $this->request->named['rescue'];
+		}
+
+		if($rescuename)
+		{
+			$rescue = $this->Rescue->findByHostname($rescuename);
 			if(empty($rescue))
 			{
-				$this->setError("Rescue not found",array('controller'=>'rescues','action'=>'index'));
+				$this->setError("Rescue not found","/rescues");#array('prefix'=>false,'plugin'=>null,'controller'=>'rescues','action'=>'index'));
 			} else {
-				$this->set("rescue", $rescue);
-				$this->set("hostname", $this->request->params['rescue']);
-				$this->set("rescuename", $this->request->params['rescue']);
+				$this->set("rescue", $this->rescue = $rescue);
+				$this->set("hostname", $rescuename);
+				$this->set("rescuename", $rescuename);
 				$this->set("rescue_id", $rescue['Rescue']['id']);
 				Configure::write("rescue_id", $this->rescue_id = $rescue['Rescue']['id']); # For later record filtering.
-				Configure::write("rescuename", $this->rescue = $rescue['Rescue']['hostname']); 
+				Configure::write("rescuename", $this->rescuename = $rescue['Rescue']['hostname']); 
 				# Save to $this->rescue and $this->rescue_id
 				Configure::write("rescue", $rescue); 
 			}
+		}
+
+		if(empty($rescue) && !empty($this->rescue_required))
+		{
+			return $this->setError("Rescue not found","/rescues");#array('plugin'=>null,'controller'=>'rescues','action'=>'index'));
+		}
+	}
+
+	function rescue($field=null)
+	{
+		if(!empty($field))
+		{
+			return !empty($this->rescue['Rescue'][$field]) ? $this->rescue['Rescue'][$field] : null;
+		} else {
+			return $this->rescue; # Whole
 		}
 	}
 
@@ -532,6 +580,10 @@ class AppController extends AppCoreController {
 			{
 				$nav['donationsEnabled'] = true;
 
+			}
+			if($this->MailchimpCredential->count(array('rescue_id'=>$rescue_id)))
+			{
+				$nav['mailingListEnabled'] = true;
 			}
 
 			$this->set("nav", $nav);

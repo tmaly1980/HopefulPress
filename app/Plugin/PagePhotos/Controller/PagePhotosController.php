@@ -33,10 +33,13 @@ class PagePhotosController extends AppController
 	}
 	*/
 
-	function vars($pluginModelClass=null)
+	# WE NEED TO KNOW THE PARENT SO WE CUSTOMIZE PROPERLY
+	function vars()#$pluginModelClass=null)
 	{
+		/*
 		Configure::load("pagePhoto");
 		$vars = Configure::read("PagePhoto.$pluginModelClass");
+		*/
 
 		# Load
 		$defaults = array(
@@ -44,11 +47,12 @@ class PagePhotosController extends AppController
 			'plugin'=>(!empty($this->request->params['plugin']) ? "/{$this->request->params['plugin']}" : ""),
 			'controller'=>$this->request->params['controller'],
 		);
+		return $defaults;
 
-		return is_array($vars)  ? array_merge($defaults, $vars) : $defaults;
+		#return is_array($vars)  ? array_merge($defaults, $vars) : $defaults;
 	}
 
-	function json_edit($id = null) # Show inline edit widget.
+	function json_edit($id = null,$parentClass='PagePhoto') # Show inline edit widget.
 	{
 		# This seems wrong for alternative logos,etc...
 		extract($this->vars());
@@ -57,7 +61,8 @@ class PagePhotosController extends AppController
 		{
 			$photo = $this->{$this->modelClass}->read(null, $id);
 			error_log("PHOTO=".print_r($photo,true));
-			$this->set("page_photo_id", $id);
+			#$this->set($primaryKey, $id);
+			$this->set("page_photo_id", $id); # Needs to be generic.
 			if(!empty($photo[$this->modelClass]['width'])) { $this->set("width", $photo[$this->modelClass]['width']); }
 			if(!empty($photo[$this->modelClass]['height'])) { $this->set("height", $photo[$this->modelClass]['height']); }
 			$this->Json->set("src", "$plugin/$controller/image/$id"); # 300x300
@@ -65,7 +70,12 @@ class PagePhotosController extends AppController
 			$this->request->data = $photo; # For Model->field()
 			#$this->Json->set("thumb_src", "/page_photos/thumb/".$this->PagePhoto->id); # Unused for now... since above is so small anyway.
 		}
-		$this->Json->replace($this->modelClass);
+		$classParts = split("[.]", $parentClass);
+		error_log("CLASS_PARTS ($parentClass)=".print_r($classParts,true));
+		if(count($classParts) == 1) { $classParts[] = 'PagePhoto'; } # Default container.
+		$container = $classParts[count($classParts)-1];
+		error_log("REPLACING($parentClass)=$container");# Should be PhotoModel
+		$this->Json->replace($container);
 		$this->Json->render("PagePhotos.edit");
 	}
 
@@ -92,111 +102,105 @@ class PagePhotosController extends AppController
 	}
 	*/
 
-	function delete($model, $model_id = null)
+	function delete($parentClass, $id = null) # Removes reference from parent object
 	{
-		extract($this->vars($model));
+		extract($this->vars());#$model));
 
-		$pluginModelClass = $model;
-		list($p,$model) = pluginSplit($model);
-
-		$this->set("modelClass", $pluginModelClass);
-		$this->set("model_id", $model_id);
-
-		$this->loadModel($pluginModelClass);
-		if(empty($model_id))
+		# For compatibility with Photos list/album in case double-implemented.
+		if(empty($id) && is_numeric($parentClass)) # Just remove self, don't bother with parent (just de-reference belongsTo to see validity)
 		{
-			$model_id = $this->{$model}->first_id();
+			$id = $parentClass;
+			$parentClass = null;
 		}
-		$page = $this->{$model}->read(null, $model_id);
-		if(!empty($page))
+
+		$this->{$this->modelClass}->delete($id); # Delete self.
+
+		# Now remove reference from parent, if applicable.
+		if(!empty($parentClass))
 		{
-			$page_photo_id = $page[$model][$primaryKey];
-			if(!empty($page_photo_id))
+			list($p,$parentModel) = pluginSplit($parentClass);
+
+			$this->loadModel($parentClass);
+
+			$parent_id = $this->{$parentClass}->field('id', array($primaryKey=>$id));
+
+			if(!empty($parent_id))
 			{
-				$this->{$model}->saveField($primaryKey, null);
-				$this->{$this->modelClass}->delete($page_photo_id);
+				$this->{$parentClass}->saveField($primaryKey, null);
 			}
+
+			$this->set("modelClass", $parentClass);
+			$this->set("model_id", $parent_id);
+			$this->render("PagePhotos.../Elements/edit");
+		} else if ($this->request->ext == 'json') { # For album list style, etc.
+                	$this->Json->script("$('#{$this->modelClass}_$id').smartRemove();");
+                	return $this->Json->render();
+		} else { # Doesnt matter.
+			return $this->redirect(array('action'=>'index')); # Best guess.
 		}
-		$this->render("PagePhotos.../Elements/edit");
 	}
 
-	function upload($model = null, $model_id = null)
+	function upload($parentClass,$id=null) # Replace?
 	{
-		return $this->edit($model,$model_id);
+		error_log("UPLOAD");
+		return $this->edit($parentClass,$id);
 	}
-	function crop($pluginModelClass = null, $model_id = null)
+
+	function crop($parentClass,$id=null)
 	{
-		extract($this->vars($pluginModelClass));
+		$this->set("modelClass",$parentClass); # Custom views/modals
+		$this->set("model_id",$id);
+		extract($this->vars());#$parentClass));
 
 		error_log("CROP CALLED");
-		$this->edit($pluginModelClass,$model_id,true); # Process first.
+		$this->edit($parentClass,$id,true); # Process first.
 		error_log("CROP CONTINUED, DONE WITH EDIT");
 
-		list($p,$modelClass) = pluginSplit($pluginModelClass); # Dont'  screww up plugin for controller url vars
-		$this->loadModel($pluginModelClass);
 
-		$this->{$modelClass}->id = $model_id;
-		$page_photo_id = $this->{$modelClass}->field($primaryKey);
-		$this->request->data = $this->{$this->modelClass}->read(null, $page_photo_id);
+		$this->request->data = !empty($id) ? $this->{$this->modelClass}->read(null, $id) : array();
 	}
 
-	function edit($pluginModelClass = null, $model_id = null, $incrop = false) 
+	function edit($parentClass,$id = null, $incrop = false) 
 	{ # Model passed is parent object. We know who we are.
+		$this->set("modelClass",$parentClass); # So views can be custom.
+		$this->set("model_id",$id);
 
-		extract($this->vars($pluginModelClass));
-
-		if(empty($pluginModelClass)) { $pluginModelClass = $this->uses[0]; }
-		if($pluginModelClass == 'PagePhoto') { $pluginModelClass = 'PagePhotos.PagePhoto'; }
-		$this->set("modelClass", $pluginModelClass);  # Could belong to a plugin
-		$pluginModelClassId = Inflector::underscore(Inflector::singularize($pluginModelClass))."_id";
-		$this->set("model_id", $model_id);
-		# Make available for JSON
-
-		list($p,$modelClass) = pluginSplit($pluginModelClass);
-		$this->loadModel($pluginModelClass);
+		extract($this->vars());#$pluginModelClass));
 
 		# Existing records are never replaced, just forgotten.
 		# This is bad code, saves to photo given id of page
-		#if(!empty($model_id)) { $this->{$this->modelClass}->id = $model_id; }
+		if(!empty($id)) { $this->{$this->modelClass}->id = $id; }
 		# *** it's the parent/page id
 
 		# This requires we have a belongsTo set up, since form uses PagePhoto/etx
 
+		error_log("D=".print_r($this->request->data,true));
+
 		if(!empty($this->request->data))
 		{
-			# If photo object has MODEL_id field, set that too.
-			if(!empty($model_id) && $this->{$this->modelClass}->hasField($pluginModelClassId))
-			{
-				$this->request->data[$this->modelClass][$pluginModelClassId] = $model_id;
-
-			}
-
 			error_log("DATA=".print_r($this->request->data,true));
 			# This here is the Photo class...
 			if($this->{$this->modelClass}->save($this->request->data))
 			{
-				#$this->admin_edit($this->PagePhoto->id);
+				error_log("SETTING $primaryKey ({$this->modelClass})=> ".$this->{$this->modelClass}->id);
 				$this->set($primaryKey, $this->{$this->modelClass}->id);
 
-				if(!empty($modelClass) && !empty($model_id)) # ie if inline edit, about_pages, etc.
-				{
-					$this->loadModel($modelClass);
-					$this->{$modelClass}->id = $model_id;
-					$this->{$modelClass}->saveField($primaryKey, $this->{$this->modelClass}->id);
-				}
+				# primary key name is based on model class (and thus controller)....ie page_photo_id, rescue_logo_id
 
+				# NO MORE INLINE EDIT UPDATE PARENT ID FOREIGN KEY
+				
 				if(!empty($this->request->data['tinymce']))
 				{
 					// fill in with url and then close dialog successfully.
 					//top.\$('.mce-btn.mce-open').parent().find('.mce-textbox').val('%s').closest('.mce-window').find('.mce-primary').click();</script>", "/page_photos/page_photos/image/$pid");
 					$this->set("resultcode", "ok");
 					$this->set("result", "file_uploaded");
-					$this->set("file_name", "$plugin/$controller/image/".$this->PagePhoto->id);
+					$this->set("file_name", "$plugin/$controller/image/".$this->{$this->modelClass}->id);
 					return $this->render("tinymce");
 				} else {
 					if($incrop)
 					{
-						return $this->json_edit($this->{$this->modelClass}->id);
+						return $this->json_edit($this->{$this->modelClass}->id,$parentClass);
 					} else {
 						# Go to crop (just uploaded)
 						$this->request->data = $this->{$this->modelClass}->read();

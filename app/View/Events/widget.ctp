@@ -1,12 +1,12 @@
 <? if(empty($updates['upcomingEvents']) && !$this->Html->me() /*&& !$this->Html->can_edit()*/) { return; } ?>
 
-<? $prefix = Configure::read("members_only") ? "members" : "user"; ?>
+<? $prefix = Configure::read("members_only") ? "members" : "rescuer"; ?>
 <? $pid = Configure::read("project_id"); ?>
 <? $project = Configure::read("project"); ?>
 
 <div class='widget'>
 <h3>
-	<?= $this->Html->link("Upcoming Events", array($prefix=>1,'plugin'=>null,'controller'=>'events','action'=>'index')); ?>
+	<?= $this->Html->link("Upcoming Events", array('plugin'=>null,'controller'=>'events','action'=>'index')); ?>
 </h3>
 <? if(false && $this->Html->can_edit()) { ?>
 <div class='alert-warning border2 dashed'>
@@ -17,7 +17,7 @@
         <? if($this->Html->me()) { ?>
         <div class='dashed alert alert-info'>
                 You have no upcoming events.
-                <?= $this->Html->add("Add an event", array('user'=>1,'controller'=>'events','action'=>'add')); ?>
+                <?= $this->Html->add("Add an event", array('rescuer'=>1,'controller'=>'events','action'=>'add')); ?>
         </div>
         <? } ?>
 <? } else { ?>

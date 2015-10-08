@@ -9,7 +9,7 @@ class DownloadsController extends ListItemsController
 
 	function download($id = null)
 	{
-		#$this->Tracker->track();
+		#$this->track();
 		if(!$this->Download->echoFileContent($id))
 		{
 			return $this->invalid();

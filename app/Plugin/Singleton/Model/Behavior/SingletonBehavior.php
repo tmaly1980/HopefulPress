@@ -1,6 +1,21 @@
 <?
 class SingletonBehavior extends ModelBehavior
 { # keeps at most one record of a table, per site. and if all critical content deleted, the page is hidden (deleted) from public
+	var $_defaults = array(
+		'field'=>'site_id' # Could be rescue_id, etc. OR false
+	);
+
+  	public function setup(Model $Model, $config = array()) {
+                if (isset($config[0])) {
+                        $config['field'] = $config[0];
+                        unset($config[0]);
+                }
+                $settings = $config + $this->_defaults;
+
+		#if(!is_array($settings['fields'])) { $settings['fields'] = array($settings['fields']); }
+
+                $this->settings[$Model->alias] = $settings;
+        }
 
 	# To get proper existing id(), we have to call $model->id = $model->first_id()..
 	# Unfortunately, beforeSave() here is too late, as exists() is called before it, and ->id is not set, so it fails and INSERTS instead of UPDATES
@@ -9,7 +24,8 @@ class SingletonBehavior extends ModelBehavior
 
 	function afterSave(Model $model, $created, $options = array())
 	{
-		if(!Configure::read("site_id")) { return true; } # Skip unless multisite enabled.
+		$field = $this->settings[$model->alias]['field'];
+		if(!empty($field) && !Configure::read($field)) { return true; } # Skip unless multisite enabled.
 
 		// If record has no critical fields, then delete the record. act like page is blank so we reset and hide from public.
 		if(!empty($model->minimal_fields))
@@ -58,10 +74,11 @@ class SingletonBehavior extends ModelBehavior
 
 	function singleton(Model $model) # AUTO create record if not there...
 	{
+		$field = $this->settings[$model->alias]['field'];
 		#error_log("CALLING SINGLETON ON {$model->alias}");
 		$model->id = false;
 		$record = $model->first();
-		if(empty($record) && Configure::read("site_id"))
+		if(!empty($field) && empty($record) && Configure::read($field))
 		{
 			$model->create();
 			$model->save();

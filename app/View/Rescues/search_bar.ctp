@@ -3,11 +3,16 @@ if(!empty($rescuename)) { # Already in one, just show browse all...
 ?>
 <ul class='breadcrumb'>
 	<li>
-		<?= $this->Html->back("Browse All Rescues",array('controller'=>'rescues','action'=>'search'),array('class'=>'btn btn-default')); ?>
+		<?= $this->Html->back("Browse All Rescues",array('plugin'=>null,'controller'=>'rescues','action'=>'search'),array('class'=>'btn btn-default')); ?>
 	</li>
 	<li class='bold'>
-		<?= $rescueCount ?> rescues nearby
+		<?= !empty($rescueCount)?$rescueCount:"No" ?> rescues nearby.
+		<!-- add location, radius -->
 		<!-- nearby me or nearby CURRENT rescue? OR ALL rescues? -->
+
+		<? if($this->Html->user("rescuer") && !$this->Html->user("Rescue")) { ?>
+			<?= $this->Html->add("Add my rescue",array('plugin'=>null,'controller'=>'rescues','action'=>'add')); ?>
+		<? } ?>
 	</li>
 </ul>
 <?

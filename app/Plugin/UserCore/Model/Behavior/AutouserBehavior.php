@@ -16,12 +16,12 @@ class AutouserBehavior extends ModelBehavior {
 		# *** only bother to set when record is being CREATED
 		# don't want to wipe out previous owner just because
 		# not mentioned in form fields...
-		if(!empty($model->id)) { return true; } # SKIP! existing record.
+		#error_log("autouser {$model->id}");
+
 		# Only autocreate on new records.
 
 		# Implement supporting member_id for members 
 		# and not mixing up user_id with users
-
 
 		if(!empty($model->autouser) && Configure::read("User.autouser") !== false)
 		{
@@ -31,13 +31,23 @@ class AutouserBehavior extends ModelBehavior {
 				$me = Configure::read("member_id");
 			} else { # User.
 				$key = "user_id";
+				$me = Configure::read("user_id");
 			}
 			$me = Configure::read($key);
 
-			if($me && $model->hasField($key) && !isset($model->data[$model->alias]['member_id']) && !isset($model->data[$model->alias]['user_id']))
-			# needs to not reset if one or other set.
+			#error_log("autouser READING $key=$me");
+
+			#error_log("autouser DATA=".print_r($model->data[$model->alias],true));
+
+			if($me && $model->hasField($key))
 			{
-				$model->data[$model->alias][$key] = $me;
+				# Set if new record or if value in form AND DB not set.
+				if(!isset($model->data[$model->alias][$key]) && (!$model->id || !$model->field($key)))
+				{
+					$model->data[$model->alias][$key] = $me; # 
+				
+					error_log("SETTING {$model->alias} $key = $me");
+				}
 			}
 		}
         	return parent::beforeSave($model);

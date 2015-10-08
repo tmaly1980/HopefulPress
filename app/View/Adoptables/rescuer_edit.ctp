@@ -37,10 +37,9 @@
 		</div>
 		<div class='row'>
 			<?= $this->Form->input("birthdate",array('div'=>'col-md-3','data-date-start-view'=>1,'date'=>1,'size'=>10,'tip'=>'Guess if unsure','placeholder'=>'mm/dd/yyyy')); # XXX TODO try asking for year so faster choice if older ?>
-			<?= $this->Form->input("gender",array('div'=>'col-md-4','options'=>$genders)); ?>
-			<? if($rescue) { ?>
-				<?= $this->Form->input("neutered_spayed",array('div'=>'col-md-4','label'=>'Neutered/Spayed','options'=>$this->Form->yesnoblank)); ?>
-			<? } ?>
+			<?= $this->Form->input("age_group",array('div'=>'col-md-3','options'=>$ageGroups,'default'=>'Adult')); ?>
+			<?= $this->Form->input("gender",array('div'=>'col-md-3','options'=>$genders)); ?>
+			<?= $this->Form->input("neutered_spayed",array('div'=>'col-md-3','label'=>'Neutered/Spayed','options'=>$this->Form->yesnoblank)); ?>
 		</div>
 		<div class='row'>
 			<?= $this->Form->input_group("weight_lbs",array('div'=>'col-md-3','label'=>'Weight (Lbs)')); ?>
@@ -51,7 +50,10 @@
 		<div class='row'>
 				<?= $this->Form->input("cat_friendly",array('div'=>'col-md-3','options'=>$this->Form->yesnoblank)); ?>
 				<?= $this->Form->input("dog_friendly",array('div'=>'col-md-3','options'=>$this->Form->yesnoblank)); ?>
-				<?= $this->Form->input_group("adoption_cost",array('div'=>'col-md-3','before'=>'$','Xsize'=>5)); ?>
+				<?= $this->Form->input_group("adoption_cost",array('id'=>'AdoptionCost','div'=>'col-md-3','before'=>'$','Xsize'=>5)); ?>
+				<script>
+				$('#AdoptionCost').filter_input({regex: "/[^0-9.]+$/"});
+				</script>
 
 				<?#= $this->Form->input("fostered",array('div'=>'col-md-3 align_right','label'=>'Currently Fostered')); ?>
 				<?#= $this->Form->input("date_fosterable",  array('date'=>1));?>
@@ -72,14 +74,14 @@
 </div>
 
 <div>
+		<h3>More Pictures</h3>
 		<? if($this->Html->me()) { ?>
-		<div class='right'>
+		<div class=''>
 			<?= $this->Form->fileupload("Upload.file", "Add photos...", array('id'=>'UploadFile','class'=>'controls')); ?>
 			<?#= $this->Html->blink('move', "Resort", "javascript:void(0)", array('id'=>'sorter','class'=>'btn-primary white controls')); ?>
 			<!-- XXX TODO figure out how to have automagic resort -->
 		</div>
 		<? } ?>
-		<h3>More Pictures</h3>
 		<div class='clear'></div>
 		<div class='border padding25 minheight50'>
 			<?= $this->element("../AdoptablePhotos/list",array('adoptable'=>$this->request->data)); ?>

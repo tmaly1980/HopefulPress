@@ -11,6 +11,7 @@ class Adoptable extends AppModel
 	# dropdown values
 	var $genders = array('Male','Female');
 	var $adult_sizes = array('Small','Medium','Large');
+	var $age_groups = array('Youth','Young Adult','Adult','Senior'); #  Lifespan varies so much it's easier to just ask
 	var $statuses = array('Available','Retreived','Pending Adoption','Adopted');
 	var $sanctuary_statuses = array('Featured','Private');
 	var $energy_levels = array('','Low','Medium','High');

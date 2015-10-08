@@ -163,7 +163,7 @@ class UserAuthComponent extends AuthComponent # PASS THRU!
 	function id()
 	{
 		if(empty($this->controller)) { return; } # Error handling
-		return $this->user($this->controller->{$this->userModel}->primaryKey); # Compatible with multiple models. User.UserID, etc.
+		return $this->user("{$this->userModel}.{$this->controller->{$this->userModel}->primaryKey}"); # Compatible with multiple models. User.UserID, etc.
 	}
 
 	function me()

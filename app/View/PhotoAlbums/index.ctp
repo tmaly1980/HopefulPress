@@ -5,7 +5,7 @@
 <? $this->assign("layout_main_class", ""); ?>
 <? $this->start("admin_controls"); ?>
 	<? if($this->Html->can_edit()) { ?>
-		<?= $this->Html->add("Add Photo Album", array("user"=>1,"action"=>"add")); ?>
+		<?= $this->Html->add("Add Photo Album", array("rescuer"=>1,"action"=>"add")); ?>
 	<? } ?>
 <? $this->end(); ?>
 <div class="photoAlbums index <?#= $this->Admin->fontsize('default'); ?>">

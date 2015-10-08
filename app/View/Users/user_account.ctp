@@ -5,7 +5,7 @@
 
 <div class='users form border lightgreybg '>
 	<?= $this->Form->create("User",array('Xautocomplete'=>'off','id'=>"UserForm")); ?>
-		<?= $this->Form->input('id'); ?>
+		<?= $this->Form->input('id',array('value'=>$this->Html->me())); # Force. ?>
 		<?#= $this->element("PagePhotos.edit"); # ??? Grab copy from facebook if can? ?>
 		<?#= $this->Form->input('Email',array('validate'=>true)); # TODO OK if duplicate if UserID match ?>
 

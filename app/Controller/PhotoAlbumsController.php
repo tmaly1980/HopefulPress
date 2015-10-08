@@ -19,13 +19,13 @@ class PhotoAlbumsController extends AppController {
 /* Actions */
 
 	public function index() {
-		$this->Tracker->track();
+		$this->track();
 		$this->PhotoAlbum->recursive = 1;
 		$this->set('photoAlbums', $albums = $this->paginate());
 	}
 
 	public function view($id = null) {
-		$this->Tracker->track();
+		$this->track();
 		$this->PhotoAlbum->recursive = 1;
 	 	if (!$this->PhotoAlbum->count($id)) { return $this->invalid(); }
 		$this->set('photoAlbum', $album = $this->PhotoAlbum->read(null, $id));

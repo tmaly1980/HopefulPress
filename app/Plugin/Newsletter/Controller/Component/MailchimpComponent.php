@@ -13,11 +13,12 @@ class MailchimpComponent extends Component
 		return parent::initialize($controller);
 	}
 
-	function login()
+	function login($action = 'oauth')
 	{
 		$client_id  = Configure::read("Mailchimp.client_id");
-		$url = Router::url(array('action'=>'oauth'),true);
+		$url = Router::url(array('action'=>$action),true);
 		$this->controller->redirect("https://login.mailchimp.com/oauth2/authorize?client_id=$client_id&redirect_uri=$url&response_type=code");
+		# ? do we need to give an approved list of url's?
 	}
 
 	function logout()

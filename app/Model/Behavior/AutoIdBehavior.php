@@ -37,14 +37,14 @@ class AutoIdBehavior extends ModelBehavior
 			if($model->alias == $selfClass) { $model->id = $field_id; }
 	
 			if(!is_array($query['conditions'])) { $query['conditions'] = array($query['conditions']); } # Fix so check below works.
-	
+
 			if(isset($query['conditions'][$field]) || isset($query['conditions'][$model->alias.".$field"])) { 
 				# Ignore (allow any) if field_id is set to false
-				if(isset($query['conditions'][$field]) && $query['conditions'][$field] === false)
+				if(isset($query['conditions'][$field]) && empty($query['conditions'][$field]))# === false)
 				{
 					unset($query['conditions'][$field]);
 				}
-				if(isset($query['conditions'][$model->alias.".$field"])) 
+				if(isset($query['conditions'][$model->alias.".$field"]) && empty($query['conditions'][$model->alias.".$field"])) 
 				{
 					unset($query['conditions'][$model->alias.".$field"]);
 				}

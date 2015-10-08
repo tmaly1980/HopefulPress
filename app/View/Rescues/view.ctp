@@ -33,15 +33,11 @@
 </div>
 <? } ?>
 
-
-<? $this->start("after_content"); ?>
-	<?= $this->requestAction(array('controller'=>'adoptables','action'=>'widget','rescue'=>$rescuename),array('return')); ?>
-<? $this->end("after_content"); ?>
-<? /* TODO full updates
-	<?= $this->fetch("before_updates"); # ??? ?>
-
 <? $updates_sidebar = $this->element("../Rescues/updates_sidebar");  ?>
 <? $updates = $this->element("../Rescues/updates");  ?>
+
+<? $this->start("after_content"); ?>
+	<?= $this->fetch("before_updates"); # ??? ?>
 <div class='row'>
 
 <? if(!empty($updates_sidebar)) { ?>
@@ -56,5 +52,4 @@
 	</div>
 </div>
 
-
-*/?>
+<? $this->end("after_content"); ?>

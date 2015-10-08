@@ -1,7 +1,7 @@
 <? 
 $sidebar_content  = !empty($rescue['Rescue']['sidebar_content']) ? $rescue['Rescue']['sidebar_content'] : null;
-$sidebar_title  = !empty($rescue['Rescue']['sidebar_content']) ? $rescue['Rescue']['sidebar_title'] : null;
-$mailinglist = $this->requestAction("/newsletter/subscribers/widget",array('return')); 
+$sidebar_title  = !empty($rescue['Rescue']['sidebar_title']) ? $rescue['Rescue']['sidebar_title'] : 'Sponsors';
+$mailinglist = $this->element("rescue/mailinglist");#$this->requestAction(array('plugin'=>"newsletter",'controller'=>'subscribers','action'=>'widget'),array('return')); 
 
 $news = $this->element("../NewsPosts/widget",array('wide'=>1));
 $events = $this->element("../Events/widget");
@@ -9,9 +9,10 @@ $photos = $this->element("../PhotoAlbums/widget");
 $videos = null;# BROKEN FOR NOW # $this->element("Videos.../Videos/widget");
 
 $nomaincontent = empty($news) && empty($photos) && empty($videos);
+# FOR NOW ADOPTABLES BETTER AS GRID
 
-$adoptables = $this->element("adoptables",array('type'=>($nomaincontent?'block':'carousel')));
-$successes = $this->requestAction("/rescue/adoption_stories/widget",array('return'));
+$adoptables = $this->element("adoptables",array('type'=>'block'));#($nomaincontent?'block':'carousel')));
+$successes = null;#$this->requestAction(array('controller'=>'adoption_stories','action'=>'widget','rescue'=>$rescuename),array('return'));
 
 $has_sidebar = (!empty($events) || !empty($sidebar_content) || !empty($mailinglist) || (!empty($adoptables) && !$nomaincontent));
 ?>
@@ -20,11 +21,6 @@ $has_sidebar = (!empty($events) || !empty($sidebar_content) || !empty($mailingli
 	<div class='col-md-8 padding5 row'>
 <? } ?>
 
-<? if($nomaincontent && !empty($adoptables)) { ?>
-<div class='col-md-12'>
-	<?= $adoptables ?>
-</div>
-<? } ?>
 
 <? if(!empty($news)) { ?>
 <div class='col-md-12'>
@@ -48,19 +44,26 @@ $has_sidebar = (!empty($events) || !empty($sidebar_content) || !empty($mailingli
 </div>
 <? } ?>
 
+<? if(!empty($adoptables)) {# && $nomaincontent) { ?>
+<div class='col-md-12'>
+	<?= $adoptables ?>
+</div>
+<? } ?>
+
 <? if(!empty($successes)) { ?>
 <div class='col-md-12'>
 	<?= $successes ?>
 </div>
 <? } ?>
 
+
 <? if($has_sidebar) { ?>
 </div>
 	<div class="col-md-4 padding5">
 		<?= $events ?>
-		<? if(!$nomaincontent) { ?>
+		<? /* if(!$nomaincontent) { ?>
 			<?= $adoptables ?>
-		<? } ?>
+		<? } */ ?>
 		<?= $mailinglist ?>
 		<? if(!empty($sidebar_content)) { ?>
 		<div class='widget'>

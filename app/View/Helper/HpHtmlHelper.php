@@ -4,44 +4,21 @@ class HpHtmlHelper extends CoreHtmlHelper
 {
 	var $helpers = array('Session','Form','Site','Text');
 
-	# Todo, have rescue, transporter, volunteer, etc link methods....
-
-	function rescue_link($title,$url=null,$opts=array(),$confirmMessage=false) # Preserves rescue info in url.
-	{
-		if(is_array($url))
-		{
-			if(isset($url['rescue'])) { $url['hostname'] = $url['rescue']; unset($url['rescue']); }
-
-			if(!isset($url['hostname']) && !empty($this->request->params['hostname'])) # Rescue specific url, 
-			{
-				$url['hostname'] = $this->request->params['hostname']; # 
-			}
-		}
-		return $this->link($title,$url,$opts,$confirmMessage);
-	}
+	# *** IF WE DONT WANT THE RESCUE PARSED IN A LINK (when the previous/loaded page has it set), GIVE AN ABSOLUTE STRING! ****
+	# Otherwise, let's assume all links want rescue passed if available.
 
 	function link($title, $url=null, $opts=array(), $confirmMessage = false)
 	{
-		Configure::load("projectable");
-		$projectable_controllers = Configure::read("Projectable.controllers");
-
-		# If controller is projectable, and in project, force all links to use project_id
-		# We abort use of project_id if we go to a non-project controller (ie homepages)
-		$parsedUrl = Router::parse(Router::url($url));
-		$controller = !empty($parsedUrl['controller']) ? $parsedUrl['controller'] : null;
-		if(in_array($controller, $projectable_controllers) && ($pid = Configure::read("project_id")) && !isset($url['project_id'])) # Bypass project if pass id/false
+		if(($rescuename = Configure::read("rescuename")) && is_array($url) && !isset($url['rescue']))
 		{
-			if(is_array($url))
-			{
-				if(!isset($url['project_id']))
-				{
-					$url['project_id'] = $pid;
-				}
-			} else {
-				$url .= "/project_id:$pid";
-			}
+			$url['rescue'] = $rescuename;
 		}
-
+			
+		# Remove prefix if unwanted. (it's implied so we have to set proper false)
+		if(is_array($url) && isset($url['prefix']) && empty($url['prefix']) && !empty($this->request->params['prefix']))
+		{
+			$url[$this->request->params['prefix']] = false;
+		}
 
 		return parent::link($title, $url, $opts, $confirmMessage);
 	}

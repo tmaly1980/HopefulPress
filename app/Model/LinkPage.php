@@ -7,7 +7,7 @@ App::uses('AppModel', 'Model');
  */
 class LinkPage extends AppModel {
 	var $displayField = 'title';
-	var $actsAs = array('Singleton.Singleton','Project.Projectable');//,'Core.FieldDefault'); # read() will auto-create if need be
+	var $actsAs = array('Singleton.Singleton');#,'Project.Projectable');//,'Core.FieldDefault'); # read() will auto-create if need be
 
 	public $hasMany = array(
 	);

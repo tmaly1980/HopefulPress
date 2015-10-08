@@ -40,7 +40,8 @@ $page_photo_id = $this->Form->fieldValue("$photoModel.id");
 <?= $this->Form->create($photoModel, array('url'=>array('plugin'=>$plugin,'controller'=>$controller,'action'=>'crop',$modelClass,$model_id),'class'=>'json')); ?>
 
 <div class='right'>
-	<button type='button' class='btn btn-warning' id='<?=$photoModel?>CropperReset'>Reset</button>
+	<button type='button' class='btn btn-danger' id='<?=$photoModel?>CropperCancel'><span class='glyphicon glyphicon-remove'></span> Cancel</button>
+	<button type='button' class='btn btn-warning' id='<?=$photoModel?>CropperReset'><span class='glyphicon glyphicon-refresh'></span> Reset</button>
 	<button type='submit' class='btn btn-primary'><span class='glyphicon glyphicon-scissors'></span> Done</button>
 </div>
 <h4>Drag a box to crop your picture (optional)</h4>
@@ -58,19 +59,26 @@ if($filename) { list($origWidth, $origHeight) = getimagesize(APP."/webroot/$path
 	<?= $this->Form->hidden("$photoModel.crop_w", array('id'=>"{$photoModel}CropW")); ?>
 	<?= $this->Form->hidden("$photoModel.crop_h", array('id'=>"{$photoModel}CropH")); ?>
 
-	<div style="width: <?= $scaledWidth ?>px;" class='center'>
+	<div style="width: <?= $scaledWidth ?>px;" class='center padding25'>
 		<?= $this->Html->image(array('plugin'=>$plugin,'controller'=>$controller,'action'=>'fullimage',$page_photo_id,$scaledWidth), array('class'=>'cropper')); ?>
 	</div>
 
 	<script>
 	var cropScale = '<?= $scaledWidth / $origWidth ?>'; // 300 / 900 => 0.3333
 
+	$('#<?=$photoModel?>CropperCancel').click(function(e) {
+		e.preventDefault();
+		$.dialogclose();
+	});
+
 	$('#<?=$photoModel?>CropperReset').click(function(e) {
 		e.preventDefault();
 		$('#<?=$photoModel?>Cropper img.cropper').cropper("clear");
 	});
 
-	$('#<?=$photoModel?>Cropper img.cropper').cropper({
+$('#<?=$photoModel?>Cropper img.cropper').load(function() {
+	//alert('loaded shifted down stupidly');
+	$(this).cropper({
 		//aspectRatio: 16 / 9,
 		data: { // x,y,width,height; current values, scaled down.
 			//x: 10,y:10,width:100,height: 100
@@ -93,8 +101,10 @@ if($filename) { list($origWidth, $origHeight) = getimagesize(APP."/webroot/$path
 			$('#<?=$photoModel?>CropH').val( Math.round(data.height / cropScale) );
 		}
 	});
+});
 	</script>
 
+	<div class='clear'></div>
 </div>
 
 

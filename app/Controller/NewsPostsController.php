@@ -9,7 +9,7 @@ class NewsPostsController extends AppController {
 
 	public function index() {
 		error_log("INDEX");
-		$this->Tracker->track();
+		$this->track();
 		#if (!$this->NewsPost->count()) { return $this->notFound(); }
 		$this->NewsPost->recursive = 0;
 
@@ -21,7 +21,7 @@ class NewsPostsController extends AppController {
 
 	public function view($id = null) {
 		error_log("VIEW=$id");
-		$this->Tracker->track();
+		$this->track();
 		if (!$this->NewsPost->count($id)) { return $this->invalid(); }
 		$this->set('newsPost', $this->NewsPost->read(null, $id));
 	}

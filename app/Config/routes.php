@@ -62,15 +62,29 @@ if(!HostInfo::site_specified())
 
 	# View content within rescue
 	Router::connect('/rescue/:rescue', array('controller' => 'rescues', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
+		
+	
+	# CSS
+	Router::connect('/rescue/:rescue/style', array('controller' => 'rescues', 'action' => 'style'),array('rescue'=>'[\w_-]+'));
+	Router::connect('/rescue/:rescue/style/*', array('controller' => 'rescues', 'action' => 'style'),array('rescue'=>'[\w_-]+'));
+
+	# OTHER PAGES
 	Router::connect('/rescue/:rescue/about', array('controller' => 'rescues', 'action' => 'about'),array('rescue'=>'[\w_-]+'));
 	Router::connect('/rescue/:rescue/contact', array('controller' => 'rescues', 'action' => 'contact'),array('rescue'=>'[\w_-]+'));
 	Router::connect('/rescue/:rescue/donate', array('plugin'=>'donation','controller' => 'donation_pages', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescue/:rescue/donate/*', array('plugin'=>'donation','controller' => 'donations'),array('rescue'=>'[\w_-]+')); # IPN
+	Router::connect('/rescue/:rescue/donate/:action', array('plugin'=>'donation','controller' => 'donations'),array('rescue'=>'[\w_-]+')); # IPN and form
+	Router::connect('/rescue/:rescue/donate/:action/*', array('plugin'=>'donation','controller' => 'donations'),array('rescue'=>'[\w_-]+')); # IPN and form
+
+	Router::connect('/rescue/:rescue/news', array('controller' => 'news_posts', 'action' => 'index'),array('rescue'=>'[\w_-]+'));
+	Router::connect('/rescue/:rescue/news/*', array('controller' => 'news_posts', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
+	Router::connect('/rescue/:rescue/photos', array('controller' => 'photo_albums', 'action' => 'index'),array('rescue'=>'[\w_-]+'));
+	Router::connect('/rescue/:rescue/photos/*', array('controller' => 'photo_albums', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
 
 	# Adoptable.
 	Router::connect('/adoptable/:id', array('controller'=>'adoptables','action'=>'view'),array('id'=>'\d+'));
 	Router::connect('/rescue/:rescue/adoptable/:id', array('controller'=>'adoptables','action'=>'view'),array('rescue'=>'[\w_-]+','id'=>'\d+'));
 	Router::connect('/rescue/:rescue/adoptable/:id/:action', array('controller'=>'adoptables'),array('rescue'=>'[\w_-]+','id'=>'\d+'));#View
+	Router::connect('/rescue/:rescue/adoptable/*', array('controller'=>'adoptables','action'=>'view'),array('rescue'=>'[\w_-]+'));
 	Router::connect('/rescuer/rescue/:rescue/adoptable/:id/:action', array('rescuer'=>1,'controller'=>'adoptables'),array('rescue'=>'[\w_-]+','id'=>'\d+')); # Edit
 	Router::connect('/rescuer/rescue/:rescue/adoptable/add', array('rescuer'=>1,'action'=>'add'),array('rescue'=>'[\w_-]+'));
 
@@ -79,11 +93,24 @@ if(!HostInfo::site_specified())
 	Router::connect('/rescue/:rescue/:controller/:action', array(),array('rescue'=>'[\w_-]+'));
 	Router::connect('/rescue/:rescue/:controller/:action/*', array(),array('rescue'=>'[\w_-]+'));
 
+	# MANAGING SPECIALIZATIONS
+	Router::connect('/rescuer/rescue/:rescue/specializations', array('rescuer'=>1,'controller'=>'rescue_specializations'),array('rescue'=>'[\w_-]+'));
+	Router::connect('/rescuer/rescue/:rescue/specializations/:action', array('rescuer'=>1,'controller'=>'rescue_specializations'),array('rescue'=>'[\w_-]+'));
+	Router::connect('/rescuer/rescue/:rescue/specializations/:action/*', array('rescuer'=>1,'controller'=>'rescue_specializations'),array('rescue'=>'[\w_-]+'));
+
 	# Update rescuer content.
 	Router::connect('/rescuer/rescue/:rescue/:action', array('rescuer'=>1,'controller'=>'rescues'),array('rescue'=>'[\w_-]+')); # edit, etc
 	Router::connect('/rescuer/rescue/:rescue/:controller/:action', array('rescuer'=>1),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescuer/rescue/:rescue/:controller/:action', array('rescuer'=>1),array('rescue'=>'[\w_-]+'));
 	Router::connect('/rescuer/rescue/:rescue/:controller/:action/*', array('rescuer'=>1),array('rescue'=>'[\w_-]+'));
+
+	Router::connect('/rescuer/:plugin/rescue/:rescue/:controller/:action', array('rescuer'=>1),array('rescue'=>'[\w_-]+'));
+
+	# We cannot generalize with ':prefix', we have to be explicit. Or loop over all prefixes found and specify rules each.
+
+	# Stuff for all users (may as well)
+	Router::connect('/user/rescue/:rescue/:controller', array('user'=>1),array('rescue'=>'[\w_-]+'));
+	Router::connect('/user/rescue/:rescue/:controller/:action', array('user'=>1),array('rescue'=>'[\w_-]+'));
+	Router::connect('/user/rescue/:rescue/:controller/:action/*', array('user'=>1),array('rescue'=>'[\w_-]+'));
 
 	/*
 	# We could be failing to catch because general routing creates duplicate entry...

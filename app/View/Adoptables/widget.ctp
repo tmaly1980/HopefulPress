@@ -81,10 +81,10 @@ $(document).ready(function() {
 <div class='right_align margintop10'>
 	<?= $this->Html->link("More adoptables".$this->Html->g("chevron-right"), array('controller'=>'adoptables','rescue'=>$rescuename),array('class'=>'btn')); ?>
 </div>
-<? } ?>
 
 
 </div>
+<? } ?>
 
 
 </div>

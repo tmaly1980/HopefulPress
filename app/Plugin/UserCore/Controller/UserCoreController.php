@@ -288,6 +288,7 @@ class UserCoreController extends UserCoreAppController {
 
 	function login() # User account info is saved to Auth.User.User.FIELD .... 
 	{
+		error_log("CALLED AC:LOGIN...");
 	
 		# may want to force prefix (per app)
 		$userField = $this->Auth->authenticate['Form']['fields']['username'];
@@ -297,6 +298,7 @@ class UserCoreController extends UserCoreAppController {
 
 		if(!empty($this->request->data))
 		{
+			error_log("PROCESSING...");
 			if(!empty($this->managerLoginField))
 			{
 				$this->{$this->modelClass}->bypassSiteField = $this->managerLoginField;
@@ -327,6 +329,7 @@ class UserCoreController extends UserCoreAppController {
 				}
 			}
 
+			error_log("LOGGING IN=".print_r($user,true));
 			if(!empty($user) && $this->Auth->login($user))#['User']))
 			{
 				$this->postLogin(); # Implement custom redirect here?
@@ -340,6 +343,7 @@ class UserCoreController extends UserCoreAppController {
 	function postLogin() # After successful login
 	# Per app, check for account status (paid, trial, expired, etc)
 	{
+		error_log("UC:POSTLOGIN");
 		if($this->Components->enabled('Tracker'))
 		{
 			$this->Tracker->hide_session();

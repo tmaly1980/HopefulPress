@@ -10,7 +10,7 @@ class ContactPagesController extends SingletonController
 
 	function view()
 	{
-		$this->Tracker->track();
+		$this->track();
 		$this->set("contacts", $this->Contact->findAll());
 		return parent::view();
 	}

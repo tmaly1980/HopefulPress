@@ -15,7 +15,7 @@ class LinksController extends ListItemsController
 
 	function follow()
 	{
-		#$this->Tracker->track(); # TODO someday
+		#$this->track(); # TODO someday
 		if(empty($this->request->query['goto']))
 		{
 			return $this->redirect($this->request->query['goto']);

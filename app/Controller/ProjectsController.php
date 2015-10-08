@@ -7,13 +7,13 @@ class ProjectsController extends ProjectCoreController
 
 	function view($id = null)
 	{
-		$this->Tracker->track();
+		$this->track();
 		return parent::view($id);
 	}
 
 	function index()
 	{
-		$this->Tracker->track();
+		$this->track();
 		return parent::index();
 	}
 
