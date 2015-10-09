@@ -360,10 +360,7 @@ class UserCoreController extends UserCoreAppController {
 			);
 		}
 
-		$redir = $this->Auth->redirectUrl();
-		error_log("POST_LOGIN_REDIR=".print_r($redir,true));
-
-		return $this->redirect($redir);
+		return $this->redirect($this->Auth->redirectUrl());
 	}
 
 	function manager_login()

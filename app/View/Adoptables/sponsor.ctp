@@ -1,5 +1,5 @@
 <? $id = $adoptable['Adoptable']['id']; ?>
-<? $imgid = $adoptable['Adoptable']['page_photo_id']; ?>
+<? $imgid = $adoptable['Adoptable']['adoptable_photo_id']; ?>
 <?  $name = $adoptable['Adoptable']['name']; ?>
 <? $this->assign("page_title",  "Sponsor $name");  ?>
 <? $this->start("title_controls");?>

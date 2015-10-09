@@ -36,8 +36,8 @@ class PagePhotosController extends AppController
 	# WE NEED TO KNOW THE PARENT SO WE CUSTOMIZE PROPERLY
 	function vars()#$pluginModelClass=null)
 	{
+		Configure::load("pagePhoto");#Have access
 		/*
-		Configure::load("pagePhoto");
 		$vars = Configure::read("PagePhoto.$pluginModelClass");
 		*/
 
@@ -70,10 +70,14 @@ class PagePhotosController extends AppController
 			$this->request->data = $photo; # For Model->field()
 			#$this->Json->set("thumb_src", "/page_photos/thumb/".$this->PagePhoto->id); # Unused for now... since above is so small anyway.
 		}
-		$classParts = split("[.]", $parentClass);
-		error_log("CLASS_PARTS ($parentClass)=".print_r($classParts,true));
-		if(count($classParts) == 1) { $classParts[] = 'PagePhoto'; } # Default container.
-		$container = $classParts[count($classParts)-1];
+		$container = Configure::read("PagePhoto.$parentClass.photoModel");
+		if(empty($container))
+		{
+			$classParts = split("[.]", $parentClass);
+			error_log("CLASS_PARTS ($parentClass)=".print_r($classParts,true));
+			if(count($classParts) == 1) { $classParts[] = 'PagePhoto'; } # Default container.
+			$container = $classParts[count($classParts)-1];
+		}
 		error_log("REPLACING($parentClass)=$container");# Should be PhotoModel
 		$this->Json->replace($container);
 		$this->Json->render("PagePhotos.edit");

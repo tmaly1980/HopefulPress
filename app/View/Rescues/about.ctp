@@ -40,21 +40,21 @@
 
 	<hr/>
 
-	<? if(!empty($rescueBios) && $this->Html->can_edit()) { ?>
+	<? if(!empty($aboutPageBios) && $this->Html->can_edit()) { ?>
 		<div class='right'>
 		<?= $this->Html->add("Add Staff Bio", array('admin'=>1,'controller'=>'about_page_bios','action'=>'add')); ?>
-		<? if(count($rescueBios) > 1) { ?>
+		<? if(count($aboutPageBios) > 1) { ?>
 		<?= $this->Html->blink("sort", "Resort", "javascript:void(0)",array('id'=>'bio_sorter')); ?>
 		<? } ?>
 		</div>
 	<? } ?>
-	<? if(!empty($rescueBios) || $this->Html->can_edit())  { ?>
+	<? if(!empty($aboutPageBios) || $this->Html->can_edit())  { ?>
 	<h3 id='Rescue_BioTitle'><?= !empty($rescue['Rescue']['bio_title']) ? $rescue['Rescue']['bio_title'] : "Our Staff" ?></h3>
 	<div class='clear'></div>
 	<? } ?>
 
-	<? if(empty($rescueBios) && $this->Html->can_edit()) { ?>
-		<?= $this->Html->add("Add Staff Bios", array('admin'=>1,'controller'=>'about_page_bios','action'=>'add'),array('short'=>false)); ?>
+	<? if(empty($aboutPageBios) && $this->Html->can_edit()) { ?>
+		<?= $this->Html->add("Add Staff Bios", array('rescuer'=>1,'controller'=>'about_page_bios','action'=>'add'),array('short'=>false)); ?>
 		<div class='alert alert-info'>
 			You can add biographies of individuals within your organization.
 		</div>
@@ -62,16 +62,16 @@
 
 <? if($this->Html->can_edit()) { ?>
 	<script>
-	$('#Rescue_BioTitle').inline_edit({link: '', inline:'after'});
+	//$('#Rescue_BioTitle').inline_edit({link: '', inline:'after'});
 	</script>
 <? } ?>
 <div class='clear'></div>
 
-	<div id="RescueBios">
-		<?= $this->element("../RescueBios/list"); ?>
+	<div id="AboutPageBios">
+		<?= $this->element("../AboutPageBios/list"); ?>
 	</div>
 
-<? if($this->Html->can_edit() && count($rescueBios) > 1) { ?>
+<? if($this->Html->can_edit() && count($aboutPageBios) > 1) { ?>
 	<script>
 	$('#bio_sorter').sorter('.biolist',{axis: 'y',controller: 'about_page_bios'});
 	</script>

@@ -3,7 +3,7 @@ class RescuesController extends AppController
 {
 	var $components  = array('Newsletter.Mailchimp');
 
-	var $uses = array('Rescue','NewsPost','Event','PhotoAlbum');
+	var $uses = array('Rescue','NewsPost','Event','PhotoAlbum','AboutPageBio','Contact');
 
 	var $globalActions = array('index','search','search_bar','rescuer_add','rescuer_edit'); # What doesn't require the rescue to be specified.
 
@@ -35,7 +35,7 @@ class RescuesController extends AppController
 		# Prompt for Rescue record.
 		if(!empty($this->request->data))
 		{
-			if($this->Rescue->save($this->request->data)) # Should save user_id to me automatically.
+			if($this->Rescue->saveAll($this->request->data)) # Should save user_id to me automatically.
 			{
 				# Update user account too, link to this rescue...
 				#
@@ -97,10 +97,12 @@ class RescuesController extends AppController
 
 	function about()
 	{
+		$this->set("aboutPageBios", $this->AboutPageBio->find('all',array('rescue_id'=>$this->rescuename)));
 	}
 
 	function contact()
 	{
+		$this->set("contacts", $this->Contact->find('all',array('rescue_id'=>$this->rescuename)));
 	}
 
 	function search()
@@ -212,5 +214,6 @@ class RescuesController extends AppController
 		} 
 		$this->redirect(array('action'=>'view'));
 	}
+
 
 }

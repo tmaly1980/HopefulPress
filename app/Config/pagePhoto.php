@@ -52,6 +52,10 @@ $config['PagePhoto'] = array(
 		'nocaption'=>true,
 		'photoModel'=>'AdoptablePhoto',
 		'plugin'=>false,
+		'SuccessStoryPhoto'=>array(
+			'photoModel'=>'SuccessStoryPhoto',
+			'plugin'=>false,
+		),
 	),
 
 );

@@ -67,7 +67,7 @@
 
 	<? if(empty($contacts)) { ?>
 		<? if($this->Html->can_edit()) { ?>
-		<?= $this->Html->add("Add Contact", array('rescue'=>1,'controller'=>'contacts','action'=>'add','rescue'=>$rescuename),array('short'=>false)); ?>
+		<?= $this->Html->add("Add Contact", array('rescuer'=>1,'controller'=>'contacts','action'=>'add','rescue'=>$rescuename),array('short'=>false)); ?>
 		<div class='alert alert-info'>
 			You can add individual contacts with their own phone and email details
 		</div>

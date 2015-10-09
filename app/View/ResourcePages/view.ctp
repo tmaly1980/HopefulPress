@@ -6,7 +6,7 @@
 <? $this->assign("layout_main_class", ""); ?>
 <? $this->start("admin_controls"); ?>
 <? if($this->Html->can_edit()) { ?>
-	<?= $this->Html->add("Add Resource", array("user"=>1,"controller"=>'resources',"action"=>"add")); ?>
+	<?= $this->Html->add("Add Resource", array("rescuer"=>1,"controller"=>'resources',"action"=>"add")); ?>
 	<? if(count($resources) > 1) { # XXX somehow count for resources within categories ?>
 		<?= $this->Html->blink("sort", "Resort", "javascript:void(0)",array('id'=>'resource_sorter')); ?>
 	<? } ?>

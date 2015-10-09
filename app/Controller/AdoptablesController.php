@@ -2,16 +2,26 @@
 App::uses("RescueAppController", "Rescue.Controller");
 class AdoptablesController extends AppController
 {
-	var $uses  = array('Adoptable','Rescue.AdoptionStory','Rescue.Adoption');
+	var $uses  = array('Adoptable','Adoption');
 
 	var  $helpers = array('Stripe.Stripe');
 
-	function  user_search()
+	function rescuer_import()
+	{
+		return $this->_import();
+	}
+
+	function rescuer_import_template()
+	{
+		return $this->_import_template();
+	}
+
+	function rescuer_search()
 	{
 		$this->setAction("user_index");
 	}
 
-	function user_index($status = null)
+	function rescuer_index($status = null)
 	{
 		$cond = $having = array();
 		$fields = array('*');
@@ -76,8 +86,16 @@ class AdoptablesController extends AppController
 		$this->set("adoptables", $this->Adoptable->findAll(
 			array("Adoptable.status != 'Adopted'")
 		));
-		$this->set("adoptionStories", $this->paginate('AdoptionStory'));
 
+		$this->paginate = array(
+			'order' => 'Adoptable.story_date DESC, Adoptable.created DESC'
+		);
+		$this->set("adoptionStories", $this->paginate('Adoptable',array("Adoptable.status = 'Adopted'","Adoptable.success_story != ''")));
+	}
+
+	function stories()
+	{
+		$this->set("adoptionStories", $this->Adoptable->find('all',array('conditions'=>array("Adoptable.status = 'Adopted'","Adoptable.success_story != ''"))));
 	}
 
 	function search_bar()
@@ -102,26 +120,6 @@ class AdoptablesController extends AppController
 		$this->view($id);
 	}
 
-	function user_add_story($adoptable_id) { return $this->setAction("user_edit_story",$adoptable_id); }
-
-	function user_edit_story($adoptable_id,$id=null)
-	{
-		$this->set("adoptable_id",$adoptable_id);
-		$this->set("adoptable_name", !empty($adoptable_id)? $this->Adoptable->field("name", array('id'=>$adoptable_id)) : null);
-
-		if(!empty($this->request->data))
-		{
-			if($this->AdoptionStory->saveAll($this->request->data))
-			{
-				return $this->setSuccess("Success story saved",array('action'=>'edit',$adoptable_id,'#'=>"adoption_story"));
-			} else  {
-				$this->setError("Could not save success story.  ".$this->AdoptionStory->errorString());
-			}
-		} else if (!empty($id)) {
-			$this->request->data = $this->AdoptionStory->read(null,$id);
-		} 
-	}
-
 	function rescuer_edit($id=null)
 	{
 		$this->require_rescue(); 
@@ -143,16 +141,17 @@ class AdoptablesController extends AppController
 				error_log("SAVEDALL,ID=$newid");
 				#return $this->setSuccess("Adoptable information saved", array('user'=>null,'action'=>'view',$id));
 				$msg = '';
+				$goto = array('rescuer'=>false,'action'=>'view','id'=>$newid,'rescue'=>$this->rescuename); 
 				if($this->request->data['Adoptable']['status'] == 'Adopted')
 				{
-					$msg .= " The adopted animal has been saved to the Adoption Database";
-					return $this->setSuccess($msg, array('action'=>'search','rescue'=>$this->rescuename)); 
+					$msg .= " The adopted animal has been saved to the <a href='".Router::url(array('rescuer'=>1,'action'=>'index','rescue'=>$this->rescuename))."'>Adoption Database</a>";
+					return $this->setSuccess($msg, $goto);#array('action'=>'search','rescue'=>$this->rescuename)); 
 				} else if($this->request->data['Adoptable']['status'] == 'Available') { 
 					$msg .= empty($id) ? "Adoptable listing shared. " : "Adoptable listing saved. ";
 					#$msg .= " <a class='underline' href='".Router::url(array('rescuer'=>false,'action'=>'view','id'=>$newid,'rescue'=>$this->rescue))."'>View adoptable listing</a>&nbsp; ";
 					$msg .= "<a href='".Router::url(array('action'=>'add','rescue'=>$this->rescuename))."' class='controls btn btn-warning'><span class='glyphicon glyphicon-plus'></span> Add another adoptable</a>";
 
-					return $this->setSuccess($msg, array('rescuer'=>false,'action'=>'view','id'=>$newid,'rescue'=>$this->rescuename)); 
+					return $this->setSuccess($msg, $goto);
 				}
 				
 			} else {
@@ -205,28 +204,6 @@ class AdoptablesController extends AppController
 		}  else {
 			$this->setError("Could not remove adoptable page",array('action'=>'view',$id));
 		}
-	}
-
-	function user_success_story($adoptable_id,$id=null) #  Add/edit
-	{
-		if(!empty($this->request->data))
-		{
-			if($this->AdoptionStory->save($this->request->data))
-			{
-				return $this->setSuccess("Success story saved",array('action'=>'edit','id'=>$adoptable_id,'rescue'=>$this->rescuename));
-			} else  {
-				$this->setError("Could not save success story.  ".$this->AdoptionStory->errorString());
-			}
-		} else if (!empty($id)) {
-			$this->request->data = $this->AdoptionStory->read(null,$id);
-		} 
-		$this->request->data['AdoptionStory']['adoptable_id'] = $adoptable_id;
-	}
-
-	function success_story($id) # View as separate page,for end-user
-	{
-		$this->Adoptable->recursive = 2;
-		$this->set("adoptable", $this->Adoptable->read(null, $id));
 	}
 
 	######################################

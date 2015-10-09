@@ -61,9 +61,12 @@ $ucThing = ucfirst($thing);
 
 # Separate params allows for passing from page?
 
+
 if(empty($page_photo_id)) { # Could be set after save.
 	$page_photo_id = $this->Form->fieldValue($primaryKey);
 }
+
+#echo "PK=$primaryKey, PPID=$page_photo_id";
 
 if(empty($height)) {
 	$height = $this->Form->fieldValue("$photoModel.height");

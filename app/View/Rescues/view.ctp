@@ -3,7 +3,7 @@
 <? $this->assign("layout_main_class", ""); ?>
 <? $this->start("title_controls"); ?>
 <? if($this->Html->can_edit()) { ?>
-	<?= $this->Html->edit("Update rescue page", array("rescuer"=>1,"action"=>"edit",'rescue'=>$rescuename)); ?>
+	<?#= $this->Html->edit("Update rescue page", array("rescuer"=>1,"action"=>"edit",'rescue'=>$rescuename)); # MOVED TO NEW ADMIN BAR ?>
 <? } ?>
 <? $this->end(); ?>
 <? $this->start("pre_content"); ?>

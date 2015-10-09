@@ -1,7 +1,7 @@
-<? $this->assign("page_title", "Search Adoption Database"); ?>
+<? $this->assign("page_title", "Search Your Adoption Database"); ?>
 <? $this->start("title_controls"); ?>
-	<?= $this->Html->add("Add Animal/Adoptable",array('user'=>1,'action'=>'add')); ?>
-	<?= $this->Html->blink("list", "Bulk Import",array('user'=>1,'action'=>'import')); ?>
+	<?= $this->Html->add("Add Animal/Adoptable",array('rescuer'=>1,'action'=>'add')); ?>
+	<?= $this->Html->blink("list", "Bulk Import",array('rescuer'=>1,'action'=>'import')); ?>
 <? $this->end("title_controls"); ?>
 <?
 Configure::load("Rescue.breeds");
@@ -41,13 +41,13 @@ $species = array_combine(array_keys($breeds),array_keys($breeds));
 		<th><?= $this->Paginator->sort("microchip"); ?></th>
 	</tr>
 <? foreach($adoptables as $adoptable) { 
-	$imgid = !empty($adoptable['Adoptable']['page_photo_id']) ? $adoptable['Adoptable']['page_photo_id'] : null;
+	$imgid = !empty($adoptable['AdoptablePhoto']['id']) ? $adoptable['AdoptablePhoto']['id'] : null;
 ?>
 	<tr>
 		<td>
-			<?= $this->Html->link($this->Html->image(!empty($imgid)?"/page_photos/page_photos/thumb/$imgid/50x50":"/rescue/images/nophoto.png", array('class'=>'width50 border')), "/page_photos/page_photos/view/$imgid", array('class'=>'lightbox','title'=>$adoptable['Adoptable']['name']));  ?>
+			<?= $this->Html->link($this->Html->image(!empty($imgid)?array('controller'=>'adoptable_photos','action'=>'thumb',$imgid,'50x50'):"/rescue/images/nophoto.png", array('class'=>'width50 border')), array('action'=>'view',$adoptable['Adoptable']['id']), array('class'=>'','title'=>$adoptable['Adoptable']['name']));  ?>
 		</td>
-		<td><?= $this->Html->link($adoptable['Adoptable']['name'], array('user'=>1,'action'=>'edit',$adoptable['Adoptable']['id']),array('class'=>'underline')); ?></td>
+		<td><?= $this->Html->link($adoptable['Adoptable']['name'], array('action'=>'view',$adoptable['Adoptable']['id']),array('class'=>'underline')); ?></td>
 		<td><?= $adoptable['Adoptable']['species'] ?></td>
 		<td><?= $adoptable['Adoptable']['breed'] ?>
 			<?= !empty($adoptable['Adoptable']['mixed_breed']) ? " mix" : "" ?>
@@ -59,7 +59,7 @@ $species = array_combine(array_keys($breeds),array_keys($breeds));
 			<?= !empty($adoptable['Adoptable']['birthdate']) ? $this->Time->age($adoptable['Adoptable']['birthdate']) : "" ?>
 		</td>
 		<td><?= $adoptable['Adoptable']['status'] ?></td>
-		<td><?= $this->Html->link($adoptable['Adoptable']['microchip'], array('user'=>1,'action'=>'edit',$adoptable['Adoptable']['id'])); ?></td>
+		<td><?= $this->Html->link($adoptable['Adoptable']['microchip'], array('rescuer'=>1,'action'=>'edit',$adoptable['Adoptable']['id'])); ?></td>
 	</tr>
 	<? } ?>
 </table>

@@ -13,6 +13,19 @@ class ListItemsController extends AppController
 	{
 		if(!empty($this->request->data))
 		{
+			# If any belongsTo displayField (ResourceCategory.title) is there but empty, remove that association.
+			if(!empty($this->{$this->modelClass}->belongsTo))
+			{
+				foreach($this->{$this->modelClass}->belongsTo as $subModel=>$subModelParams)
+				{
+					$displayField = $this->{$this->modelClass}->{$subModel}->displayField;
+					if(isset($thi->request->data[$subModel][$displayField]) &&
+						empty($thi->request->data[$subModel][$displayField]))
+					{
+						unset($this->requet->data[$subModel]);
+					}
+				}
+			}
 			if(!$this->{$this->modelClass}->saveAll($this->request->data)) # If any belongsTo (ie category), will save/create as well.
 			{
 				return $this->setError("Could not save ".$this->thing().": ".$this->{$this->modelClass}->errorString());

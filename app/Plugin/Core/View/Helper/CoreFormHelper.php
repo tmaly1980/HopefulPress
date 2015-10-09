@@ -549,7 +549,10 @@ class CoreFormHelper extends BoostCakeFormHelper
 
 	function model() # Can be used outside of forms (view/index)
 	{
-		$model = parent::model();
+		# This is unreliable if previous inputs had a different model class.
+		#$model = parent::model();
+		$model = $this->defaultModel; # Better!
+
 		if(empty($model)) # Determine from controller
 		{
 			$model = Inflector::classify(Inflector::singularize($this->request->params['controller']));
@@ -639,7 +642,7 @@ class CoreFormHelper extends BoostCakeFormHelper
 		return ob_get_clean();
 	}
 
-	function fileupload($name, $label, $attrs = array())
+	function fileupload($name, $label, $attrs = array()) 
 	{
 		$id = !empty($attrs['id']) ? $attrs['id'] : 'fileupload';
 		ob_start();

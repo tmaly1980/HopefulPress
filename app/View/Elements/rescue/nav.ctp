@@ -14,17 +14,17 @@
         <div class="collapse navbar-collapse sidebar-navbar-collapse">
           <ul class="nav navbar-nav">
 	            <!--<li class=""><a href="/">Home</a></li>-->
-		<? if(!empty($nav['newsCount']) || !empty($nav['eventCount']) || !empty($nav['photoCount']) ||$this->Html->can_edit()) { ?>
+		<? if(!empty($nav['newsCount']) || !empty($nav['eventCount']) || !empty($nav['photoCount'])) { ?>
 	  	<li class='dropdown toggle '>
 			<a class='<?= in_array($controller, array('news_posts','events','photo_albums','photos','videos')) ? "selected" : "" ?>' href='javascript:void(0)'>Media Center <?= $this->Html->s("caret"); ?></a>
 			<ul class='dropdown-menu'>
-				<? if(!empty($nav['newsCount']) ||$this->Html->can_edit()) { ?>
+				<? if(!empty($nav['newsCount'])) { ?>
 	            		<li><?= $this->Html->link("News", array('plugin'=>null,'controller'=>'news_posts')); ?></li>
 				<? } ?>
-				<? if(!empty($nav['eventCount']) ||$this->Html->can_edit()) { ?>
+				<? if(!empty($nav['eventCount'])) { ?>
 	            		<li><?= $this->Html->link("Events", array('plugin'=>null,'controller'=>"events")); ?></li>
 				<? } ?>
-				<? if(!empty($nav['photoCount']) ||$this->Html->can_edit()) { ?>
+				<? if(!empty($nav['photoCount'])) { ?>
 	            		<li><?= $this->Html->link("Photos", array('plugin'=>null,'controller'=>"photo_albums")); ?></li>
 				<? } ?>
 				<!--
@@ -35,7 +35,7 @@
 		<? } ?>
 		<? if(!empty($nav['adoptionEnabled'])) { ?>
 		<li class='dropdown toggle '>
-			<?= $this->Html->link("Adopt ".$this->Html->s("carent"), "javascript:void(0);"); ?>
+			<?= $this->Html->link("Adopt ".$this->Html->s("caret"), "javascript:void(0);"); ?>
 			<ul  class='dropdown-menu'>
 				<!--<li><?= $this->Html->link("Overview", '/adoption'); ?></li>-->
 				<? if(!empty($nav['adoptableCount'])) { ?>
@@ -45,7 +45,7 @@
 				<li><?= $this->Html->link("Adoption Form", array('controller'=>'adoption_forms')); ?></li>
 				<? } ?>
 				<? if(!empty($nav['adoptionStoryCount'])) { ?>
-				<li><?= $this->Html->link("Success Stories", array('controller'=>'adoption_stories')); ?></li>
+				<li><?= $this->Html->link("Success Stories", array('controller'=>'adoptables','action'=>'stories')); ?></li>
 				<?  } ?>
 			</ul>
 		</li>
@@ -79,17 +79,17 @@
 		    <? } ?>
 		</li>
 
-		    <? if(!empty($nav['resourceCount']) || $this->Html->can_edit()) { # Should this be for each rescue, or should there be some central peer-contributed list for everyone? Does it vary? ?>
+		    <? if(!empty($nav['resourceCount'])) { # Should this be for each rescue, or should there be some central peer-contributed list for everyone? Does it vary? ?>
 		    <li class=''>
 		    	<?= $this->Html->link("Resources", array('plugin'=>null,'controller'=>"resources")); ?>
 		    </li>
 		    <? } ?>
-		    <? if(!empty($nav['aboutPage'])) { ?>
+		    <? if(!empty($nav['aboutPage']) || $this->Html->can_edit()) { ?>
 		    <li class=''>
 		    		<?= $this->Html->link("About Us", array('plugin'=>null,'controller'=>'rescues','action'=>'about'),  array('class'=>($action=='about'?"selected":""))); ?>
 	            </li>
 		    <? } ?>
-		    <? if(!empty($nav['aboutPage'])) { ?>
+		    <? if(!empty($nav['aboutPage']) || $this->Html->can_edit()) { ?>
 		    <li class=''>
 		    			<?= $this->Html->link("Contact Us", array('plugin'=>null,'controller'=>'rescues','action'=>'contact'),  array('class'=>($action=='contact'?"selected":""))); ?>
 	            </li>

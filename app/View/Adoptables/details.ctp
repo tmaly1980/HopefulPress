@@ -1,5 +1,5 @@
 <? $this->assign("page_title", $adoptable['Adoptable']['name']); ?>
-<? $imgid  = !empty($adoptable['Adoptable']['page_photo_id']) ? $adoptable['Adoptable']['page_photo_id']  : null; ?>
+<? $imgid  = !empty($adoptable['Adoptable']['adoptable_photo_id']) ? $adoptable['Adoptable']['adoptable_photo_id']  : null; ?>
 <? if(empty($imgid) && !empty($adoptable['Photos'][0]['id'])) { $imgid = $adoptable['Photos'][0]['id'];  } ?>
 <div class='view'>
 <div class='row'>
@@ -57,6 +57,7 @@
 		</div>
 
 		<hr/>
+		<? if(!empty($adoptable['Adoptable']['biography']) || !empty($adoptable['Adoptable']['special_needs'])){ ?>
 			<h3>About <?= $adoptable['Adoptable']['name'] ?></h3>
 			<div class=''>
 				<?= nl2br($adoptable['Adoptable']['biography']); ?>
@@ -68,6 +69,7 @@
 			</div>
 			<? } ?>
 		<hr/>
+		<? } ?>
 
 		<?= $this->fetch("post_details_content"); ?>
 		<hr/>

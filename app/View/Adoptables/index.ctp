@@ -5,14 +5,16 @@
 	<?= $this->Html->add("Add an $animal", array('rescuer'=>1,'action'=>'edit','rescue'=>$rescuename)); ?>
 <? } ?>
 <? $this->end("title_controls"); ?>
+<? if(!empty($adoptables)) { ?>
 <div class='italic'><?= count($adoptables) ?> adoptable<?= count($adoptables) > 1 ? "s":"" ?> available</div>
 <br/>
+<? } ?>
 <?= $this->element("../Adoptables/list"); ?>
 
-<? if(false && !empty($adoptionStories)) { ?>
+<? if(!empty($adoptionStories)) { ?>
 <hr/>
 <h3 id='success'>Success Stories</h3>
-<?= $this->element("Rescue.../AdoptionStories/list"); ?>
+<?= $this->element("../Adoptables/stories"); ?>
 <div class='right_align'>
 	<?= $this->Html->link("View all success stories", "/adoption/stories",array('class'=>'btn btn-default ')); ?>
 </div>

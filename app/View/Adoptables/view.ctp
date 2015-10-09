@@ -48,6 +48,7 @@ $statusClass = $statusClasses[$status];
 	<? } ?>
 </div>
 <div align='center'>
+	<? if($status == 'Available') { ?>
 		<?= $this->Html->link("Adopt Me", array('action'=>'adopt','id'=>$id,'rescue'=>$rescuename), array('class'=>'controls btn btn-primary btn-lg bold')); ?>
 		<? if(!empty($adoptable['Adoptable']['enable_sponsorship'])) { ?>
 		&nbsp;
@@ -55,6 +56,7 @@ $statusClass = $statusClasses[$status];
 			<?= $this->Html->link("Sponsor Me", array('action'=>'sponsor','id'=>$id,'rescue'=>$rescuename), array('class'=>'controls btn btn-warning btn-lg')); ?>
 		<? } ?>
 		<?#= $this->Html->link("Foster Me", "/mockup/adoptables/foster/$id", array('class'=>'dialog controls btn btn-success btn-lg')); ?>
+	<? } ?>
 </div>
 
 		<br/>
@@ -70,15 +72,11 @@ $statusClass = $statusClasses[$status];
 <?= $this->element("../AdoptablePhotos/list"); ?>
 <? } ?>
 
-<? if($adoptable['Adoptable']['status'] == 'Adopted' && (!empty($adoptable['SuccessStory']) || $this->Html->can_edit())) { ?>
+<? if($adoptable['Adoptable']['status'] == 'Adopted' && (!empty($adoptable['Adoptable']['success_story']))) { ?>
 <h3>Success Story</h3>
-<? if(empty($adoptable['SuccessStory']['id'])) { # Probably moved beelow... ?>
-	<?= $this->Html->add("Add Success Story", array('rescuer'=>1,'action'=>'edit_success_story','id'=>$id,'rescue'=>$rescuename)); ?>
-<? } else { ?>
-	<?= $this->Html->edit("Edit Success Story", array('rescuer'=>1,'action'=>'edit_success_story','id'=>$id,'rescue'=>$rescuename)); ?>
-	SUCCESS STORY TODO....
-<? } ?>
-
+<div class=''>
+	<?= $this->element("../Adoptables/story",array('inline'=>1)); ?>
+</div>
 <? } ?>
 
 <? /* if($this->Html->me()) { ?>

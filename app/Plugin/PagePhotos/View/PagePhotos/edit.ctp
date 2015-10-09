@@ -1,1 +1,1 @@
-<?= $this->element("edit"); ?>
+<?= $this->element("PagePhotos.edit"); ?>

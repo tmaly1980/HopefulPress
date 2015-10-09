@@ -72,14 +72,16 @@ class AppController extends AppCoreController {
 		'Rescue',
 		'Adoptable',
 		"Newsletter.MailchimpCredential",
+		'Resource',
+		'NewsPost','Event','PhotoAlbum',
+		'AboutPageBio',
+		'Contact'
 		/*
 		'Page',
 		'AboutPage',
 		'ContactPage',
 		'LinkPage',
 		'Link',
-		'NewsPost','Event','PhotoAlbum',
-		'Resource',
 		'DownloadPage',
 		'Download',
 		#'Project.Project',
@@ -560,21 +562,30 @@ class AppController extends AppCoreController {
 			# Nav etc???
 			$nav = array();
 
-			if(!empty(array_filter(array_intersect_key($rescue['Rescue'], array_flip(array('phone','email','city'))))))
+			if(!empty(array_filter(array_intersect_key($rescue['Rescue'], array_flip(array('phone','email','city'))))) || 
+				$this->Contact->count(array('rescue_id'=>$rescue_id))
+			)
 			{
 				$nav['contactPage'] = true;
 			}
 
-			if(!empty(array_filter(array_intersect_key($rescue['Rescue'], array_flip(array('history','restrictions'))))))
+			if(!empty(array_filter(array_intersect_key($rescue['Rescue'], array_flip(array('history','restrictions'))))) ||
+				$this->AboutPageBio->count(array('rescue_id'=>$rescue_id))
+			)
 			{
 				$nav['aboutPage'] = true;
 			}
 
 			$nav['adoptableCount'] = $this->Adoptable->count(array('rescue_id'=>$rescue_id,"status != 'Adopted'"));
-			if($nav['adoptableCount'])
-			{
-				$nav['adoptionEnabled']=true;
-			}
+			$nav['adoptionStoryCount'] = $this->Adoptable->count(array('rescue_id'=>$rescue_id,"status = 'Adopted' AND success_story != ''"));
+
+
+			$nav['newsCount'] = $this->NewsPost->count(array('rescue_id'=>$rescue_id));
+			$nav['eventCount'] = $this->Event->count(array('rescue_id'=>$rescue_id));
+			$nav['photoCount'] = $this->PhotoAlbum->count(array('rescue_id'=>$rescue_id));
+			$nav['resourceCount'] = $this->Resource->count(array('rescue_id'=>$rescue_id));
+
+			$nav['adoptionEnabled']=$nav['adoptableCount'] + $nav['adoptionStoryCount'];
 
 			if(!empty($rescue['Rescue']['paypal_email']))
 			{

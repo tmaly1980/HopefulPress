@@ -45,19 +45,21 @@ if($plugin == 'volunteer') { $active = 'volunteer'; }
 		</li>
 	<? } else { ?>
 	<li class='dropdown'>
+	<div class=''>
 	    	<a href='javascript:void(0);' class='btn btn-default'>
+			<?= $this->Html->g("user"); ?>
 			<?= !empty($current_user['first_name']) ? $current_user['first_name'] : $current_user['email'] ?> <?= $this->Html->s("caret hidden-sm hidden-xs"); ?></a>
 
 		<ul class='dropdown-menu dropdown-menu-right'>
 	    		<li><a href="/user/users/account">User Account</a></li>
 			<? if(($myrescue = $this->Html->user("Rescue")) && !empty($myrescue['id'])) { ?>
 	    		<li><a class='bold' href="/rescue/<?= $myrescue['hostname'] ?>"><?= $this->Html->fa("paw"); ?> <?=$myrescue['title'] ?></a></li>
-	    		<li><a href="/rescuer/rescue/<?= $myrescue['hostname'] ?>/edit"><?= $this->Html->g("cog"); ?> My rescue's profile</a></li>
 			<? } else if($this->Html->user("rescuer")) {  ?>
 	    		<li><a href="/rescuer/rescues/add"><?= $this->Html->g("plus"); ?> Add rescue</a></li>
 			<? } ?>
 	    		<li><a href="/user/users/logout"><?= $this->Html->g("log-out"); ?> Sign Out</a></li>
 		</ul>
+	</div>
 	</li>
 	<? } ?>
       </ul>
@@ -72,7 +74,8 @@ if($plugin == 'volunteer') { $active = 'volunteer'; }
 	if(empty($prefix))
 	{
 		echo $this->requestAction(array('prefix'=>null,'plugin'=>null,'controller'=>'rescues','action'=>'search_bar','rescue'=>$rescuename),array('return')); 
-	} else { # Adding content relating to own rescue... Show admin/nav bar.
+	} 
+	if($this->Html->user("Rescue.hostname") == $rescuename) { # ALWAYS when at own site. SO  know where are, and easy links to content mgmt.
 		echo $this->element("rescue/adminbar"); 
 	}
 

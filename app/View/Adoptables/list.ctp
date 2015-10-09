@@ -1,7 +1,7 @@
 <div class='row'>
 <? if(empty($adoptables)) { ?>
 <div class='nodata'>
-	No adoptables matched your criteria.
+	No available adoptables matched your criteria.
 </div>
 <?  } ?>
 <? foreach($adoptables as $adoptable) { 

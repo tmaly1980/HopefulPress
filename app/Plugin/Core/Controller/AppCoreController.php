@@ -664,4 +664,65 @@ class AppCoreController extends Controller
 		return $geoip;
 	}
 
+	# BULK RECORD IMPORTING
+	function _import_template()
+	{
+		header("Content-Type: application/octet-stream");
+		$things = strtolower(Inflector::pluralize(Inflector::underscore($this->modelClass)));
+		header("Content-Disposition: inline; filename='$things.csv'");
+		if(empty($this->model()->import_fields))
+		{
+			return $this->setError("Import fields not configured.", array('action'=>'add'));
+		} else {
+			echo join($this->delim, $this->model()->import_fields)."\n";
+			exit(0);
+		}
+	}
+
+	function _import() 
+	{
+		if(!empty($this->request->data[$this->modelClass]['file']))
+		{
+			$this->Upload->content_only(true);
+			$content = $this->Upload->upload($this->request->data[$this->modelClass]['file']); 
+			$rows = $this->Csv->import($this->request->data[$this->modelClass]['file']['tmp_name'],null,array('delimiter'=>$this->delim));
+
+			$ids = array();
+
+			if(empty($rows))
+			{
+				return $this->setError("No data found in file provided.");
+			}
+			$keys = array_keys($rows[0][$this->modelClass]);
+			# If any keys don't match field, abort...
+			foreach($keys as $key)
+			{
+				if(!$this->model()->hasField($key))
+				{
+					return $this->setError("Invalid field '$key'. Improper file format. Use the template link below.");
+				}
+			}
+
+			# IMPLEMENT ATOMIC IMPORT, so lines before failures ARENT added multiple times!!!!!
+			$this->model()->getDataSource()->begin();
+
+			$i = 1;
+			foreach($rows as $row)
+			{
+				$i++;
+				$this->model()->create(); # Clear id, so save into new records.
+				if(!$this->model()->saveAll($row))
+				{
+					$this->model()->getDataSource()->rollback();
+					return $this->setError("Error Line $i: ".$this->model()->errorString());
+				}
+				$ids[] = $this->model()->id;
+			}
+
+			$this->model()->getDataSource()->commit();
+			$this->setSuccess(count($ids)." records successfully imported",array('action'=>'index','added'=>$ids));
+		}
+	}
+
+
 }
