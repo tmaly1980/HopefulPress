@@ -1,13 +1,14 @@
 <? $carousel = (!empty($type) && $type == 'carousel'); ?>
-<? if(!empty($adoptables) || $this->Html->me()) { ?>
+<? #if(!empty($adoptables) || $this->Html->me()) { ?>
 <div class='widget minwidth250'>
 <h3 class=''><?= $this->Html->link("Current Adoptables", array('controller'=>'adoptables','action'=>'index')); ?></h3>
+<div>
 <? if(empty($adoptables)) { ?>
-	<? if($this->Html->can_edit()) { ?>
-	<div class='dashed margin5 alert alert-info'>
-		There are no listed adoptables
-		<?= $this->Html->add("Add adoptables", array('rescuer'=>1,'controller'=>'adoptables','action'=>'add','rescue'=>$rescuename),array('class'=>'')); ?>
+	<div class='nodata'>
+		No available adoptables listed
 	</div>
+	<? if($this->Html->can_edit()) { ?>
+		<?= $this->Html->add("Add adoptables", array('rescuer'=>1,'controller'=>'adoptables','action'=>'add','rescue'=>$rescuename),array('class'=>'')); ?>
 	<? } ?>
 <? } else { ?>
 <div id='adoptables' class='<?= !empty($carousel) ? "carousel slide" : "" ?>' <?= !empty($carousel) ? 'data-ride="carousel" data-wrap="true"' : "" ?> >
@@ -86,6 +87,6 @@ $(document).ready(function() {
 </div>
 <? } ?>
 
-
 </div>
-<? } ?>
+</div>
+<? #} ?>

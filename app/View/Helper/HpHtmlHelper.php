@@ -2,14 +2,14 @@
 App::uses('CoreHtmlHelper','Core.View/Helper');
 class HpHtmlHelper extends CoreHtmlHelper 
 {
-	var $helpers = array('Session','Form','Site','Text');
+	var $helpers = array('Session','Form','Site','Text','Rescue'); # THIS NEEDS TO BE EXPLICIT??? who knows why. Something about _call being overwritten?
 
 	# *** IF WE DONT WANT THE RESCUE PARSED IN A LINK (when the previous/loaded page has it set), GIVE AN ABSOLUTE STRING! ****
 	# Otherwise, let's assume all links want rescue passed if available.
 
 	function link($title, $url=null, $opts=array(), $confirmMessage = false)
 	{
-		if(($rescuename = Configure::read("rescuename")) && is_array($url) && !isset($url['rescue']))
+		if(($rescuename = Configure::read("rescuename")) && is_array($url) && !isset($url['rescue']) && !$this->Rescue->dedicated())
 		{
 			$url['rescue'] = $rescuename;
 		}

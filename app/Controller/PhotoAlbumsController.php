@@ -120,7 +120,7 @@ class PhotoAlbumsController extends AppController {
 	}
 
 	# No more separate edit(), changes done inline on view()
-	public function add()
+	public function user_edit($id=null)
 	{
 		if (!empty($this->request->data)) { # $this->request->is('post') || $this->request->is('put')) { # This bad code lets jquery posts add record even if nothing sent.
 			error_log("SAVING=".print_r($this->request->data,true));
@@ -138,6 +138,10 @@ class PhotoAlbumsController extends AppController {
 				error_log("VALIDATION ERROR=".print_r($this->PhotoAlbum->validationErrors,true));
 			}
 			return $this->setError('The photo album could not be saved: '.$this->PhotoAlbum->errorString());
+		}
+		if(!empty($id))
+		{
+			$this->request->data = $this->PhotoAlbum->read(null,$id);
 		}
 	}
 

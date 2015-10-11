@@ -2,7 +2,7 @@
 $heading = "Find your next furry companion: $adoptableCount adoptables available now";
 $controls = (empty($this->Html->user("Rescue.id")) ? 
 	"<b>Manage a rescue?</b> ":"").
-	$this->Html->add("Add an FREE adoptable listing","/rescuer/adoptables/add",array('class'=>'btn-primary'));
+	$this->Html->add("Add FREE adoptable listing","/rescuer/adoptables/add",array('class'=>'btn-primary'));
 	#.$this->Html->add("Create a FREE rescue account","/rescuer/rescues/add",array('class'=>'btn-primary'))):
 
 $sortby = array(

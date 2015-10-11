@@ -9,12 +9,13 @@ class RescuesController extends AppController
 
 	function beforeFilter()
 	{
-		if(empty($this->request->params['rescue']) && !in_array($this->request->params['action'],$this->globalActions))
+		parent::beforeFilter();
+		if(empty($this->rescue) && !in_array($this->request->params['action'],$this->globalActions))
 		{
-			$this->setError("Rescue not found",array('prefix'=>null,'action'=>'search'));
+			error_log("BAD RESCUE, ACT={$this->request->params['action']}");
+			$this->badRescue();
 		}
 
-		return parent::beforeFilter();
 	}
 
 	function search_bar()
@@ -60,9 +61,9 @@ class RescuesController extends AppController
 				return $this->setError("Could not create rescue listing: ".$this->Rescue->errorString());
 			}
 		}
-		if(!empty($this->request->params['rescue'])) # Updating.
+		if(!empty($this->rescue_id))
 		{
-			$this->request->data = $this->Rescue->findByHostname($this->request->params['rescue']);
+			$this->request->data = $this->Rescue->read(null,$this->rescue_id);
 		}
 
 		# Specify restriction options...
@@ -70,12 +71,15 @@ class RescuesController extends AppController
 		$this->set("adultSizes", $this->Adoptable->dropdown("adult_sizes"));
 	}
 
-	function view($hostname=null) # "home" page
+	function view() #$hostname=null) # "home" page
 	{
-		if(!empty($this->request->params['rescue']))
-		{
-			$hostname = $this->request->params['rescue'];
-		}
+		$hostname = !empty($this->rescuename) ? $this->rescuename : null;
+
+		#if(!empty($this->request->params['rescue']))
+		#{
+		#	$hostname = $this->request->params['rescue'];
+		#}
+
 		if(empty($hostname) || !($rescue = $this->Rescue->findByHostname($hostname)))
 		{
 			return $this->setError("Rescue not found",array('action'=>'index'));
@@ -129,7 +133,7 @@ class RescuesController extends AppController
 
 	function beforeRender()
 	{
-		Configure::load("Rescue.breeds");
+		Configure::load("breeds");
 		$breeds = Configure::read("Breeds");
 		$this->set("breeds", $breeds);
 		$species = array();

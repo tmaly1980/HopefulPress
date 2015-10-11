@@ -45,7 +45,7 @@
 				<li><?= $this->Html->link("Adoption Form", array('controller'=>'adoption_forms')); ?></li>
 				<? } ?>
 				<? if(!empty($nav['adoptionStoryCount'])) { ?>
-				<li><?= $this->Html->link("Success Stories", array('controller'=>'adoptables','action'=>'stories')); ?></li>
+				<li><?= $this->Html->link("Happy Tails", array('controller'=>'adoptables','action'=>'stories')); ?></li>
 				<?  } ?>
 			</ul>
 		</li>
@@ -84,12 +84,12 @@
 		    	<?= $this->Html->link("Resources", array('plugin'=>null,'controller'=>"resources")); ?>
 		    </li>
 		    <? } ?>
-		    <? if(!empty($nav['aboutPage']) || $this->Html->can_edit()) { ?>
+		    <? if(!empty($nav['aboutPage']) || $this->Rescue->rescuer()) { ?>
 		    <li class=''>
 		    		<?= $this->Html->link("About Us", array('plugin'=>null,'controller'=>'rescues','action'=>'about'),  array('class'=>($action=='about'?"selected":""))); ?>
 	            </li>
 		    <? } ?>
-		    <? if(!empty($nav['aboutPage']) || $this->Html->can_edit()) { ?>
+		    <? if(!empty($nav['aboutPage']) || $this->Rescue->rescuer()) { ?>
 		    <li class=''>
 		    			<?= $this->Html->link("Contact Us", array('plugin'=>null,'controller'=>'rescues','action'=>'contact'),  array('class'=>($action=='contact'?"selected":""))); ?>
 	            </li>

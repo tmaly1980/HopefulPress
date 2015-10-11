@@ -16,7 +16,7 @@
 		<? foreach($photoAlbums as $album) { ?>
 		<div class='left margintop5 marginright15 height150 block'>
 			<?
-				$imgsrc = !empty($album['Photo'][0]['id']) ? "/photos/thumb/".$album['Photo'][0]['id'] : "/images/no-photo.png";
+				$imgsrc = !empty($album['Photo'][0]['id']) ? array('controller'=>"photos",'action'=>"thumb",$album['Photo'][0]['id']) : "/images/no-photo.png";
 				$img = $this->Html->image($imgsrc, array('class'=>'border')); 
 				$title = !empty($album['PhotoAlbum']['title']) ? $album['PhotoAlbum']['title'] : "Untitled Album";
 			?>

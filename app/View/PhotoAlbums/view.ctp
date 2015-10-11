@@ -10,12 +10,13 @@
 	<?= $this->Html->blink('back', "", array('action'=>'index')); ?>
 <? $this->end(); ?>
 
-<? if($this->Html->can_edit($photoAlbum['PhotoAlbum'])) { ?>
-<? $this->start("admin_controls"); ?>
-	<?= $this->Form->fileupload("Upload.file", "Add photos...", array('id'=>'UploadFile')); ?>
-	<?= $this->Html->blink('move', "Resort", "javascript:void(0)", array('id'=>'sorter','class'=>'btn-primary')); ?>
-	<?= $this->Html->blink('delete', "Delete album", array('user'=>1,'action'=>'delete',$photoAlbum['PhotoAlbum']['id']),array('class'=>'btn-danger','confirm'=>'Are you sure you want to remove the album? All photos will be lost.')); #,'project_id'=>$photoAlbum['PhotoAlbum']['project_id'],'#'=>'AddPhotos'), array('class'=>'')); ?>
-<? $this->end("admin_controls"); ?>
+<? if($this->Html->can_edit()){#$photoAlbum['PhotoAlbum'])) { ?>
+<? $this->start("title_controls"); ?>
+	<?= $this->Html->edit("Update Album",array('user'=>1,'action'=>'edit',$id)); ?>
+	<?#= $this->Form->fileupload("Upload.file", "Add photos...", array('id'=>'UploadFile')); ?>
+	<?#= $this->Html->blink('move', "Resort", "javascript:void(0)", array('id'=>'sorter','class'=>'btn-primary')); ?>
+	<?#= $this->Html->blink('delete', "Delete album", array('user'=>1,'action'=>'delete',$photoAlbum['PhotoAlbum']['id']),array('class'=>'btn-danger','confirm'=>'Are you sure you want to remove the album? All photos will be lost.')); #,'project_id'=>$photoAlbum['PhotoAlbum']['project_id'],'#'=>'AddPhotos'), array('class'=>'')); ?>
+<? $this->end("title_controls"); ?>
 <? } ?>
 
 <div class="photoAlbums view">

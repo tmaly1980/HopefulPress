@@ -1,6 +1,6 @@
 <!-- start Core.main -->
     <?= $this->fetch("prelayout_header"); ?>
-    <div id="page_wrapper" class="container-fluid <?= $this->fetch("container_class"); ?> <?= $this->fetch("page_class"); # Alt ?>">
+    <div id="page_wrapper" class="container-fluid <?= $this->fetch("container_class","col-sm-12"); ?> <?= $this->fetch("page_class"); # Alt ?>">
     <?= $this->fetch("layout_header"); ?>
       <div class="<?= $this->fetch("pre_main_class"); ?>">
         <div id='main_content' class="main <?= $this->fetch("layout_main_class"); ?>">

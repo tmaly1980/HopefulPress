@@ -26,8 +26,13 @@ class AutoIdBehavior extends ModelBehavior
 		{
 			$selfClass = Inflector::classify(preg_replace("/_id$/", "", $field)); # site_id => Site
 			$field_id = Configure::read($field);
+
+			# If we set key $model->autoid['rescue_id']=>false, then bypass. If not specific, assume to filter.
 	
-			if(!$model->hasField($field) || empty($field_id) || (isset($model->autoid) && $model->autoid === false) || (isset($query['autoid']) && $query['autoid'] === false)) 
+			if(!$model->hasField($field) || empty($field_id) || 
+				(isset($model->autoid) && ($model->autoid === false || (isset($model->autoid[$field]) && $model->autoid[$field] === false))) || 
+				(isset($query['autoid']) && ($query['autoid'] === false || (isset($query['autoid'][$field]) && $query['autoid'][$field] === false)))
+			) 
 			{ 
 				return $query; 
 			}

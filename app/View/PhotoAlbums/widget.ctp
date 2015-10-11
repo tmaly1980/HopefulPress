@@ -24,7 +24,7 @@
 	<? foreach($updates['photoAlbums'] as $album) { ?>
 		<div class='left paddingbottom25 maxwidth250'>
 			<?
-				$imgsrc = !empty($album['Photo'][0]['id']) ? "/photos/thumb/".$album['Photo'][0]['id'] : "/images/no-photo.png";
+				$imgsrc = !empty($album['Photo'][0]['id']) ? array('controller'=>'photos','action'=>'thumb',$album['Photo'][0]['id']) : "/images/no-photo.png";
 				$img = $this->Html->image($imgsrc, array('class'=>'border')); 
 				$title = !empty($album['PhotoAlbum']['title']) ? $album['PhotoAlbum']['title'] : "Untitled Album";
 			?>
@@ -33,7 +33,7 @@
 			</div>
 			<?= $this->Html->titlelink($title, array('controller'=>'photo_albums','action'=>'view',$album['PhotoAlbum']['idurl']), array()); ?>
 			<div class=''>
-				<?= $this->Time->mondy($album['PhotoAlbum']['created']); ?> &ndash;
+				<?= $this->Time->mondy($album['PhotoAlbum']['created']); ?> <br/>
 				<?= !empty($album['Photo']) ? count($album['Photo']) : "No" ?> photos
 			</div>
 		</div>

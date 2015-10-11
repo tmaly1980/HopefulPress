@@ -12,7 +12,7 @@ $nomaincontent = empty($news) && empty($photos) && empty($videos);
 # FOR NOW ADOPTABLES BETTER AS GRID
 
 $adoptables = $this->element("adoptables",array('type'=>'block'));#($nomaincontent?'block':'carousel')));
-$successes = null;#$this->requestAction(array('controller'=>'adoption_stories','action'=>'widget','rescue'=>$rescuename),array('return'));
+$successes = $this->requestAction(array('controller'=>'adoptables','action'=>'successes_widget','rescue'=>$rescuename),array('return'));
 
 $has_sidebar = (!empty($events) || !empty($sidebar_content) || !empty($mailinglist) || (!empty($adoptables) && !$nomaincontent));
 ?>

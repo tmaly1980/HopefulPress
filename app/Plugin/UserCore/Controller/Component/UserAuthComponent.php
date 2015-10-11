@@ -83,7 +83,20 @@ class UserAuthComponent extends AuthComponent # PASS THRU!
 		parent::startup($controller);
 	}
 
+	# Allow controller to still let user in, or give proper error message to continue somehow.
 	function isAuthorized($user = null, CakeRequest $request = null)
+	{
+		if(!$this->_authorized($user,$request))
+		{
+			if(method_exists($this->controller,"isAuthorized"))
+			{
+				return $this->controller->isAuthorized($user);
+			}
+			return false;
+		}
+		return  true;
+	}
+	function _authorized($user = null, CakeRequest $request=null)
 	{
 		if(!empty($this->prefixes))
 		{
@@ -110,7 +123,6 @@ class UserAuthComponent extends AuthComponent # PASS THRU!
 			}
 
 			# Otherwise, prefix tests did not apply
-
 		}
 
 		return parent::isAuthorized($user,$request); # Default, probably goes to Controller::isAuthorized()

@@ -1,10 +1,10 @@
 <?
 App::uses("SingletonController", "Singleton.Controller");
-class VolunteerFormsController extends SingletonController
+class VolunteerPageFormsController extends SingletonController
 {
 	function index()
 	{
-		$this->redirect(array('controller'=>'volunteer_overviews','action'=>'index'));
+		$this->redirect(array('controller'=>'volunteer_page_indices','action'=>'index'));
 	}
 
 	function view()

@@ -15,11 +15,26 @@
 			<? if(empty($inline)) { ?>
 			<h3><?= $this->Html->link($adoptable['Adoptable']['name'],array('action'=>'view',$adoptable['Adoptable']['id'])); ?></h3>
 			<? } ?>
-			<?= !empty($story['story_date']) ? $this->Time->mondy($adoptable['Adoptable']['story_date']) : null; ?>
+			<?= !empty($adoptable['Adoptable']['story_date']) ? $this->Time->mondy($adoptable['Adoptable']['story_date'])."<br/><br/>" : null; ?>
+
+			<div class='italic'>
+			<? if(!empty($adoptable['Owner']['city'])) { ?>
+				<?= $adoptable['Owner']['city'] ?>,
+			<? } ?>
+			<? if(!empty($adoptable['Owner']['state'])) { ?>
+				<?= $adoptable['Owner']['state'] ?>
+			<? } ?>
+			</div>
 
 			<div class='medium'>
 				<?php echo ($adoptable['Adoptable']['success_story']); ?>
 			</div>
+
+			<? if(empty($this->rescuename) && !empty($adoptable['Rescue']['id'])) { ?>
+			<div class=''>
+			Adoption made possible by <?= $this->Html->link($adoptable['Rescue']['title'], array('controller'=>'rescues','action'=>'view',$adoptable['Rescue']['hostname'])); ?>, <?= $adoptable['Rescue']['city'] ?>, <?= $adoptable['Rescue']['state'] ?>
+			</div>
+			<? } ?>
 			<div class='clear'></div>
 		</div>
 	</div>

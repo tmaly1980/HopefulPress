@@ -13,7 +13,13 @@ class HostInfo
 		$hostname = 'www';
 		$domain = $fqdn = self::fqdn();
 		# match hp.malysoft.com, www.hopefulpress.com, www.hp.m.com, h.com
-		preg_replace("/^www[.]/", "", $fqdn); # Remove www
+		$fqdn = preg_replace("/^www[.]/", "", $fqdn); # Remove www
+
+		# If matches any default domain, ie portal.malysoft.com, dev.hopefulpress.com, etc.... return null for hostname.
+		if(in_array($fqdn, self::default_domains()))
+		{
+			return array(null,$fqdn);
+		}
 
 		$parts = split("[.]", $fqdn);
 		if(count($parts) > 2) {
@@ -207,6 +213,28 @@ class HostInfo
 
 		return $whois_hash;
 		*/
+	}
+
+	function domain_ready($domain)
+	{
+		$server = self::default_domain();
+
+		if(preg_match("/malysoft/", $server)) { return true; }
+
+		# For now, hardcode, only sense there is.
+		if(empty($domain)) { return false; }
+		# Check to see if dns servers match ours....
+		$domain_ns = dns_get_record($domain, DNS_NS);
+		$server_ns = dns_get_record($server, DNS_NS);
+
+		$domain_nslist = Set::extract("/target", $domain_ns); # We might get 4
+		$server_nslist = Set::extract("/target", $server_ns);
+
+		if(empty($server_nslist)) { return false; }
+
+		if(empty($domain_ns) || empty($server_ns)) { return false; }
+		return in_array($server_nslist[0], $domain_nslist);
+		# Just get first domain ns server being somewhere in our list....
 	}
 }
 ?>

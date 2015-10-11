@@ -42,31 +42,7 @@ class DnsController extends DnsAppController
 
 	function dns_complete()
 	{
-		$server = Configure::read("default_domain");
-
-		# We need to fake it being complete on the test site because it never will be (fake domains)...
-		# so we unlock further features...
-		if(preg_match("/malysoft/", $server)) { return true; }
-
-		# For now, hardcode, only sense there is.
-		$domain = $this->site('domain');
-		if(empty($domain)) { return false; }
-		# Check to see if dns servers match ours....
-		$domain_ns = dns_get_record($domain, DNS_NS);
-		$server_ns = dns_get_record($server, DNS_NS);
-
-		$domain_nslist = Set::extract("/target", $domain_ns); # We might get 4
-		$server_nslist = Set::extract("/target", $server_ns);
-
-		#echo "SER=$server, DOM=$domain";
-		#print_r($domain_nslist);
-		#print_r($server_nslist);
-
-		if(empty($server_nslist)) { return false; }
-
-		if(empty($domain_ns) || empty($server_ns)) { return false; }
-		return in_array($server_nslist[0], $domain_nslist);
-		# Just get first domain ns server being somewhere in our list....
+		return HostInfo::domain_ready($this->site("domain"));
 	}
 
 	function admin_view($id = null) # Usually ajaxy.

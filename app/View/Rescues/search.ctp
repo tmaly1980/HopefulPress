@@ -1,9 +1,7 @@
 <? $this->assign("page_title", !empty($this->request->data) ? "Search Results" : "Local Rescues"); ?>
 <? $this->start("title_controls"); ?>
-<? if($this->Html->me() && ($myrescue = $this->Html->user("Rescue.hostname"))) { ?>
-	<?= $this->Html->blink("fa-paw","My rescue", array('action'=>'view',$myrescue),array('class'=>'btn btn-primary')); ?>
-<? } else { ?>
-	<?= $this->Html->add("Add my rescue", array('rescuer'=>1,'action'=>'add')); ?>
+<? if(!$this->Html->me("Rescue.id")) { ?>
+	<b>Manage a rescue?</b> <?= $this->Html->add("Add my FREE rescue listing", array('rescuer'=>1,'action'=>'add')); ?>
 <? } ?>
 <? $this->end(); ?>
 <div class='index'>

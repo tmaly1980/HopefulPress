@@ -1,10 +1,11 @@
 <?
+$dedicated = $this->Rescue->dedicated();
 $prefix = !empty($this->request->params['prefix']) ? $this->request->params['prefix'] : null;
 $plugin = !empty($this->request->params['plugin']) ? $this->request->params['plugin'] : null;
 $controller = !empty($this->request->params['controller']) ? $this->request->params['controller'] : null;
 
 $active = 'adopt';
-if(!empty($rescuename) || $controller == 'rescues') { $active = 'rescue'; }
+if(!empty($rescuename) || $controller == 'rescues' || $dedicated) { $active = 'rescue'; }
 if($plugin == 'transport') { $active = 'transport'; }
 if($plugin == 'foster') { $active = 'foster'; }
 if($plugin == 'volunteer') { $active = 'volunteer'; }
@@ -13,6 +14,7 @@ if($plugin == 'volunteer') { $active = 'volunteer'; }
 # check for other tabs.
 
 ?>
+<? if(!$dedicated) { ?>
 <nav class="navbar margin0 navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -32,51 +34,32 @@ if($plugin == 'volunteer') { $active = 'volunteer'; }
       <ul class="nav navbar-nav">
 		<li class='<?= $active == 'adopt'?"active":""?>'> <a href='/adopt' id=''>Adopt</a> </li>
 		<li class='<?= $active == 'rescue'?"active":""?>'> <a href='/rescues' id=''>Rescue</a> </li>
+		<li class='<?= $active == 'volunteer'?"active":""?>'> <a href='/volunteers' id=''>Volunteer</a> </li>
 		<!--
 		<li class='<?= $active == 'foster'?"active":""?>'> <a href='/fosters' id=''>Foster</a> </li>
 		<li class='<?= $active == 'transport'?"active":""?>'> <a href='/transporters' id=''>Transport</a> </li>
-		<li class='<?= $active == 'volunteer'?"active":""?>'> <a href='/volunteers' id=''>Volunteer</a> </li>
 		-->
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <? if(empty($current_user)) { ?>
-		<li>
-			<?= $this->Html->blink("user", "Sign In", "/user/users/login","btn-default"); ?>
-		</li>
-	<? } else { ?>
-	<li class='dropdown'>
-	<div class=''>
-	    	<a href='javascript:void(0);' class='btn btn-default'>
-			<?= $this->Html->g("user"); ?>
-			<?= !empty($current_user['first_name']) ? $current_user['first_name'] : $current_user['email'] ?> <?= $this->Html->s("caret hidden-sm hidden-xs"); ?></a>
-
-		<ul class='dropdown-menu dropdown-menu-right'>
-	    		<li><a href="/user/users/account">User Account</a></li>
-			<? if(($myrescue = $this->Html->user("Rescue")) && !empty($myrescue['id'])) { ?>
-	    		<li><a class='bold' href="/rescue/<?= $myrescue['hostname'] ?>"><?= $this->Html->fa("paw"); ?> <?=$myrescue['title'] ?></a></li>
-			<? } else if($this->Html->user("rescuer")) {  ?>
-	    		<li><a href="/rescuer/rescues/add"><?= $this->Html->g("plus"); ?> Add rescue</a></li>
-			<? } ?>
-	    		<li><a href="/user/users/logout"><?= $this->Html->g("log-out"); ?> Sign Out</a></li>
-		</ul>
-	</div>
-	</li>
-	<? } ?>
-      </ul>
+      <?= $this->element("portal/login"); ?>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+<? } ?>
 
 <? if($active == 'adopt' || (empty($prefix) && in_array($controller,array('adoptables')))) { ?>
 	<?= !$this->fetch("search_disabled") ? $this->requestAction("/adoptables/search_bar",array('return')) : null; # We get redirect loop if we omit  prefix, since this shows up on user login page ?>
 <? } ?>
-<? if($active == 'rescue') { 
-	if(empty($prefix))
+
+<? if($active == 'rescue' || $dedicated) { 
+	if(empty($prefix) && !$dedicated)
 	{
 		echo $this->requestAction(array('prefix'=>null,'plugin'=>null,'controller'=>'rescues','action'=>'search_bar','rescue'=>$rescuename),array('return')); 
 	} 
-	if($this->Html->user("Rescue.hostname") == $rescuename) { # ALWAYS when at own site. SO  know where are, and easy links to content mgmt.
+	if($this->Rescue->member())
+	{
 		echo $this->element("rescue/adminbar"); 
+	} else if($dedicated) { 
+		echo $this->element("rescue/login"); 
 	}
 
 # Someone may have stumbled upon some listings on a rescue site, and they want to look for others..

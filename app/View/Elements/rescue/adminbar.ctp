@@ -8,11 +8,8 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/rescue/<?= $rescuename ?>">
-      	<? if(!empty($rescue['RescueLogo']['id'])) { ?>
-		<img src='/rescue_logos/image/<?= $rescue['RescueLogo']['id'] ?>/x24' class='left paddingright10'/>
-	<? } ?>
-		<?= $rescue['Rescue']['title'] ?>
+      <? $logo = !empty($rescue['RescueLogo']['id']) ? $this->Html->image("/rescue_logos/image/{$rescue['RescueLogo']['id']}/x24",array('class'=>'left paddingright10')) : null; ?>
+      <?= $this->Html->link($logo.$rescue['Rescue']['title'], array('plugin'=>null,'prefix'=>null,'controller'=>'rescues','action'=>'view'),array('class'=>'navbar-brand')); ?>
       </a>
     </div>
 <div class="collapse navbar-collapse" id="header-navbar">
@@ -26,11 +23,14 @@
 		<li class=''> <?= $this->Html->link("My Photos",array('plugin'=>null,'controller'=>'photo_albums')); ?> </li>
 		<li class=''> <?= $this->Html->link("My Resources",array('plugin'=>null,'controller'=>'resources')); ?> </li>
       </ul>
+      <? if($this->Rescue->dedicated()) { ?>
+      	<?= $this->element("portal/login"); ?>
+      <? } ?>
       <? if($this->request->params['controller'] == 'rescues' && $this->request->params['action'] == 'view') { # ONLY SHOW ON HOME PAGE ?>
       <ul class='nav navbar-right'>
       	<li>
-		<div class=''>
-		<?= $this->Html->settings("Update rescue page/account",array('rescuer'=>1,'controller'=>'rescues','action'=>'edit'),array('class'=>'')); ?>
+		<div class='paddingright10'>
+		<?= $this->Html->settings("Rescue Details",array('rescuer'=>1,'controller'=>'rescues','action'=>'edit'),array('class'=>'')); ?>
 		</div>
 	</li>
       </ul>

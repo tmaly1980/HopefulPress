@@ -11,27 +11,10 @@ App::uses('CoreAppHelper', 'Core.View/Helper');
  * @package       app.View.Helper
  */
 class AppHelper extends CoreAppHelper {
-	var $helpers = array('Session','Html','Form','Multisite.Site');
+	var $helpers = array('Session','Html','Form','Rescue');
 	# DO NOT SET SUB-HELPERS IN INDIVIDUAL HELPERS UNLESS COMPLETE LIST!
 
 	# ACLS GO HERE.... if not listed as special, will give access to any logged in user...
-	var $site_owner_controllers = array(
-		'sites',
-		'setup',
-	);
-	var $admin_controllers = array(
-		'homepages',
-		'about_pages',
-		'about_page_bios',
-		'contact_pages',
-		'contacts',
-		'volunteer_overviews',
-		'foster_overviews',
-		'adoption_overviews',
-		'foster_forms',
-		'adoption_forms',
-		'volunteer_forms',
-	);
 
 	function is_project_owner()
 	{
@@ -78,42 +61,38 @@ class AppHelper extends CoreAppHelper {
 	function is_manager() { return $this->user("manager"); }
 	function manager() { return $this->is_manager(); }
 
-	# If no data, assume current controller.
-	function can_edit($data = null)  # For checking write access, ie owner, admin, or site_owner
-	{ # Assumes $something['Model'] is passed, so immediate keys accessible.
+	function rescuer() { return $this->user("rescuer"); } # This person has or could have a rescue.
+	function volunteer() { return $this->user("volunteer"); } # This person is or could be a volunteer.
+
+	# For checking write access, ie rescuer, admin, volunteer, etc
+	function can_edit($data=null)
+	{ # Assumes $something['Model'] is passed, so immediate keys accessible. Rarely/never needed.
+		if(empty($data)) # Assume current record, if set.
+		{ # ie profile page. might be mine.
+			$data = $this->Form->data();
+		}
 
 		if(!$this->me()) { return false; }
-
-		if($this->is_site_admin()) { return true; }
+		if($this->manager())  { return true; }
 
 		# Now look at special controllers
 		$controller = $this->request->params['controller'];
-		# Assume current controller.
 
-		# Project access.... 
-		if(!empty($pid) && $controller == 'projects')
+		# Current section, current controller, or a specific record in question.
+		if($this->Rescue->id()) # In a rescue.
 		{
-			return $this->is_project_user();
-		} else if (!empty($pid) && in_array($controller, $this->projectable_controllers)) { 
-			if($this->is_project_admin())
-			{
-				return true;
-			} else if(isset($data['user_id'])) {  # Existing record.
-				return ( $data['user_id'] != $this->me() ); 
-				# Owner can edit stuff
-			} else {
-				return $this->is_project_user(); # If not an existing record, project users can add.
-			}
+			return $this->Rescue->can_edit($data); # Better idea.
+
+		} else { # Not in rescue, restrictions to editing a record depends upon owner of record, otherwise assume we're adding records.
+			# If passed record, check owner.
+
+			# Else, assume record is in view var, check, ie current page/listing for editability.
+
+			return !empty($data) ? ($data['user_id'] == $me) : true; # General user-only section or public page where users can add content (ie listings etc)
+			# Not specific to a volunteer vs rescuer, etc role.
 		}
+		# If a page is meant for volunteers (or rescues) to add records, prefer using $this->Html->volunteer() or $this->Html->rescuer() instead.
+		# Otherwise we assume all users are created equal. If no record passed.
 
-		# Check restricted controllers.
-		if(in_array($controller, $this->admin_controllers)) { return $this->user("admin"); }
-		if(in_array($controller, $this->site_owner_controllers)) { return $this->Site->is_owner(); }
-
-
-		# Look at record owner.
-		if(isset($data['user_id'])) { return ( $data['user_id'] != $this->me() ); }
-
-		return true; # Otherwise.
 	}
 }

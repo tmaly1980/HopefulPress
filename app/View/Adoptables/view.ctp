@@ -25,7 +25,11 @@ $statusClass = $statusClasses[$status];
 	<? /* if(!empty($this->request->params['prefix'])) { ?>
 		<?= $this->Html->back("Search Database", array('action'=>'search')); ?>
 	<? } else { */ ?>
+	<? if($status == 'Adopted' && !empty($adoptable['Adoptable']['success_story'])) { ?>
+		<?= $this->Html->back("View all happy tails", array('action'=>'stories','rescue'=>$rescuename)); ?>
+	<? } else { ?>
 		<?= $this->Html->back("View all $animals", array('action'=>'index','rescue'=>$rescuename)); ?>
+	<? } ?>
 	<? # } # XXX TODO 'back to search' - w/session saved search criteria... ?>
 <? $this->end("subtitle_nav"); ?>
 
@@ -65,6 +69,13 @@ $statusClass = $statusClasses[$status];
 <?= $this->element("../Adoptables/details"); ?>
 
 <hr/>
+<? if($adoptable['Adoptable']['status'] == 'Adopted' && (!empty($adoptable['Adoptable']['success_story']))) { ?>
+<h3 class="margintop25">Happy Tail Story</h3>
+<div class=''>
+	<?= $this->element("../Adoptables/story",array('inline'=>1)); ?>
+</div>
+<? } ?>
+<hr/>
 
 <? if(!empty($adoptable['Photos'])) { ?>
 <h3>More Pictures</h3>
@@ -72,12 +83,6 @@ $statusClass = $statusClasses[$status];
 <?= $this->element("../AdoptablePhotos/list"); ?>
 <? } ?>
 
-<? if($adoptable['Adoptable']['status'] == 'Adopted' && (!empty($adoptable['Adoptable']['success_story']))) { ?>
-<h3>Success Story</h3>
-<div class=''>
-	<?= $this->element("../Adoptables/story",array('inline'=>1)); ?>
-</div>
-<? } ?>
 
 <? /* if($this->Html->me()) { ?>
 <div class='right'>

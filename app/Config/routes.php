@@ -54,66 +54,21 @@ if(!HostInfo::site_specified())
 
 	Configure::write("www",true);
 	Configure::write("layout",'default'); # Moved to default...
-	Configure::write("portal",true);
 	# Multisite is off.
 
 	#Configure::write("layout","Rescue.rescue");
 	Configure::write("theme","Rescue"); # This will be unnecessary once actual view files exist  within plugin
 
-	# View content within rescue
-	Router::connect('/rescue/:rescue', array('controller' => 'rescues', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
-		
-	
-	# CSS
-	Router::connect('/rescue/:rescue/style', array('controller' => 'rescues', 'action' => 'style'),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescue/:rescue/style/*', array('controller' => 'rescues', 'action' => 'style'),array('rescue'=>'[\w_-]+'));
+	Router::connect('/websites', array('plugin'=>'www','controller' => 'static', 'action' => 'index'));
+	Router::connect('/websites/*', array('plugin'=>'www','controller' => 'static', 'action' => 'view'));
 
-	# OTHER PAGES
-	Router::connect('/rescue/:rescue/about', array('controller' => 'rescues', 'action' => 'about'),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescue/:rescue/contact', array('controller' => 'rescues', 'action' => 'contact'),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescue/:rescue/resources', array('controller' => 'resource_pages', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescue/:rescue/donate', array('plugin'=>'donation','controller' => 'donation_pages', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescue/:rescue/donate/:action', array('plugin'=>'donation','controller' => 'donations'),array('rescue'=>'[\w_-]+')); # IPN and form
-	Router::connect('/rescue/:rescue/donate/:action/*', array('plugin'=>'donation','controller' => 'donations'),array('rescue'=>'[\w_-]+')); # IPN and form
+	Router::connect('/websites/contact', array('plugin'=>'www','controller' => 'contact_requests', 'action' => 'add'));
+	Router::connect('/websites/consult', array('plugin'=>'www','controller' => 'intake_surveys', 'action' => 'add'));
 
-	Router::connect('/rescue/:rescue/news', array('controller' => 'news_posts', 'action' => 'index'),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescue/:rescue/news/*', array('controller' => 'news_posts', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescue/:rescue/photos', array('controller' => 'photo_albums', 'action' => 'index'),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescue/:rescue/photos/*', array('controller' => 'photo_albums', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
+	#Configure::write("favicon", "/www/images/logo.ico");
+	#Configure::write("rss", "/blog/posts/index.rss");
 
-	# Adoptable.
-	Router::connect('/adoptable/:id', array('controller'=>'adoptables','action'=>'view'),array('id'=>'\d+'));
-	Router::connect('/rescue/:rescue/adoptable/:id', array('controller'=>'adoptables','action'=>'view'),array('rescue'=>'[\w_-]+','id'=>'\d+'));
-	Router::connect('/rescue/:rescue/adoptable/:id/:action', array('controller'=>'adoptables'),array('rescue'=>'[\w_-]+','id'=>'\d+'));#View
-	Router::connect('/rescue/:rescue/adoptable/*', array('controller'=>'adoptables','action'=>'view'),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescuer/rescue/:rescue/adoptable/:id/:action', array('rescuer'=>1,'controller'=>'adoptables'),array('rescue'=>'[\w_-]+','id'=>'\d+')); # Edit
-	Router::connect('/rescuer/rescue/:rescue/adoptable/add', array('rescuer'=>1,'action'=>'add'),array('rescue'=>'[\w_-]+'));
-
-	#
-	Router::connect('/rescue/:rescue/:controller', array(),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescue/:rescue/:controller/:action', array(),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescue/:rescue/:controller/:action/*', array(),array('rescue'=>'[\w_-]+'));
-
-	# MANAGING SPECIALIZATIONS
-	Router::connect('/rescuer/rescue/:rescue/specializations', array('rescuer'=>1,'controller'=>'rescue_specializations'),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescuer/rescue/:rescue/specializations/:action', array('rescuer'=>1,'controller'=>'rescue_specializations'),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescuer/rescue/:rescue/specializations/:action/*', array('rescuer'=>1,'controller'=>'rescue_specializations'),array('rescue'=>'[\w_-]+'));
-
-	# Update rescuer content.
-	Router::connect('/rescuer/rescue/:rescue/:action', array('rescuer'=>1,'controller'=>'rescues'),array('rescue'=>'[\w_-]+')); # edit, etc
-	Router::connect('/rescuer/rescue/:rescue/:controller/:action', array('rescuer'=>1),array('rescue'=>'[\w_-]+'));
-	Router::connect('/rescuer/rescue/:rescue/:controller/:action/*', array('rescuer'=>1),array('rescue'=>'[\w_-]+'));
-
-	Router::connect('/rescuer/:plugin/rescue/:rescue/:controller/:action', array('rescuer'=>1),array('rescue'=>'[\w_-]+'));
-
-	# We cannot generalize with ':prefix', we have to be explicit. Or loop over all prefixes found and specify rules each.
-
-	# Stuff for all users (may as well)
-	Router::connect('/user/rescue/:rescue/:controller', array('user'=>1),array('rescue'=>'[\w_-]+'));
-	Router::connect('/user/rescue/:rescue/:controller/:action', array('user'=>1),array('rescue'=>'[\w_-]+'));
-	Router::connect('/user/rescue/:rescue/:controller/:action/*', array('user'=>1),array('rescue'=>'[\w_-]+'));
-
-	/*
+	/* OLD MARKETING SITE STUFF...
 	# We could be failing to catch because general routing creates duplicate entry...
 	# RESCUE CONTENT
 	Router::connect('/', array('plugin'=>'www','controller' => 'static', 'action' => 'index'));
@@ -121,8 +76,6 @@ if(!HostInfo::site_specified())
 	# NEW
 	Router::connect('/portal', array('plugin'=>'rescue','controller' => 'portal', 'action' => 'index'));
 
-	Router::connect('/websites', array('plugin'=>'www','controller' => 'static', 'action' => 'index'));
-	Router::connect('/websites/*', array('plugin'=>'www','controller' => 'static', 'action' => 'view'));
 	Configure::write("layout","plain");
 
 	#Router::connect('/', array('plugin'=>'www','controller' => 'static', 'action' => 'view','home'));
@@ -131,8 +84,6 @@ if(!HostInfo::site_specified())
 	Router::connect('/blog', array('plugin'=>'blog','controller' => 'posts', 'action' => 'index'));
 	Router::connect('/pages/*', array('plugin'=>'www','controller' => 'static', 'action' => 'view'));
 
-	Router::connect('/contact', array('plugin'=>'www','controller' => 'contact_requests', 'action' => 'add'));
-	Router::connect('/consult', array('plugin'=>'www','controller' => 'intake_surveys', 'action' => 'add'));
 	Router::connect('/signup', array('controller' => 'sites', 'action' => 'signup'));
 	Router::connect('/signup/*', array('controller' => 'sites', 'action' => 'signup'));
 
@@ -141,10 +92,10 @@ if(!HostInfo::site_specified())
 
 	#Configure::write("layout","www");
 	Configure::write("www",true);
-	Configure::write("favicon", "/www/images/logo.ico");
-	Configure::write("rss", "/blog/posts/index.rss");
 	*/
-} else if (HostInfo::hostname() == 'todo') { 
+}
+
+if (HostInfo::hostname() == 'todo') { 
 	Router::connect('/', array('plugin'=>'todo','controller' => 'tasks'));
 	Router::connect('/tasks', array('plugin'=>'todo','controller' => 'tasks'));
 	Router::connect('/milestones', array('plugin'=>'todo','controller' => 'milestones'));
@@ -182,30 +133,81 @@ if(!HostInfo::site_specified())
 	
 #} else if (HostInfo::hostname() == 'rescue') { 
 
-} else { # In a site.
-	Configure::write("multisite",true); # REQUIRED
-	Configure::write("layout","default");
-
-	Router::connect('/', array('controller' => 'homepages', 'action' => 'view'));
-	Router::connect('/manager', array('manager'=>1,'controller' => 'sites','action'=>'view'));
-	Router::connect('/admin', array('admin'=>1,'controller' => 'sites','action'=>'view'));
-	Router::connect('/admin/billing', array('admin'=>1,'plugin'=>'stripe','controller' => 'stripe_billing','action'=>'view'));
-
-
-	# RESCUE SITES
+} else { # In a site OR PORTAL.
 	Configure::write("trial_days", 30);
-	#Configure::write("trial_days", 14);
-	Configure::write("layout","Rescue.rescue");
+	Configure::write("layout",'default'); # Moved to default...
 	Configure::write("theme","Rescue"); # This will be unnecessary once actual view files exist  within plugin
+	#Configure::write("multisite",true); # REQUIRED
+
+	# IN A SITE OR IN PORTAL
+	$specifier = !HostInfo::site_specified() ? "/rescue/:rescue":""; # Compatible with either mini-site or dedicated site.
+
+	# View content within rescue
+	Router::connect(empty($specifier)?"/":"$specifier", array('controller' => 'rescues', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
+		
+	
+	# CSS
+	Router::connect("$specifier/style", array('controller' => 'rescues', 'action' => 'style'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/style/*", array('controller' => 'rescues', 'action' => 'style'),array('rescue'=>'[\w_-]+'));
+
+	# OTHER PAGES
+	Router::connect("$specifier/about", array('controller' => 'rescues', 'action' => 'about'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/contact", array('controller' => 'rescues', 'action' => 'contact'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/resources", array('controller' => 'resource_pages', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/donate", array('plugin'=>'donation','controller' => 'donation_pages', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/donate/:action", array('plugin'=>'donation','controller' => 'donations'),array('rescue'=>'[\w_-]+')); # IPN and form
+	Router::connect("$specifier/donate/:action/*", array('plugin'=>'donation','controller' => 'donations'),array('rescue'=>'[\w_-]+')); # IPN and form
+
+	Router::connect("$specifier/news", array('controller' => 'news_posts', 'action' => 'index'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/news/*", array('controller' => 'news_posts', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/photos", array('controller' => 'photo_albums', 'action' => 'index'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/photos/*", array('controller' => 'photo_albums', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/photo/:action", array('controller' => 'photos'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/photo/:action/*", array('controller' => 'photos'),array('rescue'=>'[\w_-]+'));
+
+	# Adoptable.
+	Router::connect("/adoptable/:id", array('controller'=>'adoptables','action'=>'view'),array('id'=>'\d+'));
+	Router::connect("$specifier/adoptable/:id", array('controller'=>'adoptables','action'=>'view'),array('rescue'=>'[\w_-]+','id'=>'\d+'));
+	Router::connect("$specifier/adoptable/:id/:action", array('controller'=>'adoptables'),array('rescue'=>'[\w_-]+','id'=>'\d+'));#View
+	Router::connect("$specifier/adoptable/*", array('controller'=>'adoptables','action'=>'view'),array('rescue'=>'[\w_-]+'));
+
+
+	#
+	if(!empty($specifier))
+	{
+		Router::connect("$specifier/:controller", array(),array('rescue'=>'[\w_-]+'));
+		Router::connect("$specifier/:controller/:action", array(),array('rescue'=>'[\w_-]+'));
+		Router::connect("$specifier/:controller/:action/*", array(),array('rescue'=>'[\w_-]+'));
+	}
+
+	$prefixes = array('rescuer','user');
+	
+	foreach($prefixes as $prefix)
+	{
+		Router::connect("/$prefix$specifier/adoptable/:id/:action", array($prefix=>1,'controller'=>'adoptables'),array('rescue'=>'[\w_-]+','id'=>'\d+')); # Edit
+		Router::connect("/$prefix$specifier/adoptable/add", array($prefix=>1,'action'=>'add'),array('rescue'=>'[\w_-]+'));
+		# MANAGING SPECIALIZATIONS
+		Router::connect("/$prefix$specifier/specializations", array($prefix=>1,'controller'=>'rescue_specializations'),array('rescue'=>'[\w_-]+'));
+		Router::connect("/$prefix$specifier/specializations/:action", array($prefix=>1,'controller'=>'rescue_specializations'),array('rescue'=>'[\w_-]+'));
+		Router::connect("/$prefix$specifier/specializations/:action/*", array($prefix=>1,'controller'=>'rescue_specializations'),array('rescue'=>'[\w_-]+'));
+	
+		# Update rescuer content.
+		if(!empty($specifier)) { 
+			Router::connect("/$prefix$specifier/:action", array($prefix=>1,'controller'=>'rescues'),array('rescue'=>'[\w_-]+')); # edit, etc
+			Router::connect("/$prefix$specifier/:controller/:action", array($prefix=>1),array('rescue'=>'[\w_-]+'));
+			Router::connect("/$prefix$specifier/:controller/:action/*", array($prefix=>1),array('rescue'=>'[\w_-]+'));
+			Router::connect("/$prefix/:plugin$specifier/:controller/:action", array($prefix=>1),array('rescue'=>'[\w_-]+'));
+	
+			# Stuff for all users (may as well)
+			Router::connect("/$prefix$specifier/:controller", array($prefix=>1),array('rescue'=>'[\w_-]+'));
+			Router::connect("/$prefix$specifier/:controller/:action", array($prefix=>1),array('rescue'=>'[\w_-]+'));
+			Router::connect("/$prefix$specifier/:controller/:action/*", array($prefix=>1),array('rescue'=>'[\w_-]+'));
+		}
+	}
+
+
 }
-
-if(HostInfo::hostname() == 'rescue')
-{
-	Router::connect('/mockup/goto/:action', array('controller' => 'mockup'));
-	Router::connect('/mockup/*', array('controller' => 'mockup', 'action' => 'view'));
-
-}
-
+#Configure::write("layout","Rescue.rescue");
 
 Router::connect('/login', array('user'=>1,'controller' => 'users','action'=>'login'));
 

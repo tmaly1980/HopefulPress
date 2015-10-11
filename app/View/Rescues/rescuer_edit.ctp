@@ -1,5 +1,5 @@
 <? $id = !empty($this->request->data['Rescue']['id']) ? $this->request->data['Rescue']['id'] : null; ?>
-<? $this->assign("page_title", ($id?"Update your":"Add a")." rescue listing"); ?>
+<? $this->assign("page_title", ($id?"Update your":"Add a")." rescue"); ?>
 <div class='form'>
 	<?= $this->Form->create("Rescue"); ?>
 	<?= $this->Form->hidden('id'); ?>

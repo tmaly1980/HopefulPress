@@ -25,8 +25,10 @@ class AppController extends AppCoreController {
 			'loginRedirect'=>'/',#user/dashboard',
 			'logoutRedirect'=>'/',
 			'publicAllowed'=>true,
-			'errorMsg'=>"Email or password is incorrect. If you don't think you have an account, you can sign up below",
+			'errorMsg'=>"Email or password is incorrect. ",
 			'accountSaveRedirect'=>true, # after own account is saved; true = referer
+			# Defaults handled in UserAuth config, but we are always called as a last resort, for exceptions (or custom error handling)
+			# ie random users accessing a rescue, not yet a valid/authorized volunteer
 			'prefixes'=>array( # Map prefixes to access levels
 				'user'=>true, # /user/* for logged in users
 				'admin'=>'admin', # /admin/* for admin flag users
@@ -62,7 +64,8 @@ class AppController extends AppCoreController {
 		'Form'=>array('className'=>'HpForm'),
 		'Time'=>array('className'=>'HpTime'), # Not sure but doesnt like Html references
 		'Slug'=>array('className'=>'Sluggable.Slug'),
-		'Site'=>array('className'=>'Multisite.Site'),
+		#'Site'=>array('className'=>'Multisite.Site'),
+		'Rescue',
 		'Share'=>array('className'=>'Sharable.Share'),
 		'Less'=>array('className'=>'CakeLess.Less'),
 		'Facebook.Facebook',
@@ -124,12 +127,14 @@ class AppController extends AppCoreController {
 
 		Configure::write("in_admin", $this->me()); # Is user logged in? (do we show editing controls) XXX TODO
 
-		Configure::write("hostname", $this->Session->read("CurrentSite.Site.hostname")); # Might be  used in helpers,etc.
+		#Configure::write("hostname", $this->Session->read("CurrentSite.Site.hostname")); # Might be  used in helpers,etc.
 		
 		if(!empty($this->request->params['manager'])) # Don't auto-assign users when not explicit. I'm not part of user sites.
 		{
 			Configure::write("User.autouser", false);
 		}
+
+		$this->default_domain = HostInfo::default_domain(); # Always available.
 
 		# Load possible rescue details
 		$this->loadRescue();
@@ -214,7 +219,7 @@ class AppController extends AppCoreController {
 			$this->layout = 'Core.default'; # Default.
 		}
 
-		$this->set("default_domain", HostInfo::default_domain()); # Always available.
+		$this->set("default_domain", $this->default_domain);
 
 		$this->set("hostname", Configure::read("hostname"));
 
@@ -518,17 +523,31 @@ class AppController extends AppCoreController {
 		} else if(!empty($this->request->named['rescue'])) { # IN case not routed right
 			$rescuename = $this->request->named['rescue'];
 		}
+		if(empty($rescuename)) { 
+			list($hostname,$domain) = HostInfo::hostparts();
+			$mydomains = HostInfo::default_domains();
+			#error_log("H,D=$hostname,$domain,MTY=".print_r($mydomains,true));
+			if(!empty($domain) && !in_array($domain,$mydomains))
+			{
+				$rescuename = $domain;
+			} else if (!empty($hostname)) { 
+				$rescuename = $hostname;
+			}
+		}
+		#error_log("RESC=$rescuename");
 
 		if($rescuename)
 		{
-			$rescue = $this->Rescue->findByHostname($rescuename);
+			$rescue = preg_match("/[.]/", $rescuename) ? $this->Rescue->findByDomain($rescuename) : $this->Rescue->findByHostname($rescuename);
+			#error_log("RES=".print_r($rescue,true));
+
 			if(empty($rescue))
 			{
-				$this->setError("Rescue not found","/rescues");#array('prefix'=>false,'plugin'=>null,'controller'=>'rescues','action'=>'index'));
+				$this->badRescue();
 			} else {
 				$this->set("rescue", $this->rescue = $rescue);
-				$this->set("hostname", $rescuename);
-				$this->set("rescuename", $rescuename);
+				$this->set("hostname", $rescue['Rescue']['hostname']);
+				$this->set("rescuename", $rescue['Rescue']['hostname']);
 				$this->set("rescue_id", $rescue['Rescue']['id']);
 				Configure::write("rescue_id", $this->rescue_id = $rescue['Rescue']['id']); # For later record filtering.
 				Configure::write("rescuename", $this->rescuename = $rescue['Rescue']['hostname']); 
@@ -539,15 +558,19 @@ class AppController extends AppCoreController {
 
 		if(empty($rescue) && !empty($this->rescue_required))
 		{
-			return $this->setError("Rescue not found","/rescues");#array('plugin'=>null,'controller'=>'rescues','action'=>'index'));
+			$this->badRescue();
 		}
+
+		$this->dedicated_redirect(); # If they have a fancy plan, show fancy URL.
 	}
 
 	function rescue($field=null)
 	{
 		if(!empty($field))
 		{
-			return !empty($this->rescue['Rescue'][$field]) ? $this->rescue['Rescue'][$field] : null;
+			list($model,$key) = pluginSplit($field);
+			if(empty($model)) { $model = 'Rescue'; }
+			return !empty($this->rescue[$model][$key]) ? $this->rescue[$model][$key] : null;
 		} else {
 			return $this->rescue; # Whole
 		}
@@ -649,6 +672,117 @@ class AppController extends AppCoreController {
 			}
 		}
 		# ELSE OK
+	}
+
+	function rescue_dedicated()
+	{
+		if(empty($this->rescue)) { return false; } # Not on a site.
+		$plan = $this->rescue['Rescue']['plan'];
+		if(!in_array($plan,array('dedicated','unlimited'))) { return false; }
+		return true;
+	}
+
+	function dedicated_redirect()
+	{
+		if(!$this->rescue_dedicated()) { return false; } # Not on site or not dedicated.
+
+		# Go to dedicated site if not currently.
+		list($hostname,$domain) = HostInfo::hostparts();
+		if($hostname != $this->rescue['Rescue']['hostname'] &&
+			$domain != $this->rescue['Rescue']['domain'])
+		{ # We know the rescue but we're clearly not on a hostname/domain of theirs.
+			$url = $this->request->params;
+			# Clean up.
+			unset($url['rescue']);
+			unset($url['orig_action']);
+			$host = $this->hostname($this->rescue);
+			return $this->redirect($host.Router::url($url));
+		}
+	}
+
+	# XXX TODO handle if domain is prematurely set....
+	# ? do domain DNS lookup and make sure IP address matches?
+	function hostname($rescue)
+	{
+		error_log("DEF_DOMAIN={$this->default_domain}");
+		if(!empty($rescue['Rescue']['domain']) && HostInfo::domain_ready($rescue['Rescue']['domain']))
+		{
+			return "http://{$rescue['Rescue']['domain']}";
+		}
+		if(!empty($rescue['Rescue']['hostname']))
+		{
+			return "http://{$rescue['Rescue']['hostname']}.{$this->default_domain}";
+		}
+		return "http://{$this->default_domain}"; # fail safe.
+		# Pass null to get here.
+	}
+
+	function badRescue() # 
+	{
+		error_log("BAD RESCUE {$this->rescuename}");
+		return $this->setError("Rescue not found",$this->hostname(null)."/rescues");#array('prefix'=>false,'plugin'=>null,'controller'=>'rescues','action'=>'index'));
+	}
+
+	# Make sure this user/volunteer has been permitted access to this rescue.
+	# XXX Need to adjust Users::login to find account
+
+	# GENERAL ACL CHECK since users not necessarily meant for this rescue.
+	# Generic prefix/flag check not good enough since we allow all users.
+	function isAuthorized($user=null)
+	{
+		if(empty($user)) { $user = $this->Auth->user(); }
+		error_log("IS_AUTHORIZED....USER=".print_r($user,true));
+
+		$me = $user['User']['id'];
+
+		$prefix = !empty($this->request->params['prefix']) ?
+			$this->request->params['prefix'] : null;
+		if(empty($prefix)) { return true; }
+
+		if($prefix == 'manager') { return false; }
+
+		# We might make additions based on other portal sections
+		# ie volunteers only, etc.
+
+		# On a rescue, deny access to non-volunteers, inactive, etc.
+		if($rid = $this->rescue_id) {
+			$rescue_user_id = $this->rescue("user_id");
+			error_log("RESCUE=$rid, OWNER_ID=$rescue_user_id, ME=$me");
+			if($rescue_user_id == $me) { return true; } # Rescue owner.
+			if($prefix == 'rescuer') { return false; } # Nobody else can do this.
+
+			$admin = Set::extract("/[rescue_id=$rid][admin=1]/user_id", $user['Rescues']);
+			$volunteer = Set::extract("/[rescue_id=$rid][admin=0]/user_id", $user['Rescues']);
+
+			if(empty($admin) && empty($volunteer)) # Random unauthorized user.
+			{
+				return $this->setError("Sorry, that page is available only to active volunteers of this rescue. If you would like to become a volunteer for this rescue, you may apply via their Volunteer page. If you've recently applied as a volunteer, the rescue's admins may still be processing your request.",
+					array('controller'=>'rescues','action'=>'view'));
+			} else if ($prefix == 'admin' && empty($admin)) { # Not an admin user.
+				return $this->setError("Sorry, that page is available only to active volunteers who have been given 'administrator' access. If you believe this is in error, contact your rescue's owner to grant you proper access. ",
+					array('controller'=>'rescues','action'=>'view'));
+			} else {
+				return true; # active volunteer and either admin level or not needing admin access.
+			}
+		} else {
+			# ELSE, not on a rescue.... 
+			# For now, let people add /user/* content, but not edit another's
+			if($prefix == 'user')
+			{
+				if($this->request->action == 'user_edit' && ($id = $this->request->pass[0]) && $this->model()->hasField("user_id"))
+				{
+					return $this->model()->count(array('id'=>$id,'user_id')); # Creator ok, else nope.
+				} else { # Somthing other than  edit records
+					return true;
+				}
+			#} else if ($prefix == 'volunteer') { 
+			# Volunteer-only/etc content (ie non rescues) will later be restricted via /volunteer, etc prefixes.
+			} else { # XXX TODO other levels of access, prefixes, etc.
+				return false;
+			}
+		}
+
+		return false; # FAILSAFE, i dunno.
 	}
 
 }

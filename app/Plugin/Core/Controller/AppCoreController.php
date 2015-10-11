@@ -638,7 +638,7 @@ class AppCoreController extends Controller
 		return empty($target) ? $updating : $target == $updating;
 	}
 
-	function isAuthorized() # $this->Auth->prefixes is likely good enough.
+	function isAuthorized($user=null) # $this->Auth->prefixes is likely good enough.
 	{
 		return true;
 	}

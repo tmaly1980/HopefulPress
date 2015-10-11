@@ -93,7 +93,7 @@ class CoreHtmlHelper extends BoostCakeHtmlHelper
 			$type = $opts['fa'];
 			$icon = !empty($this->button_types[$type]) ? $this->button_types[$type] : $type;
 			# DONT SHOW TEXT ON SMALL DEVICES < 768
-			$text = !empty($text) ? "<i class='".((!isset($opts['short'])||$opts['short'])?"hidden-xs hidden-sm":"")."'> $title </i>" : null;
+			$text = !empty($text) ? "<span class='".((!isset($opts['short'])||$opts['short'])?"hidden-xs hidden-sm":"")."'> $title </span>" : null;
 			$icon = "<i class='fa $icon'></i>";
 			$title = (!empty($opts['glyph_after']) || !empty($opts['gafter'])) ? $text.$icon : $icon.$text;
 		}
