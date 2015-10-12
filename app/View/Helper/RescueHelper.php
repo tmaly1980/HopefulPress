@@ -19,6 +19,8 @@ class RescueHelper extends AppHelper
 		'volunteer_page_forms',
 	);
 
+	var $dedicated_plans = array('dedicated','unlimited');
+
 	function get($key=null)
 	{
 		$rescue = $this->_View->get("rescue");
@@ -33,10 +35,15 @@ class RescueHelper extends AppHelper
 		}
 	}
 
-	function dedicated()
+	function dedicated($rescue = null)
 	{
-		$plan = $this->get("plan");
-		return in_array($plan,array('dedicated','unlimited'));
+		if(!empty($rescue))
+		{
+			$plan = !empty($rescue['Rescue']) ? $rescue["Rescue"]['plan'] : $rescue['plan'];
+		} else {
+			$plan = $this->get("plan");
+		}
+		return in_array($plan,$this->dedicated_plans);
 	}
 
 	function hostname()
@@ -103,5 +110,59 @@ class RescueHelper extends AppHelper
 		if(in_array($controller, $this->rescuer_controllers)) { return false; } # Already checked above.
 		if(in_array($controller, $this->admin_controllers)) { return $this->admin(); }
 		return !empty($data) ? ($data['user_id'] == $me) : true; # All other controllers (ie news, adoptables, etc).
+	}
+
+	# Useful to go to homepage for dedicated site.
+	function url($rescue = null, $url = '/')
+	{
+		if(is_string($rescue)) # Only gave url,assume current rescue.
+		{
+			$url = $rescue;
+			$rescue = null;
+		}
+		if(empty($rescue))
+		{
+			if(!$this->id()) { return $url; } # Nothing we can do.
+			$rescue = $this->get();
+		}
+		if(!$this->dedicated($rescue))
+		{
+			$url['rescue'] = $rescue['hostname']; #  Add into url.
+			return "http://".Configure::read("default_domain").Router::url($url);
+		}
+
+		# Else, dedicated, so try to handle proper url.
+		if(!empty($rescue['domain']) && HostInfo::domain_ready($rescue['domain']))
+		{
+			$host = "http://{$rescue['domain']}";
+		} else if(!empty($rescue['hostname'])) { 
+			$host = "http://{$rescue['hostname']}.".Configure::read("default_domain");
+		} else {
+			return "http://".Configure::read("default_domain").Router::url($url); # Failsafe.
+		}
+
+		if(is_array($url))
+		{
+			$url['?'] = array(Configure::read("Session.cookie")=>session_id());
+		} else {
+			$url .= "?".Configure::read("Session.cookie")."=".session_id();
+		}
+
+
+		return $host.Router::url($url);
+	}
+	function breeds() # OK for single dropdown?
+	{
+		Configure::load("breeds");
+		$breeds = Configure::read("Breeds");
+		return $breeds;
+	}
+
+	function breedsSpecies()
+	{
+		$breeds = $this->breeds();
+		$species = array_combine(array_keys($breeds),array_keys($breeds));
+
+		return array($breeds,$species);
 	}
 }

@@ -14,7 +14,7 @@ $statusClass = $statusClasses[$status];
 <? $this->end("post_title_header");?>
 <? $this->start("title_controls");?>
 <? if($this->Html->can_edit()) { ?>
-	<?= $this->Html->edit("Update", array('rescuer'=>1,'action'=>'edit','id'=>$id,'rescue'=>$adoptable['Rescue']['hostname'])); ?>
+	<?= $this->Html->edit("Update", array('user'=>1,'action'=>'edit','id'=>$id,'rescue'=>$adoptable['Rescue']['hostname'])); ?>
 <? } ?>
 <? $this->end("title_controls");?>
 <? $this->start("subtitle_nav"); ?>

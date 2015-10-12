@@ -8,7 +8,7 @@
 		No available adoptables listed
 	</div>
 	<? if($this->Html->can_edit()) { ?>
-		<?= $this->Html->add("Add adoptables", array('rescuer'=>1,'controller'=>'adoptables','action'=>'add','rescue'=>$rescuename),array('class'=>'')); ?>
+		<?= $this->Html->add("Add adoptables", array('user'=>1,'controller'=>'adoptables','action'=>'add','rescue'=>$rescuename),array('class'=>'')); ?>
 	<? } ?>
 <? } else { ?>
 <div id='adoptables' class='<?= !empty($carousel) ? "carousel slide" : "" ?>' <?= !empty($carousel) ? 'data-ride="carousel" data-wrap="true"' : "" ?> >

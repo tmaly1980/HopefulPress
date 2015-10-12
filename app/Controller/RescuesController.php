@@ -31,7 +31,7 @@ class RescuesController extends AppController
 		$this->setAction("search");
 	}
 
-	function rescuer_edit() # Signup/edit
+	function user_edit() # Signup/edit
 	{
 		# Prompt for Rescue record.
 		if(!empty($this->request->data))

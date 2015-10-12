@@ -1,7 +1,7 @@
 <? #$this->layout = 'default'; ?>
 <? $this->assign("search_disabled",true); ?>
 <?#= $this->element("UserCore.login"); ?>
-<? $this->assign("container_class","maxwidth500 center"); ?>
+<? $this->assign("container_class","maxwidth550 center"); ?>
 <? $this->assign("page_title", $this->Rescue->dedicated()?"Sign in to continue":"Sign in or create an account to continue");  ?>
 <div class="users form border lightgreybg ">
 	<?= $this->Session->flash("auth"); ?>

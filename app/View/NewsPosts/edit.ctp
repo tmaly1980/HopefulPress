@@ -21,7 +21,7 @@
 		echo $this->Form->hidden('draft_id');
 		echo $this->Form->hidden('project_id');
 	?>
-	<?= $this->Form->input("created",array('size'=>'12','type'=>'text','placeholder'=>'mm/dd/yyyy','label'=>'Post Date','default'=>date("m/d/Y"),'class'=>'datepicker','div'=>'form-inline')); ?>
+	<?#= $this->Form->input("created",array('size'=>'12','type'=>'text','placeholder'=>'mm/dd/yyyy','label'=>'Post Date','default'=>date("m/d/Y"),'class'=>'datepicker','div'=>'form-inline')); ?>
 	<div class='clear'></div>
 	<div class='row'>
 		<div class='col-md-3 right'>

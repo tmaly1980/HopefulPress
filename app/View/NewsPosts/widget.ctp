@@ -17,7 +17,7 @@
 	<? if($this->Html->me()) { ?>
 	<div class='dashed alert alert-info'>
 		You have no news posts yet.
-		<?= $this->Html->add("Add a news post", array('rescuer'=>1,'controller'=>'news_posts','action'=>'add')); ?>
+		<?= $this->Html->add("Add a news post", array('user'=>1,'controller'=>'news_posts','action'=>'add')); ?>
 	</div>
 	<? } ?>
 <? } else { ?>

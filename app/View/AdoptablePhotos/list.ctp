@@ -16,10 +16,10 @@
 
 <? if($this->Html->me()) { ?>
 	<script>
-	$('#sorter').sorter('#Photos', {msg: '#sort_msg', prefix: 'rescuer', controller: 'adoptable_photos',axis: 'both'});
+	$('#sorter').sorter('#Photos', {msg: '#sort_msg', prefix: 'user', controller: 'adoptable_photos',axis: 'both'});
 
 	<? $adoptable_id = !empty($this->request->data['Adoptable']['id']) ? $this->request->data['Adoptable']['id'] : null; ?>
-	$('#UploadFile').uploader('<?= Router::url(array('rescuer'=>1,'controller'=>'adoptable_photos','action'=>'listupload',$adoptable_id,'rescue'=>$rescuename)); ?>', 
+	$('#UploadFile').uploader('<?= Router::url(array('user'=>1,'controller'=>'adoptable_photos','action'=>'listupload',$adoptable_id,'rescue'=>$rescuename)); ?>', 
 		{ 
 		target: 'Photos',
 		}

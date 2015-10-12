@@ -101,7 +101,7 @@ class EventsController extends AppController {
 		$days = array();
 		$daysofmonth = date("t", strtotime("$year-$month-01"));
 
-		for($day = 1; $day <= $daysofmonth; $day++)
+		for($day = 0; $day < $daysofmonth; $day++)
 		{
 			$days[$day] = array();
 

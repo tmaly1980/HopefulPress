@@ -7,7 +7,7 @@
 <?php echo $this->Form->create('Adoptable',array('type'=>'file')); ?>
 	<h4>Provide a comma-separated (CSV) spreadsheet file</h4>
 	<div class='right'>
-		<?= $this->Html->link("Sample CSV Template",array('rescuer'=>1,'controller'=>'adoptables','action'=>'import_template')); ?>
+		<?= $this->Html->link("Sample CSV Template",array('user'=>1,'controller'=>'adoptables','action'=>'import_template')); ?>
 	</div>
 	
 	<?= $this->Form->input('file',array('type'=>'file','label'=>false)); ?>

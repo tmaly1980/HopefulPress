@@ -724,5 +724,14 @@ class AppCoreController extends Controller
 		}
 	}
 
+	function loadExplicitSession() #From cross-domain use.
+	{
+		$cookie = Configure::read("Session.cookie");
+		if(!empty($this->request->query[$cookie]))
+		{
+			session_id($this->request->query[$cookie]);
+		}
+	}
+
 
 }

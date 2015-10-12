@@ -62,7 +62,7 @@ class ShareHelper extends AppHelper {
 		return $url;
 	}
 
-	function share($large = false, $class='right_align font12 black whitebg')
+	function share($large = true, $class='right_align font12 black whitebg')
 	{
 		$prefix = !empty($this->params['prefix']) ? $this->params['prefix'] : null;
 		if(Configure::read("members_only")) { return; }

@@ -9,14 +9,14 @@
 </h3>
 <? if(false && $this->Html->can_edit()) { ?>
 <div class='alert-warning dashed border2'>
-	<?= $this->Html->add(empty($updates['photoAlbums']) ? "Add your first photo album":"Add another photo album", array('rescuer'=>1,'plugin'=>null,'controller'=>'photo_albums','action'=>'add','project_id'=>$pid),array('title'=>'Add Photos','class'=>'')); ?>
+	<?= $this->Html->add(empty($updates['photoAlbums']) ? "Add your first photo album":"Add another photo album", array('user'=>1,'plugin'=>null,'controller'=>'photo_albums','action'=>'add','project_id'=>$pid),array('title'=>'Add Photos','class'=>'')); ?>
 </div>
 <? } ?>
 <? if(empty($updates['photoAlbums'])) { ?>
         <? if($this->Html->me()) { ?>
         <div class='dashed alert alert-info'>
                 You have no photos yet.
-                <?= $this->Html->add("Add some photos", array('rescuer'=>1,'controller'=>'photo_albums','action'=>'add')); ?>
+                <?= $this->Html->add("Add some photos", array('user'=>1,'controller'=>'photo_albums','action'=>'add')); ?>
         </div>
         <? } ?>
 <? } else { ?>

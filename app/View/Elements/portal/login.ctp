@@ -10,7 +10,7 @@
 	<li class='paddingright25'>
 		<div class=''>
 		<? if($myrescue = $this->Rescue->mine()){ ?>
-	    	<a class='btn btn-primary' href="/rescue/<?= $myrescue['hostname'] ?>"><?= $this->Html->fa("paw"); ?> <?=$myrescue['title'] ?></a>
+			<?= $this->Html->blink("fa-paw", $myrescue['title'],$this->Rescue->url($myrescue),array('class'=>'btn-primary')); ?>
 		<? } else if($this->Html->user("rescuer")) {  ?>
 	    	<a class='btn btn-primary' href="/rescuer/rescues/add"><?= $this->Html->g("plus"); ?> Add rescue</a>
 		<? } ?>

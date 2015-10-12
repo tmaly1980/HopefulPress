@@ -17,7 +17,7 @@
         <? if($this->Html->me()) { ?>
         <div class='dashed alert alert-info'>
                 You have no upcoming events.
-                <?= $this->Html->add("Add an event", array('rescuer'=>1,'controller'=>'events','action'=>'add')); ?>
+                <?= $this->Html->add("Add an event", array('user'=>1,'controller'=>'events','action'=>'add')); ?>
         </div>
         <? } ?>
 <? } else { ?>

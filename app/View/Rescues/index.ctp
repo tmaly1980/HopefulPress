@@ -13,7 +13,7 @@
 			<p>
 				If you're a local animal rescue, you can add your listing to our directory or post your adoptable listings on this website
 			</p>
-			<?= $this->Html->add("Post an adoptable listing",array('rescuer'=>1,'controller'=>'adoptables','action'=>'add')); ?>
+			<?= $this->Html->add("Post an adoptable listing",array('user'=>1,'controller'=>'adoptables','action'=>'add')); ?>
 			<?= $this->Html->add("Add rescue to directory",array('rescuer'=>1,'controller'=>'rescues','action'=>'add')); ?>
 			</div>
 		</div>

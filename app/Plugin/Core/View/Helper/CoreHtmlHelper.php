@@ -82,6 +82,9 @@ class CoreHtmlHelper extends BoostCakeHtmlHelper
 		return $this->link("$title <span class='caret'></span>", $url, $opts);
 	}
 
+	function caret() { return $this->span(null, "caret"); }
+	function span($content=null,$class=null) { return "<span class='$class'>$content</span>"; }
+
 	function link($title, $url = null, $opts = array(), $confirmMessage = null)
 	{
 		if(!isset($opts['escape'])) { $opts['escape'] = false; }

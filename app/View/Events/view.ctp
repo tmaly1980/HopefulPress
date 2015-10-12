@@ -3,7 +3,7 @@
 <? $this->start("admin_controls"); ?>
 	<?= $this->Html->back("All events", array('action'=>'index')); ?>
 	<? if($this->Html->can_edit($event['Event'])) { ?>
-		<?= $this->Html->edit("Edit event", array('rescuer'=>1,'action'=>'edit',$id)); ?>
+		<?= $this->Html->edit("Edit event", array('user'=>1,'action'=>'edit',$id)); ?>
 	<? } ?>
 <? $this->end("admin_controls"); ?>
 <? $this->set('crumbs', true); ?>
@@ -23,7 +23,11 @@
 		</div>
 		<? } ?>
 		
-		<? if(!empty($event["Event"]['start_date'])) { ?>
+		<? if(!empty($event["Event"]['start_date'])) { 
+
+			$end_date = (!empty($event['Event']['end_date']) && !$this->Time->sameday($event["Event"]['start_date'], $event['Event']['end_date'])) ?
+				$event['Event']['end_date'] : null;
+		?>
 		<div class="paddingbottom10">
 			<div class="bold marginbottom10">When:</div>
 			<div class="wrap indent">
@@ -31,13 +35,19 @@
 					<? if(!empty($event['Event']['start_time'])) { ?>
 						@ <?= $this->Time->time_12hm($event["Event"]['start_time']); ?>
 					<? } ?>
-					<? if(!empty($event['Event']['end_date']) && !$this->Time->sameday($event["Event"]['start_date'], $event['Event']['end_date'])) { ?>
-						&ndash; <br/>
-						<?= $this->Time->mondy($event["Event"]['end_date']); ?>
+					<? if($end_date) { ?>
+						<br/>&ndash;
+						<?= $this->Time->mondy($end_date); ?>
 					<? } ?>
-						<? if(!empty($event['Event']['end_time']) && !$this->Time->sametime($event["Event"]['start_time'], $event['Event']['end_time'])) { ?>
-							@ <?= $this->Time->time_12hm($event["Event"]['end_time']); ?>
+					<? if(!empty($event['Event']['end_time']) && !$this->Time->sametime($event["Event"]['start_time'], $event['Event']['end_time'])) { ?>
+						<? if(empty($end_date)) { ?>
+						&ndash; 
+						<? } else { ?>
+						@
 						<? } ?>
+
+						<?= $this->Time->time_12hm($event["Event"]['end_time']); ?>
+					<? } ?>
 			</div>
 		</div>
 		<? } ?>

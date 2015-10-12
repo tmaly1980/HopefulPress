@@ -2,7 +2,7 @@
 <? $this->assign("page_title", "Find your next companion animal"); ?>
 <? $this->start("title_controls"); ?>
 <? if($this->Html->me() && (!empty($rescuename) || ($rescuename = $this->Html->user("Rescue.hostname")))) { ?>
-	<?= $this->Html->add("Add an $animal", array('rescuer'=>1,'action'=>'edit','rescue'=>$rescuename)); ?>
+	<?= $this->Html->add("Add an $animal", array('user'=>1,'action'=>'edit','rescue'=>$rescuename)); ?>
 <? } ?>
 <? $this->end("title_controls"); ?>
 <? if(!empty($adoptables)) { ?>

@@ -1,13 +1,9 @@
 <? $this->assign("page_title", "Search Your Adoption Database"); ?>
 <? $this->start("title_controls"); ?>
-	<?= $this->Html->add("Add Animal/Adoptable",array('rescuer'=>1,'action'=>'add')); ?>
-	<?= $this->Html->blink("list", "Bulk Import",array('rescuer'=>1,'action'=>'import')); ?>
+	<?= $this->Html->add("Add Animal/Adoptable",array('user'=>1,'action'=>'add')); ?>
+	<?= $this->Html->blink("list", "Bulk Import",array('user'=>1,'action'=>'import')); ?>
 <? $this->end("title_controls"); ?>
-<?
-Configure::load("Rescue.breeds");
-$breeds = Configure::read("Breeds");
-$species = array_combine(array_keys($breeds),array_keys($breeds));
-?>
+<? $breeds = $this->Rescue->breeds(); ?>
 
 <div class='form'>
 	<?= $this->Form->create("Adoptable",array()); ?>
@@ -59,7 +55,7 @@ $species = array_combine(array_keys($breeds),array_keys($breeds));
 			<?= !empty($adoptable['Adoptable']['birthdate']) ? $this->Time->age($adoptable['Adoptable']['birthdate']) : "" ?>
 		</td>
 		<td><?= $adoptable['Adoptable']['status'] ?></td>
-		<td><?= $this->Html->link($adoptable['Adoptable']['microchip'], array('rescuer'=>1,'action'=>'edit',$adoptable['Adoptable']['id'])); ?></td>
+		<td><?= $this->Html->link($adoptable['Adoptable']['microchip'], array('user'=>1,'action'=>'edit',$adoptable['Adoptable']['id'])); ?></td>
 	</tr>
 	<? } ?>
 </table>

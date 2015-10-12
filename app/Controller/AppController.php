@@ -123,6 +123,8 @@ class AppController extends AppCoreController {
 
 	function beforeFilter()
 	{
+		$this->loadExplicitSession();
+
 		#error_log("I_AM=".print_r($this->request->params,true));
 
 		Configure::write("in_admin", $this->me()); # Is user logged in? (do we show editing controls) XXX TODO
@@ -135,6 +137,7 @@ class AppController extends AppCoreController {
 		}
 
 		$this->default_domain = HostInfo::default_domain(); # Always available.
+		Configure::write("default_domain",$this->default_domain);
 
 		# Load possible rescue details
 		$this->loadRescue();
@@ -692,11 +695,17 @@ class AppController extends AppCoreController {
 			$domain != $this->rescue['Rescue']['domain'])
 		{ # We know the rescue but we're clearly not on a hostname/domain of theirs.
 			$url = $this->request->params;
+			$url['?'] = array('HOPEFULPRESS'=>session_id());
 			# Clean up.
 			unset($url['rescue']);
 			unset($url['orig_action']);
 			$host = $this->hostname($this->rescue);
-			return $this->redirect($host.Router::url($url));
+			$urlstring = Router::url($url);
+			error_log("GOING TO $host $urlstring,  URL=".print_r($url,true));
+
+			# We need to somehow SHORTEN urls if going to a dedicated site. But routing doesn't know how when on shared site.
+
+			return $this->redirect($host.$urlstring);
 		}
 	}
 

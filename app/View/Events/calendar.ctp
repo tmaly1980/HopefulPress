@@ -1,6 +1,6 @@
 <? $this->start("title_controls"); ?>
 	<? if($this->Html->can_edit()) { ?>
-                <?= $this->Html->add("Add Event", array('rescuer'=>1,'action'=>'add'), array()); ?> 
+                <?= $this->Html->add("Add Event", array('user'=>1,'action'=>'add'), array()); ?> 
 	<? } ?>
 	<?= $this->element("../Events/list_toggler"); ?>
 

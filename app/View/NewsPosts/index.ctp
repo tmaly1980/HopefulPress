@@ -1,10 +1,10 @@
-<? $this->set("share",true); ?>
+<?# $this->set("share",true); ?>
 <?# $this->set("crumbs", true); ?>
 <? #$project_title = $this->Admin->project('title'); ?>
 <? $this->assign("page_title", "News Posts".(!empty($project_title)? " For $project_title":"")); ?>
 <? $this->start("admin_controls"); ?>
 	<? if($this->Html->can_edit()) { ?>
-		<?= $this->Html->add("Add News Post", array("rescuer"=>1,"action"=>"add")); ?>
+		<?= $this->Html->add("Add News Post", array("user"=>1,"action"=>"add")); ?>
 	<? } ?>
 <? $this->end(); ?>
 

@@ -10,7 +10,9 @@
 	<li class=''> <a href='#contact' id=''>Contact Info</a> </li>
 	<li class=''> <a href='#donations' id=''>Donations</a> </li>
 	<li class=''> <a href='#mailinglist' id=''>Mailing List</a> </li>
+	<!--
 	<li class=''> <a href='#specialization' id=''>Specialization</a> </li>
+	-->
 	<li class=''> <a href='#sponsors' id=''>Affiliate/Sponsor Ads</a> </li>
 	<li class=''> <a href='#design' id=''>Design/Theme</a> </li>
 	<!--
@@ -34,11 +36,23 @@
 
 </div>
 <div id='about' class='tab-pane'>
-	<div class='alert alert-info'>
-		Tell the world a bit about your rescue. While you're at it, add a picture/banner that will show near the top of your page.
+	<div class='row'>
+	<div class='col-md-6'>
+		<h3>Home page banner</h3>
+		<div class='alert alert-info'>
+			Add a banner to show at the top of your home page.
+		</div>
+		<?= $this->element("PagePhotos.edit",array('modelClass'=>'PagePhoto'));  ?>
 	</div>
-	<?= $this->element("PagePhotos.edit",array('modelClass'=>'PagePhoto'));  ?>
-	<?= $this->Form->input("about",array('label'=>'About your rescue','rows'=>5)); ?>
+	<div class='col-md-6'>
+		<h3>About page photo</h3>
+		<div class='alert alert-info'>
+			Add a picture on your 'About Us' page, perhaps with key members of your rescue.
+		</div>
+		<?= $this->element("PagePhotos.edit",array('modelClass'=>'AboutPhoto'));  ?>
+	</div>
+	</div>
+	<?= $this->Form->input("about",array('label'=>'Tell the world a bit about your rescue','rows'=>5)); ?>
 	<?= $this->Form->input("history",array('label'=>"Your rescue's experience/history",'rows'=>5)); ?>
 </div>
 <div id='contact' class='tab-pane'>
@@ -92,7 +106,7 @@
 	</div>
 	<h3>Theme</h3>
 	<? Configure::load("SiteDesigns"); $themes = Configure::read("SiteDesigns.themes"); ?>
-	<?= $this->Form->thumbs("theme",array('options'=>$themes,'path'=>'/images/themes')); ?>
+	<?= $this->Form->thumbs("theme",array('options'=>$themes,'path'=>'/images/themes','large_path'=>'/images/themes/large')); ?>
 
 	<h3>Colors</h3>
 	<?= $this->Form->color("color1"); ?>

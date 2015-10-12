@@ -7,11 +7,11 @@
 <div class="pages form">
 
 	<div class='minheight100'>
-			<?= $this->element("PagePhotos.view"); ?>
+			<?= $this->element("PagePhotos.view",array('modelClass'=>'AboutPhoto')); ?>
 	<? if(empty($rescue['Rescue']['about']) && empty($rescue['Rescue']['history']) && $this->Html->can_edit()) { ?>
 		<div class='alert alert-info'>
 			You haven't filled out any information about your organization yet.
-			<?= $this->Html->edit("Add details", array('rescuer'=>1,'action'=>'edit','rescue'=>$rescuename),array('short'=>false)); ?>
+			<?= $this->Html->edit("Add details", array('admin'=>1,'action'=>'edit','rescue'=>$rescuename),array('short'=>false)); ?>
 		</div>
 	<? } else { ?>
 			<? if(!empty($rescue['Rescue']['about'])) { ?>
@@ -54,7 +54,7 @@
 	<? } ?>
 
 	<? if(empty($aboutPageBios) && $this->Html->can_edit()) { ?>
-		<?= $this->Html->add("Add Staff Bios", array('rescuer'=>1,'controller'=>'about_page_bios','action'=>'add'),array('short'=>false)); ?>
+		<?= $this->Html->add("Add Staff Bios", array('admin'=>1,'controller'=>'about_page_bios','action'=>'add'),array('short'=>false)); ?>
 		<div class='alert alert-info'>
 			You can add biographies of individuals within your organization.
 		</div>

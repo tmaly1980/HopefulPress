@@ -696,7 +696,7 @@ class CoreFormHelper extends BoostCakeFormHelper
 		else { $div['data-date-autoclose'] = 1; }
 
 		return $this->input_group($field, array_merge(array(
-			'type'=>'text','size'=>10,
+			'type'=>'text','size'=>12,
 			'div'=>$div,
 			'placeholder'=>'mm/dd/yyyy',
 			'after_icon'=>"calendar"
@@ -802,8 +802,10 @@ class CoreFormHelper extends BoostCakeFormHelper
 
 		?>
 		<div id='<?= $domId ?>_thumbs' class='row thumbs'>
-		<?  foreach($values as $value=>$name) { ?>
-			 <?= $this->Html->link($this->Html->image("$path/$value.png?rand=".rand(10000,99999))."<br/>$name", "#", array('data-value'=>$value,'class'=>"thumb ".($selected==$value?" active":""),'title'=>$name)) ?>
+		<?  foreach($values as $value=>$name) { 
+			$url = !empty($opts['large_path']) ? $opts['large']."/$value.png" : "javascript:void(0)";
+		?>
+			 <?= $this->Html->link($this->Html->image("$path/$value.png?rand=".rand(10000,99999))."<br/>$name", $url, array('data-value'=>$value,'class'=>(!empty($opts['large_path'])?"lightbox ":"")." thumb ".($selected==$value?" active":""),'title'=>$name)) ?>
 		<? } ?>
 		</div>
 

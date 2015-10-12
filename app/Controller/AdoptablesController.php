@@ -1,27 +1,26 @@
 <?
-App::uses("RescueAppController", "Rescue.Controller");
 class AdoptablesController extends AppController
 {
 	var $uses  = array('Adoptable','Adoption');
 
 	var  $helpers = array('Stripe.Stripe');
 
-	function rescuer_import()
+	function user_import()
 	{
 		return $this->_import();
 	}
 
-	function rescuer_import_template()
+	function user_import_template()
 	{
 		return $this->_import_template();
 	}
 
-	function rescuer_search()
+	function user_search()
 	{
 		$this->setAction("user_index");
 	}
 
-	function rescuer_index($status = null)
+	function user_index($status = null)
 	{
 		$cond = $having = array();
 		$fields = array('*');
@@ -127,7 +126,7 @@ class AdoptablesController extends AppController
 		$this->view($id);
 	}
 
-	function rescuer_edit($id=null)
+	function user_edit($id=null)
 	{
 		$this->require_rescue(); 
 

@@ -141,67 +141,68 @@ if (HostInfo::hostname() == 'todo') {
 
 	# IN A SITE OR IN PORTAL
 	$specifier = !HostInfo::site_specified() ? "/rescue/:rescue":""; # Compatible with either mini-site or dedicated site.
+	$params = !HostInfo::site_specified() ? array('rescue'=>'[\w_-]+') : array();
 
 	# View content within rescue
-	Router::connect(empty($specifier)?"/":"$specifier", array('controller' => 'rescues', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
+	Router::connect(empty($specifier)?"/":"$specifier", array('controller' => 'rescues', 'action' => 'view'),$params);
 		
 	
 	# CSS
-	Router::connect("$specifier/style", array('controller' => 'rescues', 'action' => 'style'),array('rescue'=>'[\w_-]+'));
-	Router::connect("$specifier/style/*", array('controller' => 'rescues', 'action' => 'style'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/style", array('controller' => 'rescues', 'action' => 'style'),$params);
+	Router::connect("$specifier/style/*", array('controller' => 'rescues', 'action' => 'style'),$params);
 
 	# OTHER PAGES
-	Router::connect("$specifier/about", array('controller' => 'rescues', 'action' => 'about'),array('rescue'=>'[\w_-]+'));
-	Router::connect("$specifier/contact", array('controller' => 'rescues', 'action' => 'contact'),array('rescue'=>'[\w_-]+'));
-	Router::connect("$specifier/resources", array('controller' => 'resource_pages', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
-	Router::connect("$specifier/donate", array('plugin'=>'donation','controller' => 'donation_pages', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
-	Router::connect("$specifier/donate/:action", array('plugin'=>'donation','controller' => 'donations'),array('rescue'=>'[\w_-]+')); # IPN and form
-	Router::connect("$specifier/donate/:action/*", array('plugin'=>'donation','controller' => 'donations'),array('rescue'=>'[\w_-]+')); # IPN and form
+	Router::connect("$specifier/about", array('controller' => 'rescues', 'action' => 'about'),$params);
+	Router::connect("$specifier/contact", array('controller' => 'rescues', 'action' => 'contact'),$params);
+	Router::connect("$specifier/resources", array('controller' => 'resource_pages', 'action' => 'view'),$params);
+	Router::connect("$specifier/donate", array('plugin'=>'donation','controller' => 'donation_pages', 'action' => 'view'),$params);
+	Router::connect("$specifier/donate/:action", array('plugin'=>'donation','controller' => 'donations'),$params);
+	Router::connect("$specifier/donate/:action/*", array('plugin'=>'donation','controller' => 'donations'),$params);
 
-	Router::connect("$specifier/news", array('controller' => 'news_posts', 'action' => 'index'),array('rescue'=>'[\w_-]+'));
-	Router::connect("$specifier/news/*", array('controller' => 'news_posts', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
-	Router::connect("$specifier/photos", array('controller' => 'photo_albums', 'action' => 'index'),array('rescue'=>'[\w_-]+'));
-	Router::connect("$specifier/photos/*", array('controller' => 'photo_albums', 'action' => 'view'),array('rescue'=>'[\w_-]+'));
-	Router::connect("$specifier/photo/:action", array('controller' => 'photos'),array('rescue'=>'[\w_-]+'));
-	Router::connect("$specifier/photo/:action/*", array('controller' => 'photos'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/news", array('controller' => 'news_posts', 'action' => 'index'),$params);
+	Router::connect("$specifier/news/*", array('controller' => 'news_posts', 'action' => 'view'),$params);
+	Router::connect("$specifier/photos", array('controller' => 'photo_albums', 'action' => 'index'),$params);
+	Router::connect("$specifier/photos/*", array('controller' => 'photo_albums', 'action' => 'view'),$params);
+	Router::connect("$specifier/photo/:action", array('controller' => 'photos'),$params);
+	Router::connect("$specifier/photo/:action/*", array('controller' => 'photos'),$params);
 
 	# Adoptable.
 	Router::connect("/adoptable/:id", array('controller'=>'adoptables','action'=>'view'),array('id'=>'\d+'));
 	Router::connect("$specifier/adoptable/:id", array('controller'=>'adoptables','action'=>'view'),array('rescue'=>'[\w_-]+','id'=>'\d+'));
 	Router::connect("$specifier/adoptable/:id/:action", array('controller'=>'adoptables'),array('rescue'=>'[\w_-]+','id'=>'\d+'));#View
-	Router::connect("$specifier/adoptable/*", array('controller'=>'adoptables','action'=>'view'),array('rescue'=>'[\w_-]+'));
+	Router::connect("$specifier/adoptable/*", array('controller'=>'adoptables','action'=>'view'),$params);
 
 
 	#
 	if(!empty($specifier))
 	{
-		Router::connect("$specifier/:controller", array(),array('rescue'=>'[\w_-]+'));
-		Router::connect("$specifier/:controller/:action", array(),array('rescue'=>'[\w_-]+'));
-		Router::connect("$specifier/:controller/:action/*", array(),array('rescue'=>'[\w_-]+'));
+		Router::connect("$specifier/:controller", array(),$params);
+		Router::connect("$specifier/:controller/:action", array(),$params);
+		Router::connect("$specifier/:controller/:action/*", array(),$params);
 	}
 
 	$prefixes = array('rescuer','user');
 	
 	foreach($prefixes as $prefix)
 	{
-		Router::connect("/$prefix$specifier/adoptable/:id/:action", array($prefix=>1,'controller'=>'adoptables'),array('rescue'=>'[\w_-]+','id'=>'\d+')); # Edit
-		Router::connect("/$prefix$specifier/adoptable/add", array($prefix=>1,'action'=>'add'),array('rescue'=>'[\w_-]+'));
+		Router::connect("/$prefix$specifier/adoptable/:id/:action", array($prefix=>1,'controller'=>'adoptables'),$params);
+		Router::connect("/$prefix$specifier/adoptable/add", array($prefix=>1,'action'=>'add'),$params);
 		# MANAGING SPECIALIZATIONS
-		Router::connect("/$prefix$specifier/specializations", array($prefix=>1,'controller'=>'rescue_specializations'),array('rescue'=>'[\w_-]+'));
-		Router::connect("/$prefix$specifier/specializations/:action", array($prefix=>1,'controller'=>'rescue_specializations'),array('rescue'=>'[\w_-]+'));
-		Router::connect("/$prefix$specifier/specializations/:action/*", array($prefix=>1,'controller'=>'rescue_specializations'),array('rescue'=>'[\w_-]+'));
+		Router::connect("/$prefix$specifier/specializations", array($prefix=>1,'controller'=>'rescue_specializations'),$params);
+		Router::connect("/$prefix$specifier/specializations/:action", array($prefix=>1,'controller'=>'rescue_specializations'),$params);
+		Router::connect("/$prefix$specifier/specializations/:action/*", array($prefix=>1,'controller'=>'rescue_specializations'),$params);
 	
 		# Update rescuer content.
 		if(!empty($specifier)) { 
-			Router::connect("/$prefix$specifier/:action", array($prefix=>1,'controller'=>'rescues'),array('rescue'=>'[\w_-]+')); # edit, etc
-			Router::connect("/$prefix$specifier/:controller/:action", array($prefix=>1),array('rescue'=>'[\w_-]+'));
-			Router::connect("/$prefix$specifier/:controller/:action/*", array($prefix=>1),array('rescue'=>'[\w_-]+'));
-			Router::connect("/$prefix/:plugin$specifier/:controller/:action", array($prefix=>1),array('rescue'=>'[\w_-]+'));
+			Router::connect("/$prefix$specifier/:action", array($prefix=>1,'controller'=>'rescues'),$params);
+			Router::connect("/$prefix$specifier/:controller/:action", array($prefix=>1),$params);
+			Router::connect("/$prefix$specifier/:controller/:action/*", array($prefix=>1),$params);
+			Router::connect("/$prefix/:plugin$specifier/:controller/:action", array($prefix=>1),$params);
 	
 			# Stuff for all users (may as well)
-			Router::connect("/$prefix$specifier/:controller", array($prefix=>1),array('rescue'=>'[\w_-]+'));
-			Router::connect("/$prefix$specifier/:controller/:action", array($prefix=>1),array('rescue'=>'[\w_-]+'));
-			Router::connect("/$prefix$specifier/:controller/:action/*", array($prefix=>1),array('rescue'=>'[\w_-]+'));
+			Router::connect("/$prefix$specifier/:controller", array($prefix=>1),$params);
+			Router::connect("/$prefix$specifier/:controller/:action", array($prefix=>1),$params);
+			Router::connect("/$prefix$specifier/:controller/:action/*", array($prefix=>1),$params);
 		}
 	}
 

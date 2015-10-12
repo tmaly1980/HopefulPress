@@ -77,6 +77,7 @@ class UserCoreController extends UserCoreAppController {
 	function session() # Debug 
 	{
 		header("Content-Type: text/plain");
+		echo "SESSION_ID=".session_id()."\n";
 		print_r($this->Session->read());
 		exit(0);
 	}
