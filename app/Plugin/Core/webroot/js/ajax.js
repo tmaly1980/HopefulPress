@@ -311,7 +311,7 @@
 
 	$(document).ready(function()
 	{
-		$('body').on('click', 'a.json, a.ajax', function(e) {
+		$('body').on('click', 'a.json, a.ajax, a[data-update]', function(e) {
 			var src = this;
 			e.preventDefault();
 			var url = $(src).attr('href');
@@ -334,7 +334,7 @@
 
 		});
 
-		$('body').on('submit', 'form.json, form.ajax', function(e) {
+		$('body').on('submit', 'form.json, form.ajax, form[data-update]', function(e) {
 			var form = $(e.target);
 			if($(form).hasClass('bv-form')) {return; } // handled in validator instead.
 			e.preventDefault();

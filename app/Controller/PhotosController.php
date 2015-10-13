@@ -10,6 +10,22 @@ class PhotosController extends AppController {
 		$this->redirect(array('controller'=>'photo_albums'));
 	}
 
+	function user_edit_caption($id) # Modal.
+	{
+		if(!empty($this->request->data))
+		{
+			$this->Photo->id = $id;
+			if($this->Photo->save($this->request->data))
+			{
+				$this->Json->dialogclose();
+				return $this->Json->render();
+			} else {
+				return $this->Json->error("Couldn't save caption");
+			}
+		}
+		$this->request->data = $this->Photo->read(null,$id);
+	}
+
 	public function view($id = null) {
 		$this->track();
 	 	if (!$this->{$this->modelClass}->count($id)) { return $this->invalid(); }

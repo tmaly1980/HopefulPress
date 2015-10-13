@@ -70,14 +70,15 @@ class PagePhotosController extends AppController
 			$this->request->data = $photo; # For Model->field()
 			#$this->Json->set("thumb_src", "/page_photos/thumb/".$this->PagePhoto->id); # Unused for now... since above is so small anyway.
 		}
-		$container = Configure::read("PagePhoto.$parentClass.photoModel");
-		if(empty($container))
-		{
+		#$container = Configure::read("PagePhoto.$parentClass.photoModel");
+		#if(empty($container))
+		#{
 			$classParts = split("[.]", $parentClass);
 			error_log("CLASS_PARTS ($parentClass)=".print_r($classParts,true));
 			if(count($classParts) == 1) { $classParts[] = 'PagePhoto'; } # Default container.
 			$container = $classParts[count($classParts)-1];
-		}
+		#}
+		# container is always either PagePhoto or something passed based on special photo  class name. ie rescuelogo
 		error_log("REPLACING($parentClass)=$container");# Should be PhotoModel
 		$this->Json->replace($container);
 		$this->Json->render("PagePhotos.edit");
@@ -110,6 +111,8 @@ class PagePhotosController extends AppController
 	{
 		extract($this->vars());#$model));
 
+		error_log("PPDEL=$parentClass");
+
 		# For compatibility with Photos list/album in case double-implemented.
 		if(empty($id) && is_numeric($parentClass)) # Just remove self, don't bother with parent (just de-reference belongsTo to see validity)
 		{
@@ -122,15 +125,28 @@ class PagePhotosController extends AppController
 		# Now remove reference from parent, if applicable.
 		if(!empty($parentClass))
 		{
-			list($p,$parentModel) = pluginSplit($parentClass);
+			list($parentModel,$photoModel) = pluginSplit($parentClass);
 
-			$this->loadModel($parentClass);
+			$this->loadModel($photoModel);
+			if(!empty($parentModel))# Grab better primary key
+			{
+				$this->loadModel($parentModel);
+				if(!empty($this->{$parentModel}->belongsTo[$photoModel]['primaryKey']))
+				{
+					$primaryKey = $this->{$parentModel}->belongsTo[$photoModel]['primaryKey'];
+				} else {
+					$primaryKey = Inflector::underscore($photoModel)."_id";
+				}
+			}
 
-			$parent_id = $this->{$parentClass}->field('id', array($primaryKey=>$id));
+			error_log("LOOKING FOR $parentClass WITH $primaryKey => $id");
+			$parent_id = $this->{$parentModel}->field('id', array($primaryKey=>$id));
+			error_log("GOT=$parent_id");
 
 			if(!empty($parent_id))
 			{
-				$this->{$parentClass}->saveField($primaryKey, null);
+				$this->{$parentModel}->id = $parent_id;# Must be explicit since we didn't call read() before.
+				$this->{$parentModel}->saveField($primaryKey, null);
 			}
 
 			$this->set("modelClass", $parentClass);

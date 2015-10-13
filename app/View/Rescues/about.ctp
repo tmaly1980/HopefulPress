@@ -7,11 +7,11 @@
 <div class="pages form">
 
 	<div class='minheight100'>
-			<?= $this->element("PagePhotos.view",array('modelClass'=>'AboutPhoto')); ?>
+			<?= $this->element("PagePhotos.view",array('modelClass'=>'Rescue.AboutPhoto')); ?>
 	<? if(empty($rescue['Rescue']['about']) && empty($rescue['Rescue']['history']) && $this->Html->can_edit()) { ?>
 		<div class='alert alert-info'>
 			You haven't filled out any information about your organization yet.
-			<?= $this->Html->edit("Add details", array('admin'=>1,'action'=>'edit','rescue'=>$rescuename),array('short'=>false)); ?>
+			<?= $this->Html->edit("Add details", array('rescuer'=>1,'action'=>'edit','#'=>'about'),array('short'=>false)); ?>
 		</div>
 	<? } else { ?>
 			<? if(!empty($rescue['Rescue']['about'])) { ?>

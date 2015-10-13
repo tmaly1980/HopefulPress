@@ -726,10 +726,14 @@ class AppCoreController extends Controller
 
 	function loadExplicitSession() #From cross-domain use.
 	{
+		# THIS IS CAUSING LOOP....
 		$cookie = Configure::read("Session.cookie");
 		if(!empty($this->request->query[$cookie]))
 		{
-			session_id($this->request->query[$cookie]);
+			$sid = $this->request->query[$cookie];
+			if(session_id() == $sid) { return; } # Skip, already in use.
+			error_log("LOADING EXPLICIT COOKIE SESSION=$cookie=".$this->request->query[$cookie]);
+			session_id($sid);
 		}
 	}
 

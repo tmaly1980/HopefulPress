@@ -17,7 +17,7 @@
 			<?= $this->Html->link($event['Event']['title'], array('action'=>'view',$event["Event"]['idurl']), array('class'=>"")); ?>
 			<? if(!empty($event['EventLocation']['name'])) { ?>
 			<div class="bold">
-				<?= $event['EventLocation']['name'] ?>
+				@ <?= $event['EventLocation']['name'] ?>
 			</div>
 			<? } ?>
 			<p>

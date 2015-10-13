@@ -50,11 +50,11 @@
       <? if($this->Rescue->dedicated()) { ?>
       	<?= $this->element("portal/login"); ?>
       <? } ?>
-      <? if($this->request->params['controller'] == 'rescues' && $this->request->params['action'] == 'view') { # ONLY SHOW ON HOME PAGE ?>
+      <? if($this->Rescue->rescuer()) { #request->params['controller'] == 'rescues' && $this->request->params['action'] == 'view') { # ONLY SHOW ON HOME PAGE ?>
       <ul class='nav navbar-right'>
       	<li>
 		<div class='paddingright10'>
-		<?= $this->Html->settings("Rescue Details",array('user'=>1,'controller'=>'rescues','action'=>'edit'),array('class'=>'')); ?>
+		<?= $this->Html->settings("Rescue Details",array('rescuer'=>1,'controller'=>'rescues','action'=>'edit'),array('class'=>'')); ?>
 		</div>
 	</li>
       </ul>

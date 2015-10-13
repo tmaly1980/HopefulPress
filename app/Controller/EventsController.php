@@ -16,6 +16,9 @@ class EventsController extends AppController {
 		#$this->track();
 	 	#if (!$this->Event->count()) { return $this->noContent(); }
 
+		# Load calendar too.
+		$this->calendar();
+
 		$this->Event->recursive = 1;
 		if(empty($this->request->params['named']['page']))
 		{
@@ -94,7 +97,7 @@ class EventsController extends AppController {
 		if(empty($year)) { $year = date("Y"); $month = date("m"); }
 		else if(empty($month)) { $month = "01"; }
 
-		$this->Event->recursive = -1;
+		#$this->Event->recursive = -1;
 		$events = $this->Event->find('all', array('conditions'=>array(" ( (YEAR(start_date) = '$year' AND MONTH(start_date) = '$month') OR (YEAR(end_date) = '$year' AND MONTH(end_date) = '$month')) ")));
 		$this->set("events", $events);
 
@@ -115,12 +118,12 @@ class EventsController extends AppController {
 				{
 					if(strtotime($thisdate) >= strtotime($start_date) && strtotime($thisdate) <= strtotime($end_date))
 					{
-						$days[$day][] = $event;
+						$days[$day-1][] = $event;
 					}
 				} else {
 					if($thisdate == $start_date)
 					{
-						$days[$day][] = $event;
+						$days[$day-1][] = $event;
 					}
 				}
 			}
@@ -131,6 +134,45 @@ class EventsController extends AppController {
 		$this->set("year", $year);
 		$this->set("month", $month);
 		return $events;
+	}
+
+	function year($year = null)
+	{
+		if(empty($year)) { $year = date("Y"); }
+
+		$events = $this->Event->find('all', array('conditions'=>array("YEAR(start_date) = '$year' OR YEAR(end_date) = '$year'")));
+		$this->set("events", $events);
+
+		$months = array();
+
+		for($month = 0; $month < 12; $month++)
+		{
+			$months[$month] = array();
+
+			$thismonth = sprintf("%04u%02u", $year,$month);
+			foreach($events as $event)
+			{
+				$startmonth = date("Ym", strtotime($event["Event"]['start_date']));
+				$endmonth = !empty($event['Event']['end_date']) ? date("Ym", strtotime($event["Event"]['end_date'])) : null;
+
+				if(!empty($endmonth))
+				{
+					# Multiday event happens on this month.
+					if($thismonth >= $startmonth && $thismonth <= $endmonth)
+					{
+						$months[$month-1][] = $event;
+					}
+				} else {
+					if($thismonth == $startmonth)
+					{
+						$months[$month-1][] = $event;
+					}
+				}
+			}
+		}
+
+		$this->set("months", $months);
+		$this->set("year", $year);
 	}
 
 	function yearmonth($yearmonth)

@@ -21,19 +21,39 @@
 </ul>
 
 <div class='tab-content lightgreybg padding25 border'>
-<div id='intro' class='tab-pane active row'>
+<div id='intro' class='tab-pane active'>
+	<div class='row'>
 		<div class='col-md-2'>
 			<?= $this->element("PagePhotos.edit",array('modelClass'=>'Rescue.RescueLogo'));  ?>
 		</div>
-		<?= $this->Form->input("title", array('div'=>'col-md-4','label'=>'Rescue name','class'=>'large','required'=>1)); ?>
-		<div class='col-md-6'>
-		<?= $this->Form->input_group("hostname", array('id'=>'RescueHostname','required'=>1,'before'=>"http://$default_domain/rescues/",'label'=>'Home page address')); ?>
+		<div class='col-md-10 row'>
+			<div class='row'>
+				<div class='col-md-6'>
+					<?= $this->Form->input("title", array('label'=>'Rescue name','class'=>'large','required'=>1)); ?>
+					<? if($id) { ?>
+					<hr/>
+					<div>
+						<?= $this->element("../Rescues/rescuer_view_plan"); ?>
+					</div>
+					<? } ?>
+				</div>
+				<div class='col-md-6'>
+					<? if($id) { ?>
+						<!-- XXX TODO change hostname -->
+						<!-- suggest upgrading for more options -->
+					<? } else { ?>
+						<?= $this->Form->input_group("hostname", array('id'=>'RescueHostname','required'=>1,'before'=>"http://$default_domain/rescues/",'label'=>'Home page address','readonly'=>$id)); ?>
+						<div class='info'>
+							You can always have a dedicated address such as <b>http://YourRescue.<?=$default_domain?></b> or <b>http://YourRescue.org</b> by upgrading at any time.
+						</div>
+					<? } ?>
+				</div>
+			</div>
 		</div>
-                <script>
-                        $('#RescueHostname').filter_input({regex: '[^a-zA-Z0-9_]+', replace: '-'});
-                </script>
-
-
+	</div>
+        <script>
+        	$('#RescueHostname').filter_input({regex: '[^a-zA-Z0-9_]+', replace: '-'});
+        </script>
 </div>
 <div id='about' class='tab-pane'>
 	<div class='row'>
@@ -42,14 +62,14 @@
 		<div class='alert alert-info'>
 			Add a banner to show at the top of your home page.
 		</div>
-		<?= $this->element("PagePhotos.edit",array('modelClass'=>'PagePhoto'));  ?>
+		<?= $this->element("PagePhotos.edit",array('modelClass'=>'Rescue.PagePhoto'));  ?>
 	</div>
 	<div class='col-md-6'>
 		<h3>About page photo</h3>
 		<div class='alert alert-info'>
-			Add a picture on your 'About Us' page, perhaps with key members of your rescue.
+			Add a picture with members for your 'About Us' page
 		</div>
-		<?= $this->element("PagePhotos.edit",array('modelClass'=>'AboutPhoto'));  ?>
+		<?= $this->element("PagePhotos.edit",array('modelClass'=>'Rescue.AboutPhoto'));  ?>
 	</div>
 	</div>
 	<?= $this->Form->input("about",array('label'=>'Tell the world a bit about your rescue','rows'=>5)); ?>
@@ -120,6 +140,6 @@
 </div>
 
 
-		<?= $this->Form->save($id?"Update listing":"Create listing"); ?>
+		<?= $this->Form->save($id?"Update":"Create"); ?>
 	<?= $this->Form->end(); ?>
 </div>

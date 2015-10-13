@@ -21,6 +21,9 @@ $config['PagePhoto'] = array(
 		'scaledWidth'=>'200x200'
 	),
 	'Rescue'=>array(
+		'AboutPhoto'=>array(
+			'photoModel'=>'PagePhoto',
+		),
 		'RescueLogo'=>array(
 			'wh'=>'100x100',
 			'scaledWidth'=>'100x100',

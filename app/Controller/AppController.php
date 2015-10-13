@@ -370,11 +370,11 @@ class AppController extends AppCoreController {
 		#error_log("REDIRECT@=".print_r($this->request->params,true)."=".print_r($url,true));
 
 		# ALWAYS ASSUME THAT IF RESCUE SET, PASS ALONG....
-		if(is_array($url) && !empty($this->rescuename) && !isset($url['rescue'])) # Can be
+		if(is_array($url) && !empty($this->rescuename) && !isset($url['rescue']) && !$this->rescue_dedicated()) # Can be
 		{
 			#error_log("ADDING RESCUE....@".print_r($this->request->params,true));
 			$url['rescue'] = $this->rescuename;
-		} else if (isset($url['rescue']) && $url['rescue'] == false) { 
+		} else if(is_array($url) && isset($url['rescue']) && ($this->rescue_dedicated() || $url['rescue'] ==false)) { #if (isset($url['rescue']) && $url['rescue'] == false) { 
 			unset($url['rescue']);
 		}
 
@@ -668,7 +668,15 @@ class AppController extends AppCoreController {
 				$goto = $this->request->params;
 				$goto['rescue'] = $rhostname;
 				return $this->redirect($goto);
-			#} else if (!$this->user("User.rescuer")) {  # TODO only rescuers allowed to do this.
+			} else if ($rescues = $this->user("User.Rescues") && !empty($rescues)) {  # Volunteer for one or more rescues.
+				if(count($rescues) > 1) # Multiple rescues, select which.
+				{
+					$this->Session->write("process.redirect",$this->request->params);
+					$this->redirect(array('user'=>1,'controller'=>'rescues','action'=>'select')); #
+				} else { # Just one, auto-choose.
+
+				}
+
 			} else { # No rescue for user. ASK THEM TO FILL OUT
 				$this->Session->write("process.redirect",$this->request->params);
 				$this->redirect(array('rescuer'=>1,'controller'=>'rescues','action'=>'add'));
@@ -699,6 +707,7 @@ class AppController extends AppCoreController {
 			# Clean up.
 			unset($url['rescue']);
 			unset($url['orig_action']);
+			unset($url['named']); # Redundant.
 			$host = $this->hostname($this->rescue);
 			$urlstring = Router::url($url);
 			error_log("GOING TO $host $urlstring,  URL=".print_r($url,true));
@@ -740,7 +749,7 @@ class AppController extends AppCoreController {
 	function isAuthorized($user=null)
 	{
 		if(empty($user)) { $user = $this->Auth->user(); }
-		error_log("IS_AUTHORIZED....USER=".print_r($user,true));
+		#error_log("IS_AUTHORIZED....USER=".print_r($user,true));
 
 		$me = $user['User']['id'];
 
@@ -778,18 +787,22 @@ class AppController extends AppCoreController {
 			# For now, let people add /user/* content, but not edit another's
 			if($prefix == 'user')
 			{
-				if($this->request->action == 'user_edit' && ($id = $this->request->pass[0]) && $this->model()->hasField("user_id"))
+				if($this->request->action == 'user_edit' && !empty($this->request->pass) && ($id = $this->request->pass[0]) && $this->model()->hasField("user_id"))
 				{
+					error_log("ID=$id FAIL COUNT");
 					return $this->model()->count(array('id'=>$id,'user_id')); # Creator ok, else nope.
 				} else { # Somthing other than  edit records
+					error_log("OK?");
 					return true;
 				}
 			#} else if ($prefix == 'volunteer') { 
 			# Volunteer-only/etc content (ie non rescues) will later be restricted via /volunteer, etc prefixes.
 			} else { # XXX TODO other levels of access, prefixes, etc.
+				error_log("PREFIX AUTH FAILURE=$prefix");
 				return false;
 			}
 		}
+		error_log("FAIL bogus");
 
 		return false; # FAILSAFE, i dunno.
 	}

@@ -1,11 +1,11 @@
-<? $this->start("title_controls"); ?>
+<? /* $this->start("title_controls"); ?>
 	<? if($this->Html->can_edit()) { ?>
                 <?= $this->Html->add("Add Event", array('user'=>1,'action'=>'add'), array()); ?> 
 	<? } ?>
 	<?= $this->element("../Events/list_toggler"); ?>
 
 <? $this->end(); ?>
-<? $this->assign("page_title", "Event Calendar"); ?>
+<? $this->assign("page_title", "Event Calendar"); */ ?>
 <?
 	if(empty($year)) { $year = date("Y"); }
 	if(empty($month)) { $month = date("m"); }
@@ -23,22 +23,23 @@
 <tr>
 	<td colspan=7>
 		<div align='center' class='large padding10'>
-			<?= $this->Html->blink("chevron-right", "Next", array("action"=>'calendar',$nextyear,$nextmonth), array('title'=>$nextmonthname, 'class'=>'right btn-primary white')); ?>
-			<?= $this->Html->blink("chevron-left", "Previous", array("action"=>'calendar',$prevyear,$prevmonth), array('title'=>$prevmonthname, 'class'=>'left btn-primary white')); ?>
+			<?= $this->Html->blink("chevron-right", "Next", array("action"=>'index',$nextyear,$nextmonth), array('title'=>$nextmonthname, 'class'=>'right btn-primary white')); ?>
+			<?= $this->Html->blink("chevron-left", "Previous", array("action"=>'index',$prevyear,$prevmonth), array('title'=>$prevmonthname, 'class'=>'left btn-primary white')); ?>
 		
-			<?= date("F Y", strtotime("$year-$month-01")); ?>
+			<?= date("F", strtotime("$year-$month-01")); ?>
+			<?= $this->Html->link(date("Y", strtotime("$year-$month-01")), array('action'=>'year',$year),array('title'=>'View all events for '.$year)); ?>
 		
 		</div>
 	</td>
 </tr>
 <tr class='greybg'>
-	<th>Sunday</th>
-	<th>Monday</th>
-	<th>Tuesday</th>
-	<th>Wednesday</th>
-	<th>Thursday</th>
-	<th>Friday</th>
-	<th>Saturday</th>
+	<th class='padding5'>Sunday</th>
+	<th class='padding5'>Monday</th>
+	<th class='padding5'>Tuesday</th>
+	<th class='padding5'>Wednesday</th>
+	<th class='padding5'>Thursday</th>
+	<th class='padding5'>Friday</th>
+	<th class='padding5'>Saturday</th>
 </tr>
 <?
 $daysofmonth = date("t", strtotime("$year-$month-01"));
@@ -55,11 +56,15 @@ $day = 1;
 		<div class='minheight100'>
 		<? if(($w > 0 || $d >= $firstdayofweek) && $day <= $daysofmonth) { ?>
 			<div class='bold medium'><?= $day ?></div>
-			<div>
+			<div class='padding5'>
 				<? if(!empty($days[$day-1])) { ?>
 				<? foreach($days[$day-1] as $event) { ?>
 				<div>
-					<?= $this->Html->link($event['Event']['title'], array('action'=>'view',$event['Event']['id']), array('class'=>'font12')); ?>
+					<?= $this->Html->link($event['Event']['title'], array('action'=>'view',$event['Event']['id']), array('class'=>'')); ?>
+					<? if(!empty($event['EventLocation']['name'])){ ?>
+					<br/>
+						@ <?= $event['EventLocation']['name'] ?>
+					<? } ?>
 				</div>
 				<? } ?>
 				<? } ?>

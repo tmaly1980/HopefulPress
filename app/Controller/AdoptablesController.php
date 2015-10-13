@@ -140,6 +140,24 @@ class AdoptablesController extends AppController
 				unset($this->request->data['Owner']); # Nothing.  Don't add a blank record.
 			}
 
+			# Don't let them add more active adoptables than their plan allows.
+			$adoptableCount = $this->Adoptable->count(array('status'=>'Available'));
+			$plan = $this->rescue("plan");
+			if(empty($plan)) { $plan = 'free'; }
+			$maxAdoptables = array(
+				'free'=>10,
+				'basic'=>25,
+				'dedicated'=>25,
+				'unlimited'=>null
+			);
+			$new = (!empty($this->request->data) && empty($id) && empty($this->request->data['Adoptable']['id'])); # NEW...
+			$available = (!empty($this->request->data['Adoptable']['status']) && $this->request->data['Adoptable']['status'] == 'Available');
+
+			if($new && $available && !empty($maxAdoptables[$plan]) && $adoptableCount >= $maxAdoptables[$plan])
+			{
+				$this->setError("Sorry, you've reached the maxmimum number of active adoptable listings for your rescue's account. Either remove older listings or upgrade your rescue account plan via the 'Rescue Details' page.");
+			}
+
 			if($this->Adoptable->saveAll($this->request->data))
 			{
 				# HOW DO WE GET ID???

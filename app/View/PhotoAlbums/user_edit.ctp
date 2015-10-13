@@ -5,8 +5,11 @@
 <? #$project_title = $this->Admin->project('title'); ?>
 <?= $this->assign("page_title", $id?"Update Photo Album":"Add Photo Album"); ?>
 
-<? $this->start("admin_controls"); ?>
-<?= $this->end(); ?>
+<? $this->start("title_controls"); ?>
+<? if(!empty($id)) { ?>
+	<?=$this->Html->back("View album",array('action'=>'view',$id)); ?>
+<? } ?>
+<? $this->end(); ?>
 
 <div class="photoAlbums form">
 <?php echo $this->Form->create('PhotoAlbum'); ?>
@@ -44,6 +47,8 @@
 	}); 
 	$('#sorter').sorter('#Photos', {controller: 'photos',axis: 'both'});
 	</script>
+
+	<div class='clear'></div>
 
 <?php echo $this->Form->end(); ?>
 </div>

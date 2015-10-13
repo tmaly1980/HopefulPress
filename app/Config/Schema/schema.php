@@ -207,12 +207,6 @@ class AppSchema extends CakeSchema {
 		'color1' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 6, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'color2' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 6, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 
-
-
-
-
-
-
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'disabled' => array('type' => 'datetime', 'null' => true, 'default' => null),

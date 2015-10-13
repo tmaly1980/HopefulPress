@@ -1,24 +1,23 @@
 <?= $this->element("Editable.js"); ?>
 <?
-# ModelClass etc is the parent object.
+# ModelClass etc is the parent object. Might be passed optional photo object/class, ie Rescue.AboutPhoto
 #
-if(empty($modelClass) || $modelClass == 'PagePhoto') { $modelClass = (!empty($this->request->params['plugin']) ? Inflector::camelize($this->request->params['plugin']).".":"").$this->Form->defaultModel; } # Already set from controller after upload.
+# DEFAULTS.
+$parentClass = $this->Form->defaultModel;
+$photoModel = 'PagePhoto';
+$pluginModelClass = $parentClass;
 
-
-# We need to figure out parent class so we can set hidden id field.
-# It might NOT be modelClass.... ie Rescue.RescueLogo => Rescue.logo_id
-$pluginModelClass = $modelClass;
-$parentClass = $modelClass;
-list($parentPrefix,$parentSuffix) = pluginSplit($parentClass);
-if(empty($parentPrefix)) # Only gave parent model 'Homepage' (implied PagePhoto)
+if(!empty($modelClass))  # Explicit, on photo model and maybe parent too.
 {
-	$parentClass = $parentSuffix;
-	$photoModel = 'PagePhoto';
-} else { # Have parent AND photo model 'Rescue.RescueLogo'
-	$parentClass = $parentPrefix;
-	$photoModel = $parentSuffix;
+	list($prefix,$photoModel) = pluginSplit($modelClass);
+	if(!empty($prefix))
+	{
+		$parentClass = $prefix;
+		$pluginModelClass = $modelClass; # Rescue.Logo
+	}
 }
-#echo "PMC=$pluginModelClass, PP=$parentPrefix, PM=$photoModel, PC=$parentClass";
+$photoID = $photoModel; # Dont set any later since can be overwritten/misled by config...
+# IF WE DONT WANT PAGEPHOTO, BE EXPLICIT
 
 # Support per-parent customization in app's config file; sharing PagePhoto  (no need for custom model)
 Configure::load("pagePhoto");
@@ -36,15 +35,20 @@ if(!empty($config['placeholder'])) { $placeholder = $config['placeholder']; }
 
 if(!empty($config['photoModel'])) { $photoModel= $config['photoModel']; }
 
-if(empty($photoID))  { $photoID = $photoModel;  } # PagePhoto, RescueLogo, etc.
+#echo "MC=$modelClass, PM=$photoModel, PID=$photoID";
 
-$plugin = 'page_photos';
+$plugin = ($photoModel == 'PagePhoto' ? 'page_photos' : null);
 if(isset($config['plugin'])) { $plugin= $config['plugin']; } # false allowed
 
 $controller = Inflector::pluralize(Inflector::underscore($photoModel)); # Implied from model class.
 if(!empty($config['controller'])) { $controller= $config['controller']; }
 
-$primaryKey = Inflector::underscore(Inflector::singularize($controller))."_id"; # Logo => logo_id
+# ALWAYS get key name from model relation....
+ClassRegistry::init($parentClass);
+$parent = new $parentClass();
+$primaryKey = !empty($parent->belongsTo[$photoID]['foreignKey']) ?
+	$parent->belongsTo[$photoID]['foreignKey'] : 
+	Inflector::underscore($photoID)."_id"; # Logo => logo_id
 if(!empty($config['primaryKey'])) { $primaryKey= $config['primaryKey']; }
 
 $thing = "picture";
@@ -88,7 +92,7 @@ if(empty($align)) { $align = 'right'; }
 
 $data = $this->Form->data();
 
-error_log("LOST PIC: PPID=$page_photo_id, PM=$photoModel,DATA=".print_r($data,true));
+#error_log("LOST PIC: PPID=$page_photo_id, PM=$photoModel,DATA=".print_r($data,true));
 
 #echo "PPID=$page_photo_id, PM=$photoModel, D=".print_r($data[$photoModel],true);
 
@@ -103,21 +107,28 @@ error_log("LOST PIC: PPID=$page_photo_id, PM=$photoModel,DATA=".print_r($data,tr
 		return;
 	}
 	?>
-		<?= $this->Form->hidden("$photoModel.id", array('value'=>$page_photo_id)); ?>
+		<?= $this->Form->hidden("$photoID.id", array('value'=>$page_photo_id)); ?>
 
-		<div class='absolute controls top0 right0' align='right'>
+		<div class='absolute top0 right0' align='right'>
 				<?= $this->Html->blink("camera", null, array('plugin'=>$plugin,'controller'=>$controller,'action'=>'upload',$pluginModelClass,$page_photo_id), array('class'=>"white btn-primary dialog $btnSize",'title'=>"Update $ucThing")); ?>
 				<?= $this->Html->blink("scissors", null, array('plugin'=>$plugin,'controller'=>$controller,'action'=>'crop',$pluginModelClass,$page_photo_id), array('class'=>"white dialog btn btn-success $btnSize",'title'=>'Re-crop picture','data-form'=>true,'data-header'=>'0')); ?>
-				<?= $this->Html->blink("trash", null, array('plugin'=>$plugin,'controller'=>$controller,'action'=>'delete',$pluginModelClass,$page_photo_id), array('class'=>"white btn-danger json $btnSize",'title'=>"Remove $ucThing",'confirm'=>"Are you sure you want to remove this $thing?",'data-replace'=>$photoModel)); ?>
+				<?= $this->Html->blink("trash", null, array('plugin'=>$plugin,'controller'=>$controller,'action'=>'delete',$pluginModelClass,$page_photo_id), array('class'=>"white btn-danger json $btnSize",'title'=>"Remove $ucThing",'confirm'=>"Are you sure you want to remove this $thing?",'data-replace'=>$photoID)); ?>
 		</div>
 		<div class='clear'></div>
 		<?= $this->Form->hidden("$parentClass.$primaryKey", array('value'=>$page_photo_id)); ?>
-		<? $img_attrs = array('id'=>"{$modelClass}_$page_photo_id", 'class'=>"maxwidth100p margin5 $class"); ?>
+		<? $img_attrs = array('id'=>"{$photoModel}_$page_photo_id", 'class'=>"maxwidth100p margin5 $class"); ?>
 		<? if(!empty($width)) { $img_attrs['width'] = $width; } ?>
 		<? if(!empty($height)) { $img_attrs['height'] = $height; } ?>
 		<?= $this->Html->image(array('plugin'=>$plugin,'controller'=>$controller,'action'=>'image',$page_photo_id,$scaledWidth,'?'=>array('rand'=>rand(10000,50000))),$img_attrs); ?>
 
 		<div class='clear'></div>
+
+		<script>
+			// Don't hide controls until photo successfully loads - so know how to clear.
+			$('#<?=$photoModel?>_<?= $page_photo_id ?>').load(function() {
+				$(this).closest('.PagePhoto').find('.absolute').addClass('controls');
+			});
+		</script>
 
 
 		<? if(empty($config['nocaption'])) { ?>
@@ -125,6 +136,7 @@ error_log("LOST PIC: PPID=$page_photo_id, PM=$photoModel,DATA=".print_r($data,tr
 			<?= $this->Form->fieldValue("$photoModel.caption"); ?>
 		</div>
 		<script>
+
 			$('#<?=$photoModel?>_Caption_<?= $page_photo_id ?>').inline_edit({link: "Add caption/Edit caption", type: 'textarea', rows: 4, plugin: 'page_photos'});
 		</script>
 		<? } ?>

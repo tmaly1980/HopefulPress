@@ -225,7 +225,7 @@ class StripeBillingComponent extends Component
 				if(empty($customer_id))
 				{
 					throw \Stripe\Error\InvalidRequest("No customer yet");
-					# To go below.
+					# To go below. AND ADD..
 				} else {
 					$customer = \Stripe\Customer::retrieve($customer_id);
 				}

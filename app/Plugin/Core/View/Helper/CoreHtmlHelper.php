@@ -263,7 +263,7 @@ class CoreHtmlHelper extends BoostCakeHtmlHelper
 		if(empty($opts['class'])) { $opts['class'] = ''; }
 		$opts['class'] .= ' btn controls ';
 		if(!empty($url['manager'])) { $opts['class'] .= " btn-danger "; } # Special color, so obvious.
-		else if(!preg_match("/btn-/", $opts['class'])) { $opts['class'] .= ' btn-warning'; }
+		else if(!preg_match("/btn-(danger|warning|default|success|info|primary|link)/", $opts['class'])) { $opts['class'] .= ' btn-warning'; }
 		return $this->blink($method, $label, $url, $opts);
 	}
 
@@ -272,7 +272,7 @@ class CoreHtmlHelper extends BoostCakeHtmlHelper
 		if(empty($opts['class'])) { $opts['class'] = ''; }
 		$opts['class'] .= ' btn controls ';
 		if(!empty($url['manager'])) { $opts['class'] .= " btn-danger "; } # Special color, so obvious.
-		else if(!preg_match("/btn-/", $opts['class'])) { $opts['class'] .= ' btn-warning'; }
+		else if(!preg_match("/btn-(danger|warning|default|success|info|primary|link)/", $opts['class'])) { $opts['class'] .= ' btn-warning'; }
 		return $this->blink('add', $label, $url, $opts);
 	}
 	function edit($label, $url, $opts = array())
@@ -280,7 +280,7 @@ class CoreHtmlHelper extends BoostCakeHtmlHelper
 		if(empty($opts['class'])) { $opts['class'] = ''; }
 		$opts['class'] .= ' btn controls ';
 		if(!empty($url['manager'])) { $opts['class'] .= " btn-danger "; } # Special color, so obvious.
-		else if(!preg_match("/btn-/", $opts['class'])) { $opts['class'] .= ' btn-warning'; }
+		else if(!preg_match("/btn-(danger|warning|default|success|info|primary|link)/", $opts['class'])) { $opts['class'] .= ' btn-warning'; }
 
 		return $this->blink('edit', $label, $url, $opts);
 	}
@@ -295,14 +295,14 @@ class CoreHtmlHelper extends BoostCakeHtmlHelper
 	{
 		if(empty($opts['class'])) { $opts['class'] = ''; }
 		$opts['class'] .= ' btn controls';
-		if(!preg_match("/btn-/", $opts['class'])) { $opts['class'] .= ' btn-danger'; }
+		if(!preg_match("/btn-(danger|warning|default|success|info|primary|link)/", $opts['class'])) { $opts['class'] .= ' btn-danger'; }
 		return $this->blink('remove', $label, $url, $opts, $confirmMessage);
 	}
 	function delete($label, $url, $opts = array(), $confirmMessage = false)
 	{
 		if(empty($opts['class'])) { $opts['class'] = ''; }
 		$opts['class'] .= ' btn controls';
-		if(!preg_match("/btn-/", $opts['class'])) { $opts['class'] .= ' btn-danger'; }
+		if(!preg_match("/btn-(danger|warning|default|success|info|primary|link)/", $opts['class'])) { $opts['class'] .= ' btn-danger'; }
 		return $this->blink('delete', $label, $url, $opts, $confirmMessage);
 	}
 	function smdelete($label, $url, $opts = array(), $confirmMessage = false)

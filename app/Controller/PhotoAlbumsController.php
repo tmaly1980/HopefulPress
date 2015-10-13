@@ -134,7 +134,8 @@ class PhotoAlbumsController extends AppController {
 				}
 			}
 			if ($this->PhotoAlbum->saveAll($this->request->data)) { # Will inject photo_album_id if needed.
-				return $this->setSuccess('The photo album has been saved', array('action'=>'view',$this->PhotoAlbum->id));
+				$idurl = $this->PhotoAlbum->field('idurl');
+				return $this->setSuccess('The photo album has been saved', array('prefix'=>false,'action'=>'view',$idurl));
 				error_log("VALIDATION ERROR=".print_r($this->PhotoAlbum->validationErrors,true));
 			}
 			return $this->setError('The photo album could not be saved: '.$this->PhotoAlbum->errorString());

@@ -2,12 +2,12 @@
 <div class='biolist Xcol-md-9'>
 <? foreach($aboutPageBios as $bio) { ?>
 <div id="AboutPageBio_<?= $bio['AboutPageBio']['id'] ?>" class='row marginbottom25'>
-	<div class='col-sm-5 center_align'>
+	<div class='col-sm-3 center_align'>
 		<? if($page_photo_id = $bio['AboutPageBio']['page_photo_id']) { ?>
 			<?= $this->element("PagePhotos.thumb",array('wh'=>'200x200','id'=>$page_photo_id,'class'=>'maxwidth100p')); ?>
 		<? } ?>
 	</div>
-	<div class='medium col-sm-6'>
+	<div class='medium col-sm-4'>
 		<b><?= $bio['AboutPageBio']['name'] ?><? if(!empty($bio['AboutPageBio']['title'])) { ?>, <i><?= $bio['AboutPageBio']['title'] ?></i><? } ?></b>
 		&nbsp;
 		<? if($this->Html->can_edit()) { ?>

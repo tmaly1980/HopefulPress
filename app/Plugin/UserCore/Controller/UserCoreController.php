@@ -330,7 +330,7 @@ class UserCoreController extends UserCoreAppController {
 				}
 			}
 
-			error_log("LOGGING IN=".print_r($user,true));
+			#error_log("LOGGING IN=".print_r($user,true));
 			if(!empty($user) && $this->Auth->login($user))#['User']))
 			{
 				$this->postLogin(); # Implement custom redirect here?

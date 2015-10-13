@@ -28,6 +28,11 @@ class JsonComponent extends Component
 		$this->update($target, 'append');
 	}
 
+	function dialogclose($callback =true)
+	{
+		$this->modalclose($callback);
+	}
+
 	function modalclose($callback = true)
 	{
 		$this->set("modalclose", $callback);

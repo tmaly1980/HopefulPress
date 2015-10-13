@@ -18,6 +18,25 @@ class RescuesController extends AppController
 
 	}
 
+	function user_select($hostname=null)
+	{
+		if(!empty($hostname))
+		{
+			$redirect = $this->Session->read("process.redirect");
+			if(empty($redirect))
+			{
+				$redirect = array('controller'=>'rescues','action'=>'view');
+			}
+			$redirect['rescue'] = $hostname;
+
+			$this->Session->delete("process.redirect");
+
+			return $this->redirect($redirect);
+		}
+
+		# Havent chosen yet.
+	}
+
 	function search_bar()
 	{
 		parent::search_bar();
@@ -31,7 +50,120 @@ class RescuesController extends AppController
 		$this->setAction("search");
 	}
 
-	function user_edit() # Signup/edit
+	function rescuer_view_plan()# View plan
+	{
+	}
+
+	function rescuer_plans() # Show list of plans.
+	{
+	}
+
+	# Might be ajax????
+
+	function rescuer_view_billing() # View existing billing details, if any.
+	{
+		$stripe_id = $this->rescue("stripe_id");
+		$subscription_id = $this->rescue("subscription_id");
+
+		$subscription = null;
+		if($stripe_id && $subscription_id)
+		{
+			$subscription = $this->StripeBilling->subscription($stripe_id,$subscription_id);
+			if(is_array($subsciption))
+			{
+				$this->set("subscription", $subscription);
+			} else {
+				$subscription = null;
+			}
+		}
+		if(empty($subscription)  || empty($subscription['source']))
+		{
+			$this->setAction("rescuer_edit_billing");
+		}
+	}
+
+	# MAY HAVE TO TEST!!!!
+	function rescuer_edit_billing()
+	{
+		$stripe_id = $this->rescue("stripe_id");
+		if(!empty($this->request->data))
+		{
+			# Just updating cards.
+			$return = $this->StripeBilling->customer($stripe_id,$this->request->data['StripeBilling']);
+			if(is_string($return))
+			{
+				# JSON
+				return $this->Json->error("Could not update billing details: $return");
+			}
+			$this->rescuer_view_billing();
+			return $this->Json->render("rescuer_view_billing");
+		}
+	}
+
+	function rescuer_upgrade($plan=null)
+	{
+		# XXX always prompt them the  option to choose the yearly discount...
+		# if they have a card  on file, let them confirm OR CHANGE!!!
+
+
+		if(empty($plan))
+		{
+			return $this->setError("Unable to change plan, no plan specified",array('rescuer'=>1,'action'=>'edit'));
+		}
+		if($plan == 'free') { $plan = null; }
+
+		# check for current subscription/card, prompt if needed. Keep AJAX in 'PlanDetails'.
+		$stripe_id = $this->rescue("stripe_id");
+		$subscription_id = $this->rescue("subscription_id");
+
+		$subscription = null;
+		if($stripe_id && $subsciption_id)
+		{
+			$this->set("subscription", $subscription = $this->StripeBilling->subscription($stripe_id,$subscription_id));
+		}
+
+		# auto-process downgrade
+		if(empty($plan))
+		{
+			if(!empty($subscription)) # CANCEL
+			{
+				if($error  = $this->StripeBilling->cancelSubscription($stripe_id,$subscription_id))
+				{
+					return $this->setError("Could not cancel existing subscription: $error");
+				}
+			}
+			return $this->setSuccess("Account plan successfully changed", array('action'=>'edit'));
+		}
+
+		# We always should ask for yearly discount option.
+
+		# Process once we have payment info...
+		if(!empty($this->request->data['StripeBilling'])) # PROCESS
+		{
+			$return = $this->StripeBilling->hostingSubscription($this->request->data['StripeBilling']);
+			if(is_string($return))
+			{
+				return $this->setError("Could not update account plan: $return");
+			} else { # SUCCESS
+				$this->request->data['StripeBilling']['disabled'] = null;
+				if($existingPlan != $this->request->data['StripeBilling']['plan'])
+				{
+					$this->request->data['StripeBilling']['upgraded'] = date('Y-m-d H:i:s');
+				}
+				$this->Rescue->id = $this->rescue_id;
+				if($this->Rescue->save($this->request->data['StripeBilling']))
+				{
+					return $this->setSuccess("Account plan successfully changed", array('action'=>'edit')); 
+				} else {
+					$this->setError("Could not save billing information: ".$this->Rescue->errorString());
+				}
+			}
+		}
+
+		$this->set("plan", $plan);
+	}
+
+	function rescuer_edit() # Signup/edit
 	{
 		# Prompt for Rescue record.
 		if(!empty($this->request->data))

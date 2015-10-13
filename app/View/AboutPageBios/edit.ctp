@@ -14,11 +14,11 @@
 	<div class='col-md-4'>
 		<?= $this->element("PagePhotos.edit"); ?>
 	</div>
-	<br/>
-	<br/>
-	<?php echo $this->Form->input('name', array('placeholder'=>'Name','div'=>'col-md-3','label'=>false)); ?>
-	<?php echo $this->Form->input('title', array('placeholder'=>'Title','div'=>'col-md-3','label'=>false)); ?>
-	<?php echo $this->Form->input('description', array('label'=>false,'div'=>'col-md-6','placeholder'=>"Description goes here")); ?>
+	<div class='col-md-8'>
+	<?php echo $this->Form->input('name', array('placeholder'=>'Name','div'=>'col-md-6','label'=>false)); ?>
+	<?php echo $this->Form->input('title', array('placeholder'=>'Title','div'=>'col-md-6','label'=>false)); ?>
+	<?php echo $this->Form->input('description', array('label'=>false,'div'=>'col-md-12','placeholder'=>"Description goes here")); ?>
+	</div>
 </div>
 	<div class='clear'></div>
 

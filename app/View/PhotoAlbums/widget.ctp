@@ -22,7 +22,7 @@
 <? } else { ?>
 	<div class=''>
 	<? foreach($updates['photoAlbums'] as $album) { ?>
-		<div class='left paddingbottom25 maxwidth250'>
+		<div class='left padding10 width250 minheight225'>
 			<?
 				$imgsrc = !empty($album['Photo'][0]['id']) ? array('controller'=>'photos','action'=>'thumb',$album['Photo'][0]['id']) : "/images/no-photo.png";
 				$img = $this->Html->image($imgsrc, array('class'=>'border')); 
@@ -33,14 +33,16 @@
 			</div>
 			<?= $this->Html->titlelink($title, array('controller'=>'photo_albums','action'=>'view',$album['PhotoAlbum']['idurl']), array()); ?>
 			<div class=''>
-				<?= $this->Time->mondy($album['PhotoAlbum']['created']); ?> <br/>
+				<?= $this->Time->mondy($album['PhotoAlbum']['created']); ?> &ndash;
 				<?= !empty($album['Photo']) ? count($album['Photo']) : "No" ?> photos
 			</div>
 		</div>
 	<? } ?>
 	<div class='clear'></div>
 	<? if(!empty($updates['photoAlbums'])) { ?>
+	<div class='right_align'>
 	<?= $this->Html->link("More photos ".$this->Html->g("chevron-right"), array('controller'=>"photo_albums"), array('class'=>'btn more right_align medium bold')); ?>
+	</div>
 	<? } ?>
 	</div>
 <? } ?>

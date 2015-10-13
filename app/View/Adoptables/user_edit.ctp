@@ -12,6 +12,10 @@
 <?= $this->Form->create("Adoptable",null,array('validate'=>false)); ?>
 <?= $this->Form->hidden("id"); ?>
 
+<div class='alert alert-info'>
+	Use the following sections to add various details.
+</div>
+
 <ul id='tabs' class='nav nav-pills'>
 	<li class='active'> <a href='#intro' id=''>Overview</a> </li>
 	<li class=''> <a href='#bio' id=''>Biography</a> </li>
@@ -49,7 +53,7 @@
 				</div>
 			</div>
 			<div class='row'>
-				<?= $this->Form->input("birthdate",array('div'=>'col-md-3','data-date-start-view'=>1,'date'=>1,'size'=>10,'tip'=>'Guess if unsure','placeholder'=>'mm/dd/yyyy')); # XXX TODO try asking for year so faster choice if older ?>
+				<?= $this->Form->input("birthdate",array('div'=>'col-md-3','data-date-start-view'=>1,'date'=>1,'size'=>12,'tip'=>'Guess if unsure','placeholder'=>'mm/dd/yyyy')); # XXX TODO try asking for year so faster choice if older ?>
 				<?= $this->Form->input("age_group",array('div'=>'col-md-3','options'=>$ageGroups,'default'=>'Adult')); ?>
 				<?= $this->Form->input("gender",array('div'=>'col-md-3','options'=>$genders)); ?>
 				<?= $this->Form->input("neutered_spayed",array('div'=>'col-md-3','label'=>'Neutered/Spayed','options'=>$this->Form->yesnoblank)); ?>
@@ -65,15 +69,17 @@
 					<?= $this->Form->input("dog_friendly",array('div'=>'col-md-3','options'=>$this->Form->yesnoblank)); ?>
 					<?= $this->Form->input_group("adoption_cost",array('id'=>'AdoptionCost','div'=>'col-md-6','before'=>'$','Xsize'=>5)); ?>
 					<script>
-					$('#AdoptionCost').filter_input({regex: "/[^0-9.]+$/"});
+					//$('#AdoptionCost').filter_input({regex: "/[^0-9.]+$/"});
+					//broken?
 					</script>
 	
 					<?#= $this->Form->input("fostered",array('div'=>'col-md-3 align_right','label'=>'Currently Fostered')); ?>
 					<?#= $this->Form->input("date_fosterable",  array('date'=>1));?>
 			</div>
-	
-	
-	
+
+			<div class='alert alert-info'>
+				Add further details using the sections listed at the top.
+			</div>
 	
 		</div>
 	</div>

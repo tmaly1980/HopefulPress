@@ -72,9 +72,9 @@ class UploadBehavior extends ModelBehavior
 	function beforeDelete(Model $model, $cascade = true)
 	{
         	$model->read(null, $model->id);
-                if(isset($model->data) && $model->hasField("filename")) {
-			$path = $model->data[$model->name]['path'];
-			$filename = $model->data[$model->name]['filename'];
+                if(isset($model->data[$model->alias]) && $model->hasField("filename")) {
+			$path = $model->data[$model->alias]['path'];
+			$filename = $model->data[$model->alias]['filename'];
 			if(!empty($filename) && !empty($path))
 			{
                         	$this->deleteFiles($filename, $path);
