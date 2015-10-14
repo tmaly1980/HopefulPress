@@ -124,5 +124,5 @@ Configure::write("Exception.renderer", "Core.CoreExceptionRenderer");
 # SITE CONFIG
 Configure::write("in_admin", true); // Enable admin stuff
 Configure::write("site_title", "Hopeful Press");
-Configure::write("default_domains", array("portal.hopefulpress.com", "portal.malysoft.com"));
+Configure::write("default_domains", array("portal.hopefulpress.com", "portal.malysoft.com","dev.hopefulpress.com"));
 
