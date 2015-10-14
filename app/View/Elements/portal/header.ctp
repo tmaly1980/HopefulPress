@@ -46,7 +46,7 @@ if($plugin == 'volunteer') { $active = 'volunteer'; }
 </nav>
 <? } ?>
 
-<? if($active == 'adopt' || (empty($prefix) && in_array($controller,array('adoptables')))) { ?>
+<? if(($active == 'adopt' || (empty($prefix) && in_array($controller,array('adoptables')))) && !$dedicated) { ?>
 	<?= !$this->fetch("search_disabled") ? $this->requestAction("/adoptables/search_bar",array('return')) : null; # We get redirect loop if we omit  prefix, since this shows up on user login page ?>
 <? } ?>
 

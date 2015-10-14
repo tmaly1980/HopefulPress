@@ -24,6 +24,16 @@ class UserCoreController extends UserCoreAppController {
 		print_r($_SESSION);
 		exit(0);
 	}
+
+	function user_medump()
+	{
+		header("Content-type: text/plain");
+		$user = $this->{$this->modelClass}->read(null,$this->Auth->me());
+		print_r($user);
+		$this->{$this->modelClass}->sqlDump();
+		exit(0);
+	}
+
 	function reset() # Clears session.
 	{
 		#$newsid = md5(uniqid(time(),true));
@@ -149,6 +159,9 @@ class UserCoreController extends UserCoreAppController {
 	#################
 
 	function invite($email = null,$code = null) { # Must be public
+		$this->checkRedirect();  # May go  somewhere specific after setting password.
+
+
 		if(empty($email) || empty($code))
 		{
 			$this->setFlash("Sorry, that link is invalid.", array('action'=>'login'));
@@ -220,6 +233,8 @@ class UserCoreController extends UserCoreAppController {
 
 	function initialize()
 	{
+		$this->checkRedirect();
+
 		#print_r($this->Session->read("Auth.User"));
 
 		$oldUser = $this->Auth->user(); # For reference.
@@ -240,7 +255,7 @@ class UserCoreController extends UserCoreAppController {
 				$user = $this->model()->read();
 				$this->Auth->login($user);#[$this->modelClass]); # Refresh session.
 				$this->_post_initialize($oldUser, $user); # App level definition
-				$this->redirect($this->loginHome);#setFlash("Your account has been created", "/admin");
+				$this->postLogin();
 				# Should have tip with first-time login stuff... how to login again...
 			} else {
 				$this->setWarn("Could not save your account information: ".$this->model()->errorString());
@@ -287,9 +302,19 @@ class UserCoreController extends UserCoreAppController {
 		# true = submitted, false = viewing
 	}
 
+	function checkRedirect()
+	{
+		# Once either login or follow invite link, go here.
+		if(!empty($this->request->query['redirect']))
+		{
+			$this->Session->write("Auth.redirect", $this->request->query['redirect']);
+		}
+	}
+
 	function login() # User account info is saved to Auth.User.User.FIELD .... 
 	{
 		error_log("CALLED AC:LOGIN...");
+		$this->checkRedirect();
 	
 		# may want to force prefix (per app)
 		$userField = $this->Auth->authenticate['Form']['fields']['username'];
@@ -341,7 +366,7 @@ class UserCoreController extends UserCoreAppController {
 		return false;
 	}
 
-	function postLogin() # After successful login
+	function postLogin() # After successful login (or invite)
 	# Per app, check for account status (paid, trial, expired, etc)
 	{
 		error_log("UC:POSTLOGIN");

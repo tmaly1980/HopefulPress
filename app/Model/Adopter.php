@@ -1,6 +1,6 @@
 <?
 App::uses("RescueAppModel", "Rescue.Model");
-class Adoption extends AppModel
+class RescueAdopter extends AppModel
 {
 	var $actsAs  = array(
 		'Core.JsonColumn'=>array('fields'=>array('data','pet_ownership_history','home_details','care_and_responsibility','preference','references')),

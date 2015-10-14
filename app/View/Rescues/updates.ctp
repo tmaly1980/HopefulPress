@@ -11,7 +11,7 @@ $videos = null;# BROKEN FOR NOW # $this->element("Videos.../Videos/widget");
 $nomaincontent = empty($news) && empty($photos) && empty($videos);
 # FOR NOW ADOPTABLES BETTER AS GRID
 
-$adoptables = $this->element("adoptables",array('type'=>'block'));#($nomaincontent?'block':'carousel')));
+$adoptables = $this->element("adoptables",array('type'=>($nomaincontent?'block':'carousel')));
 $successes = $this->requestAction(array('controller'=>'adoptables','action'=>'successes_widget','rescue'=>$rescuename),array('return'));
 
 $has_sidebar = (!empty($events) || !empty($sidebar_content) || !empty($mailinglist) || (!empty($adoptables) && !$nomaincontent));
@@ -44,7 +44,7 @@ $has_sidebar = (!empty($events) || !empty($sidebar_content) || !empty($mailingli
 </div>
 <? } ?>
 
-<? if(!empty($adoptables)) {# && $nomaincontent) { ?>
+<? if(!empty($adoptables) && $nomaincontent) { ?>
 <div class='col-md-12'>
 	<?= $adoptables ?>
 </div>
@@ -61,9 +61,9 @@ $has_sidebar = (!empty($events) || !empty($sidebar_content) || !empty($mailingli
 </div>
 	<div class="col-md-4 padding5">
 		<?= $events ?>
-		<? /* if(!$nomaincontent) { ?>
+		<?  if(!$nomaincontent) { ?>
 			<?= $adoptables ?>
-		<? } */ ?>
+		<? }  ?>
 		<?= $mailinglist ?>
 		<? if(!empty($sidebar_content)) { ?>
 		<div class='widget'>

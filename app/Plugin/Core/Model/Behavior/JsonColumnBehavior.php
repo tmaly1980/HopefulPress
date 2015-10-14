@@ -1,4 +1,6 @@
 <?php
+
+############# IF using on belongsTo, we need to declare in main model's  actsAs also, since only main model has  behavior's afterFind() fired.
 /**
  * Be able to easily save and retrieve PHP arrays to/from a database's column
  *
@@ -11,9 +13,10 @@ class JsonColumnBehavior extends ModelBehavior {
  * @var array
  * @access public
  */
-    public $settings = array(
+    public $_defaults = array(
         'fields' => array()
     );
+    public $settings = array();
 
 /**
  * Setup the behavior.
@@ -24,7 +27,8 @@ class JsonColumnBehavior extends ModelBehavior {
  * @access public
  */
     public function setup(Model $model, $settings = array()) {
-        $this->settings = array_merge($this->settings, $settings);
+        $this->settings[$model->alias] = array_merge($this->_defaults, $settings);
+	error_log("JSONSETUP {$model->alias}");
     }
 
 /**
@@ -33,7 +37,7 @@ class JsonColumnBehavior extends ModelBehavior {
  * @access public
  */
     public function beforeSave(Model $model, $options = array()) {
-        foreach($this->settings['fields'] as $field){
+        foreach($this->settings[$model->alias]['fields'] as $field){
             if(isset($model->data[$model->alias][$field]))
                 $model->data[$model->alias][$field] = $this->_encode($model->data[$model->alias][$field]);
         }
@@ -47,11 +51,30 @@ class JsonColumnBehavior extends ModelBehavior {
  * @access public
  */
     public function afterFind(Model $model, $results, $primary = false) {
+    	error_log("AFT#ER_FIND={$model->alias}");
         foreach($results as $i => &$res){
-            foreach($this->settings['fields'] as $field){
-                if(isset($res[$model->alias][$field]))
+	# Since this won't get called on belongsTo/etc associated models, we need to do the work FOR them...
+            foreach($this->settings[$model->alias]['fields'] as $field){
+                if(isset($res[$model->alias][$field])) {
                     $res[$model->alias][$field] = $this->_decode($res[$model->alias][$field]);
+		}
             }
+	    if(!empty($model->belongsTo))
+	    {
+	    	foreach($model->belongsTo as $m=>$cfg)
+		{
+			if(is_numeric($m)) { $m = $cfg; }
+			if(!empty($this->settings[$m]) && !empty($res[$m])) # FILTER THEM TOO...
+			{
+				error_log("FILTERING $m");
+            			foreach($this->settings[$m]['fields'] as $field) {
+                			if(isset($res[$m][$field])) {
+                    				$res[$m][$field] = $this->_decode($res[$m][$field]);
+					}
+				}
+			}
+		}
+	    }
         }
         return $results;
     }

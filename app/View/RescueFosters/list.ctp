@@ -9,15 +9,21 @@
 ?>
 <tr class=''>
 	<td><?= $this->Html->link(
-		$foster['Foster']['full_name'],
+		!empty($foster['User']['full_name']) ? $foster['User']['full_name'] : $foster['Foster']['full_name'],
 		array('admin'=>1,'action'=>'view',$foster['Foster']['id'])
 		); ?>
-		<? if(!empty($foster['Foster']['password']) || !empty($foster['Foster']['invite'])) { ?>
-			<? if(empty($foster['Foster']['disabled'])) { ?>
-			<div class='bold green'>User account enabled</div>
-			<? } else { ?>
-			<div class='bold red'>User account disabled</div>
+		<? if(!empty($online)) { ?>
+			<? if(!empty($foster['User']['invite'])) { ?>
+				<div class='bold'>User (invited) has not signed in yet</div>
+			<? } else if(!empty($foster['User']['password'])) { ?>
+				<div class='bold green'>User account enabled</div>
+			<? } else if(empty($foster['User']['id'])) { ?>
+				<div class='bold orange'>User does not have an account yet</div>
 			<? } ?>
+
+			<? /* if(!empty($foster['RescueFoster']['admin'])) { ?>
+				<div class='bold'>(Administrator access)</div>
+			<? } */ ?>
 		<? } ?>
 	</td>
 	<td class='maxwidth200'>

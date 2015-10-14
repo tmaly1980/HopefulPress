@@ -1,8 +1,6 @@
 <?
-extract($this->PagePhoto->config(compact('parentClass','photoModel')));
+extract($this->PagePhoto->config(compact('parentClass','photoModel','width','height','align','margin','class')));
 if(empty($page_photo_id)) { return; } # NONE
-
-$margin = 'margin25';
 
 if(empty($wh)) { $wh = (!empty($width) || !empty($height)) ? "{$width}x{$height}" : ""; }
 

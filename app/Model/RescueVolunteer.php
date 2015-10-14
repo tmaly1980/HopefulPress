@@ -3,8 +3,9 @@ class RescueVolunteer extends AppModel # Application for specific rescue.
 {
 	var $actsAs  = array(
 		# Which works?
-		'Core.JsonColumn'=>array('fields'=>array('data','home_details')), # Do this first.
-		'Core.CommaSeparated',
+		# Manual decode below...
+		#####'Core.JsonColumn'=>array('fields'=>array('data','home_details')), # Do this first.
+		#'Core.CommaSeparated',
 	);
 
 	var $belongsTo = array(
@@ -12,6 +13,8 @@ class RescueVolunteer extends AppModel # Application for specific rescue.
 		'User',
 		'Volunteer',
 	);
+
+	var $statuses = array('Active','Active Offline','Applied','Inactive','Ignored');
 
 	/*
 	function beforeValidate($options=array())
@@ -21,5 +24,17 @@ class RescueVolunteer extends AppModel # Application for specific rescue.
 	}
 	*/
 
+	# JSON behavior / afterFind firing  is useless on associated models
+	function afterFind($results,$primary=false)
+	{
+		return $this->jsonDecode($results, array('data','home_details'));
+	}
+
+	function beforeSave($options=array())
+	{
+		 $this->jsonEncode(array('data','home_details'));
+		 $this->commaJoin();
+		 return true;
+	}
 
 }

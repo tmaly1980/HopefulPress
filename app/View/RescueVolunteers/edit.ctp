@@ -16,13 +16,13 @@ if(false) {#!$this->Rescue->dedicated()) { # Will have to figure out how to hand
 	<? $this->assign("page_title", $title); ?>
 	<? $this->start("title_controls"); ?>
 	<?= $this->Html->back("Volunteer Information", array('admin'=>false,'action'=>'index')); ?>
-	<? if($this->Html->can_edit()) { ?>
+	<? if(empty($this->request->params['prefix']) && $this->Html->can_edit()) { ?>
 		<?= $this->Html->edit("Customize Form", array('admin'=>1,'controller'=>'volunteer_forms','action'=>'edit')); ?>
 	<? } ?>
 	<? $this->end("title_controls"); ?>
 <? } else { ?>
 	<!--<h3><?= $title  ?></h3>-->
-	<? if($this->Html->can_edit()) { ?>
+	<? if(empty($this->request->params['prefix']) && $this->Html->can_edit()) { ?>
 	<div class='right'>
 		<?= $this->Html->edit("Customize Form", array('admin'=>1,'controller'=>'volunteer_forms','action'=>'edit'),array('short'=>false)); ?>
 	</div>
@@ -37,6 +37,12 @@ if(false) {#!$this->Rescue->dedicated()) { # Will have to figure out how to hand
 	<?= $this->Form->create("RescueVolunteer"); ?>
 		<?= $this->Form->hidden("RescueVolunteer.id"); ?>
 		<?= $this->Form->hidden("Volunteer.id"); ?>
+
+	<? if(!empty($this->request->params['admin'])) { ?>
+	<div class='right_align'>
+		<?= $this->Form->save(!empty($id)?"Update Application":"Submit Application",array('cancel'=>false)); ?>
+	</div>
+	<? } ?>
 
 		<?= $this->element("forms/admin_status"); ?>
 		<?= $this->element("forms/about",array('model'=>'Volunteer')); ?>
@@ -53,7 +59,9 @@ if(false) {#!$this->Rescue->dedicated()) { # Will have to figure out how to hand
 
 	<hr/>
 
+	<div class='right_align'>
 		<?= $this->Form->save(!empty($id)?"Update Application":"Submit Application",array('cancel'=>false)); ?>
+	</div>
 
 		<?= $this->Form->end(); ?>
 	</div>

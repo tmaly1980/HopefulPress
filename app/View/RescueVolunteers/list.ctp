@@ -9,14 +9,20 @@
 ?>
 <tr class=''>
 	<td><?= $this->Html->link(
-		$volunteer['Volunteer']['full_name'],
+		!empty($volunteer['User']['full_name']) ? $volunteer['User']['full_name'] : $volunteer['Volunteer']['full_name'],
 		array('admin'=>1,'action'=>'view',$volunteer['Volunteer']['id'])
 		); ?>
-		<? if(!empty($volunteer['Volunteer']['password']) || !empty($volunteer['Volunteer']['invite'])) { ?>
-			<? if(empty($volunteer['Volunteer']['disabled'])) { ?>
-			<div class='bold green'>User account enabled</div>
-			<? } else { ?>
-			<div class='bold red'>User account disabled</div>
+		<? if(!empty($online)) { ?>
+			<? if(!empty($volunteer['User']['invite'])) { ?>
+				<div class='bold'>User (invited) has not signed in yet</div>
+			<? } else if(!empty($volunteer['User']['password'])) { ?>
+				<div class='bold green'>User account enabled</div>
+			<? } else if(empty($volunteer['User']['id'])) { ?>
+				<div class='bold orange'>User does not have an account yet</div>
+			<? } ?>
+
+			<? if(!empty($volunteer['RescueVolunteer']['admin'])) { ?>
+				<div class='bold'>(Administrator access)</div>
 			<? } ?>
 		<? } ?>
 	</td>

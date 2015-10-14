@@ -1,21 +1,21 @@
 <? $this->assign("page_title", "Edit Foster Overview"); ?>
 
 <div class='form'>
-<?= $this->Form->create("FosterOverview"); ?>
+<?= $this->Form->create("FosterPageIndex"); ?>
 	<?= $this->Form->hidden("id"); ?>
 
 <div class='row'>
-	<div class='col-md-6 col-md-push-6 padding10'>
+	<div class='col-md-6 pull-right'>
 		<?= $this->element("PagePhotos.edit"); ?>
 	</div>
-	<div class='col-md-6 col-md-pull-6'>
+	<div class='col-md-6 push-left'>
 	<?= $this->Form->title(); ?>
 	</div>
 </div>
 
 	<?= $this->Form->content("introduction", array('class'=>'editor')); ?>
 	<div class='alert alert-info'>
-		Here you can describe your foster process as well as expectations toward a potential foster caregiver.
+		Here you can describe your foster process as well as expectations toward a potential foster parent.
 	</div>
 
 	<div class='clear'></div>

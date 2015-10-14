@@ -2,7 +2,7 @@
 <? if($this->Html->can_edit()) { ?>
 <? $this->start("title_controls"); ?>
 	<?#= $this->Html->back("View Donations", array('admin'=>1,'controller'=>'donations','action'=>'index')); ?>
-	<?= $this->Html->edit("Customize page", array('rescuer'=>1,'action'=>'edit','rescue'=>$rescuename)); ?>
+	<?= $this->Html->edit("Customize page", array('admin'=>1,'action'=>'edit','rescue'=>$rescuename)); ?>
 <? $this->end(); ?>
 <? } ?>
 
@@ -23,13 +23,15 @@
 
 <h3 id='wishlist'>Donation Wish List</h3>
 <div>
-	<? if(empty($donationPage['DonationPage']['wishlist'])) { ?>
-		<?= $this->Html->link("Add wish list", array('rescuer'=>1,'action'=>'edit','rescue'=>$rescuename),array('class'=>'btn btn-primary btn-xs white')); ?>
+	<? if(empty($donationPage['DonationPage']['wishlist']) && $this->Html->can_edit()) { ?>
+		<?= $this->Html->link("Add wish list", array('user'=>1,'action'=>'edit','rescue'=>$rescuename),array('class'=>'btn btn-primary btn-xs white')); ?>
 	<?  } else { ?>
 	<div>
 		<?= $donationPage['DonationPage']['wishlist']; ?>
 	</div>
-	<?= $this->Html->link("Edit wish list", array('rescuer'=>1,'action'=>'edit','rescue'=>$rescuename),array('class'=>'btn btn-primary btn-xs white')); ?>
+	<? if($this->Html->can_edit()) { ?>
+	<?= $this->Html->link("Edit wish list", array('user'=>1,'action'=>'edit','rescue'=>$rescuename),array('class'=>'btn btn-primary btn-xs white')); ?>
+	<? } ?>
 	<? } ?>
 </div>
 <? } ?>

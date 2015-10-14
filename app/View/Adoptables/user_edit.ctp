@@ -34,7 +34,7 @@
 			<? if(empty($this->request->data['Adoptable']['adoptable_photo_id']) && !empty($this->request->data['Photos'][0]['id'])) { 
 				$this->request->data['Adoptable']['adoptable_photo_id'] = $this->request->data['Photos'][0]['id'];
 			} ?>
-			<?= $this->element("PagePhotos.edit"); ?>
+			<?= $this->element("PagePhotos.edit",array('parentClass'=>'Adoptable','photoModel'=>'AdoptablePhoto')); ?>
 	
 		</div>
 		<div class='col-sm-6'>

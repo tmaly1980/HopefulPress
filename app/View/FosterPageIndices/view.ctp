@@ -1,33 +1,34 @@
-<?= $this->assign("page_title", !empty($fosterPageIndex['FosterPageIndex']['title']) ? $fosterPageIndex['FosterPageIndex']['title'] : "Foster Information"); ?>
-<? if(empty($fosterPageIndex['FosterPageIndex']['id'])) { ?>
+<? $index = $fosterPageIndex; ?>
+<?= $this->assign("page_title", !empty($index['FosterPageIndex']['title']) ? $index['FosterPageIndex']['title'] : "Foster Information"); ?>
+<? if(empty($index['FosterPageIndex']['id'])) { ?>
 <div class='dashed alert alert-info'>
 	Foster information and forms are not currently available.
 	<? if($this->Html->can_edit()) { ?>
-		<?= $this->Html->add("Enable foster page", array('user'=>1,'action'=>'enable'),array('short'=>false)); ?>
+		<?= $this->Html->add("Enable page", array('admin'=>1,'action'=>'enable'),array('short'=>false)); ?>
 	<? } ?>
 </div>
 <? } else { ?>
 <? if($this->Html->can_edit()) { ?>
 <? $this->start("title_controls"); ?>
-	<?= $this->Html->edit("Edit introduction", array('user'=>1,'action'=>'edit')); ?>
-	<?= $this->Html->remove("Hide page", array('user'=>1,'action'=>'disable'),array('confirm'=>'Are you sure you want to hide all foster information? You can always enable it again at any time.')); ?>
+	<?= $this->Html->edit("Edit introduction", array('admin'=>1,'action'=>'edit')); ?>
+	<?= $this->Html->remove("Hide page", array('admin'=>1,'action'=>'disable'),array('confirm'=>'Are you sure you want to hide all foster information? You can always enable it again at any time.')); ?>
 <? $this->end(); ?>
 <? } ?>
 
-<? if(!empty($fosterPageIndex['FosterPageIndex']['introduction']) || !empty($fosterPageIndex['FosterPageIndex']['page_photo_id']) || $this->Html->can_edit()) { ?>
+<? if(!empty($index['FosterPageIndex']['introduction']) || !empty($index['FosterPageIndex']['page_photo_id']) || $this->Html->can_edit()) { ?>
 <div class='view row'>
-	<div class='col-md-6 col-md-push-6'>
+	<div class='col-md-4 pull-right'>
 		<?= $this->element("PagePhotos.view"); ?>
 	</div>
 
-	<div class='col-md-6 col-md-pull-6 padding25'>
-		<? if(!empty($fosterPageIndex['FosterPageIndex']['introduction'])) { ?>
+	<div class='col-md-8 push-left padding25'>
+		<? if(!empty($index['FosterPageIndex']['introduction'])) { ?>
 		<div id='FosterPageIndex_Introduction' class='medium double'>
-			<?= $fosterPageIndex['FosterPageIndex']['introduction'] ?>
+			<?= $index['FosterPageIndex']['introduction'] ?>
 		</div>
 		<? } else if($this->Html->me()) { ?>
 		<div class='dashed alert alert-info'>
-			<?= $this->Html->link("Add an introduction", array('user'=>1,'action'=>'edit')); ?>
+			<?= $this->Html->link("Add an introduction", array('admin'=>1,'action'=>'edit')); ?>
 			to describe your foster process
 		</div>
 		<? } ?>
@@ -62,7 +63,7 @@
 
 <div class='row'>
 <div class='col-md-9'>
-<? if($this->Site->can_edit()) { # By default, only owner can add sub page - and then can re-assign ?>
+<? if($this->Html->can_edit()) { # By default, only owner can add sub page - and then can re-assign ?>
 	<div class='right'>
 		<? if(count($pages) > 1) { # && $in_admin && $this->Admin->access()) { ?>
 			<?= $this->Html->blink("sort", "Resort", "javascript:void(0)",array('id'=>'Subpage_sorter')); ?>
@@ -70,7 +71,7 @@
 	</div>
 <? } ?>
 
-<? if($this->Site->can_edit()) { # By default, only owner can add sub page - and then can re-assign ?>
+<? if($this->Html->can_edit()) { # By default, only owner can add sub page - and then can re-assign ?>
 
 	<div class='right'>
 		<? if(count($downloads) > 1) { # && $in_admin && $this->Admin->access()) { ?>

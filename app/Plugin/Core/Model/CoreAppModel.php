@@ -130,6 +130,7 @@ class CoreAppModel extends Model {
 	{ # Get value of single field from many records, as a list.
 		$options['fields'] = array($field);
 		$options['conditions'] = $conditions;
+		if(!isset($options['recursive'])) { $options['recursive'] = -1; } # SAVE energy.
 		return $this->find('field', $options);
 	}
 	function _findField($state, $query, $results = array()) # Extract just a single field out of all these records.
@@ -754,6 +755,60 @@ class CoreAppModel extends Model {
             }
        
         return $count;
+    }
+
+    # Also need to internally code comma joining arrays  so we dont call before json encode.
+    function commaJoin()
+    {
+    	foreach($this->data[$this->alias] as $k=>$v)
+	{
+		if(is_array($v))
+		{
+			$this->data[$this->alias][$k] = join(",",$v);
+		}
+	}
+	return true;
+    }
+
+    # We ALSO need this in beforeSave so we don't lose keys from CommaSeparated nonsense.
+    function jsonEncode($keys=array())
+    {
+    	# comma-separate might be called before us.
+    	error_log("JSON_ENCODE, DATA=".print_r($this->data[$this->alias],true));
+	foreach($keys as $key)
+	{
+		if(!empty($this->data[$this->alias][$key]) && is_array($this->data[$this->alias][$key]))
+		{
+			$this->data[$this->alias][$key] = json_encode($this->data[$this->alias][$key]);
+		}
+	}
+	error_log("JSON_COMPLETE=".print_r($this->data[$this->alias],true));
+	return true;
+    }
+
+    # Behavior afterFind wont get called on belongsTo etc records...
+    function jsonDecode($results, $keys=array())
+    {
+		foreach($results as &$res)
+		{
+			foreach($keys as $key)
+			{
+				if(!empty($res[$this->alias][$key]))
+				{
+					$object = json_decode($res[$this->alias][$key]);
+					if(empty($object))
+					{
+						error_log("JSON_DECODE NULL, $key=".print_r($res[$this->alias][$key],true));
+					}
+					if(!empty($object))
+					{
+						$res[$this->alias][$key] = get_object_vars($object);
+					}
+				}
+			}
+
+		}
+		return $results;
     }
 
 

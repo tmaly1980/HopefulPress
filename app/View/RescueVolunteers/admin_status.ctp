@@ -1,5 +1,5 @@
 <div class='form'>
-<?= $this->Form->create("Volunteer",array('class'=>'')) ?>
+<?= $this->Form->create("RescueVolunteer",array('class'=>'')) ?>
 	<?= $this->Form->hidden("id"); ?>
 	<?= $this->Form->input("status",array('id'=>'VolunteerStatus','options'=>array_combine($statuses,$statuses))); ?>
 	<div class='alert alert-info'>

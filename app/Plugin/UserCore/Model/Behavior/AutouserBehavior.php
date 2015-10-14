@@ -23,6 +23,7 @@ class AutouserBehavior extends ModelBehavior {
 		# Implement supporting member_id for members 
 		# and not mixing up user_id with users
 
+
 		if(!empty($model->autouser) && Configure::read("User.autouser") !== false)
 		{
 			if(AuthComponent::$sessionKey == 'Auth.Member')
@@ -38,6 +39,7 @@ class AutouserBehavior extends ModelBehavior {
 			#error_log("autouser READING $key=$me");
 
 			#error_log("autouser DATA=".print_r($model->data[$model->alias],true));
+			############error_log("SAVING {$model->alias}, AUTOUSER={$model->autouser}, ME+$me");
 
 			if($me && $model->hasField($key))
 			{
@@ -46,7 +48,7 @@ class AutouserBehavior extends ModelBehavior {
 				{
 					$model->data[$model->alias][$key] = $me; # 
 				
-					error_log("SETTING {$model->alias} $key = $me");
+					#error_log("SETTING {$model->alias} $key = $me");
 				}
 			}
 		}

@@ -487,7 +487,7 @@ class CoreFormHelper extends BoostCakeFormHelper
 
 		#echo("GETTING $model/$field=".print_r($data,true));
 
-		error_log("GETTING $model . $field=".print_r($data,true));
+		#error_log("GETTING $model . $field=".print_r($data,true));
 
 		return isset($data[$model][$field]) ?
 			$data[$model][$field] : null;

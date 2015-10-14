@@ -36,13 +36,13 @@ class SingletonBehavior extends ModelBehavior
 			$record = $model->read(); # Gather from ->id set on save()
 			$record[$model->alias] = array_filter($record[$model->alias]); # Skip over blank values.
 
-			error_log("ODL REC=".print_r($record,true));
+		#	error_log("ODL REC=".print_r($record,true));
 
 			$valid_fields = false;
 
 			if($model->minimal_fields === true) # Just check for varchar/text fields
 			{
-				error_log("MINIMAL ALL");
+			#	error_log("MINIMAL ALL");
 				foreach($record[$model->alias] as $k=>$v)
 				{
 					if(in_array($model->_schema[$k]['type'], array('string','text')))
@@ -56,7 +56,7 @@ class SingletonBehavior extends ModelBehavior
 				$valid_fields = array_intersect_key($record[$model->alias], array_flip($model->minimal_fields)); # Has at least one.
 			}
 
-			error_log("VALID=".print_r($valid_fields,true));
+		#	error_log("VALID=".print_r($valid_fields,true));
 
 			if(empty($valid_fields))
 			{
@@ -89,13 +89,15 @@ class SingletonBehavior extends ModelBehavior
 
 		# Hide disabled singletons.
 		$cond = array();
-		if($model->hasField("disabled"))
 		{
-			$cond[] = "({$model->alias}.disabled IS NULL OR {$model->alias}.disabled = 0)";
 		}
 
 		$record = $model->first($cond);
-		if(empty($record) && !$model->hasField("disabled"))
+		if($model->hasField("disabled") && !empty($record[$model->alias]['disabled']))
+		{
+			return null; # Will not create.
+		}
+		if(empty($record)) # OK to create
 		{
 			$model->create();
 			$model->save();

@@ -75,19 +75,29 @@ class RescueHelper extends AppHelper
 		if(!$strict && $this->owner()) { return true; }
 		$rid = $this->id();
 		if(empty($rid)) { return false; }
-		$rescues = $this->user("Rescues"); #
-		if(empty($rescues)) { return false; }
-		return Set::extract("/[id=$rid][admin=1]/user_id", $rescues);
+		$user = $this->user(); #
+		$path = "/RescueVolunteer[rescue_id=$rid][admin=1]/rescue_id";
+		return !empty(Set::extract($path,$user));
 	}
 
 	function volunteer($strict=false) # true limits to just volunteers, not admins/owners.
 	{
+		if(!$strict && ($this->admin() || $this->foster())) { return true; } # Foster is a type of (non-admin) volunteer access.
+		$rid = $this->id();
+		if(empty($rid)) { return false; }
+		$user = $this->user(); #
+		$path = "/RescueVolunteer[rescue_id=$rid][admin=0]/rescue_id";
+		return !empty(Set::extract($path,$user));
+	}
+
+	function foster($strict=false) # true limits to just fosters, not admins/owners.
+	{
 		if(!$strict && $this->admin()) { return true; }
 		$rid = $this->id();
 		if(empty($rid)) { return false; }
-		$rescues = $this->user("Rescues"); #
-		if(empty($rescues)) { return false; }
-		return Set::extract("/[id=$rid][admin=0]/user_id", $rescues);
+		$user = $this->user(); #
+		$path = "/RescueFoster[rescue_id=$rid]/rescue_id";
+		return !empty(Set::extract($path,$user));
 	}
 
 	function mine()
@@ -113,15 +123,20 @@ class RescueHelper extends AppHelper
 	}
 
 	# Useful to go to homepage for dedicated site.
-	function url($rescue = null, $url = '/')
+	function url($rescue = null, $url = '/', $pass_session=true) # DISABLE session passing for EMAILS
 	{
+
 		if(is_string($rescue)) # Only gave url,assume current rescue.
 		{
 			$url = $rescue;
 			$rescue = null;
 		}
+
+		if(!empty($rescue['Rescue'])) { $rescue = $rescue['Rescue']; }  # Strip.
+
 		if(empty($rescue))
 		{
+			echo 'EMPTY RESCUE, SPIT URL BACK';
 			if(!$this->id()) { return $url; } # Nothing we can do.
 			$rescue = $this->get();
 		}
@@ -141,11 +156,14 @@ class RescueHelper extends AppHelper
 			return "http://".Configure::read("default_domain").Router::url($url); # Failsafe.
 		}
 
-		if(is_array($url))
+		if($pass_session)
 		{
-			$url['?'] = array(Configure::read("Session.cookie")=>session_id());
-		} else {
-			$url .= "?".Configure::read("Session.cookie")."=".session_id();
+			if(is_array($url))
+			{
+				$url['?'] = array(Configure::read("Session.cookie")=>session_id());
+			} else {
+				$url .= "?".Configure::read("Session.cookie")."=".session_id();
+			}
 		}
 
 

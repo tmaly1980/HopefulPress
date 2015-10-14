@@ -17,7 +17,8 @@ class PagePhotoHelper extends AppHelper
 			'btnSize' => "btn-xs",
 			'onEditLoad' => "",
 			'align'=>'right',
-			'class'=>'margin25',
+			'margin'=>'margin25',
+			'class'=>''
 		);
 		$vars = array_merge($defaults,$params);
 
@@ -89,7 +90,7 @@ class PagePhotoHelper extends AppHelper
 		}
 		# Only as  thumbnail.
 
-		error_log("VARS=".print_r($vars,true));
+		#error_log("VARS=".print_r($vars,true));
 		
 		$vars['data'] = $this->Form->data();
 		

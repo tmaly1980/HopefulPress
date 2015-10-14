@@ -52,7 +52,7 @@ class PagePhotosController extends AppController
 		#return is_array($vars)  ? array_merge($defaults, $vars) : $defaults;
 	}
 
-	function json_edit($id = null,$parentClass='PagePhoto') # Show inline edit widget.
+	function json_edit($id = null,$parentClass=null,$photoModel='PagePhoto') # Show inline edit widget.
 	{
 		# This seems wrong for alternative logos,etc...
 		extract($this->vars());
@@ -60,7 +60,7 @@ class PagePhotosController extends AppController
 		if(!empty($id))
 		{
 			$photo = $this->{$this->modelClass}->read(null, $id);
-			error_log("PHOTO=".print_r($photo,true));
+			#error_log("PHOTO=".print_r($photo,true));
 			#$this->set($primaryKey, $id);
 			$this->set("page_photo_id", $id); # Needs to be generic.
 			if(!empty($photo[$this->modelClass]['width'])) { $this->set("width", $photo[$this->modelClass]['width']); }
@@ -70,17 +70,7 @@ class PagePhotosController extends AppController
 			$this->request->data = $photo; # For Model->field()
 			#$this->Json->set("thumb_src", "/page_photos/thumb/".$this->PagePhoto->id); # Unused for now... since above is so small anyway.
 		}
-		#$container = Configure::read("PagePhoto.$parentClass.photoModel");
-		#if(empty($container))
-		#{
-			$classParts = split("[.]", $parentClass);
-			error_log("CLASS_PARTS ($parentClass)=".print_r($classParts,true));
-			if(count($classParts) == 1) { $classParts[] = 'PagePhoto'; } # Default container.
-			$container = $classParts[count($classParts)-1];
-		#}
-		# container is always either PagePhoto or something passed based on special photo  class name. ie rescuelogo
-		error_log("REPLACING($parentClass)=$container");# Should be PhotoModel
-		$this->Json->replace($container);
+		$this->Json->replace($photoModel);
 		$this->Json->render("PagePhotos.edit");
 	}
 
@@ -111,7 +101,7 @@ class PagePhotosController extends AppController
 	{
 		extract($this->vars());#$model));
 
-		error_log("PPDEL=$parentClass");
+		#error_log("PPDEL=$parentClass");
 
 		# For compatibility with Photos list/album in case double-implemented.
 		if(empty($id) && is_numeric($parentClass)) # Just remove self, don't bother with parent (just de-reference belongsTo to see validity)
@@ -139,9 +129,9 @@ class PagePhotosController extends AppController
 				}
 			}
 
-			error_log("LOOKING FOR $parentClass WITH $primaryKey => $id");
+			#error_log("LOOKING FOR $parentClass WITH $primaryKey => $id");
 			$parent_id = $this->{$parentModel}->field('id', array($primaryKey=>$id));
-			error_log("GOT=$parent_id");
+			#error_log("GOT=$parent_id");
 
 			if(!empty($parent_id))
 			{
@@ -162,7 +152,7 @@ class PagePhotosController extends AppController
 
 	function upload($parentClass,$photoModel='PagePhoto',$id=null) # Replace?
 	{
-		error_log("UPLOAD");
+		#error_log("UPLOAD");
 		return $this->edit($parentClass,$photoModel,$id);
 	}
 
@@ -173,9 +163,9 @@ class PagePhotosController extends AppController
 		$this->set("model_id",$id);
 		extract($this->vars());#$parentClass));
 
-		error_log("CROP CALLED");
+		#error_log("CROP CALLED");
 		$this->edit($parentClass,$photoModel,$id,true); # Process first.
-		error_log("CROP CONTINUED, DONE WITH EDIT");
+		#error_log("CROP CONTINUED, DONE WITH EDIT");
 
 
 		$this->request->data = !empty($id) ? $this->{$this->modelClass}->read(null, $id) : array();
@@ -196,15 +186,15 @@ class PagePhotosController extends AppController
 
 		# This requires we have a belongsTo set up, since form uses PagePhoto/etx
 
-		error_log("D=".print_r($this->request->data,true));
+		#error_log("D=".print_r($this->request->data,true));
 
 		if(!empty($this->request->data))
 		{
-			error_log("DATA=".print_r($this->request->data,true));
+			#error_log("DATA=".print_r($this->request->data,true));
 			# This here is the Photo class...
 			if($this->{$this->modelClass}->save($this->request->data))
 			{
-				error_log("SETTING $primaryKey ({$this->modelClass})=> ".$this->{$this->modelClass}->id);
+				#error_log("SETTING $primaryKey ({$this->modelClass})=> ".$this->{$this->modelClass}->id);
 				$this->set($primaryKey, $this->{$this->modelClass}->id);
 
 				# primary key name is based on model class (and thus controller)....ie page_photo_id, rescue_logo_id
@@ -222,7 +212,7 @@ class PagePhotosController extends AppController
 				} else {
 					if($incrop)
 					{
-						return $this->json_edit($this->{$this->modelClass}->id,$parentClass);
+						return $this->json_edit($this->{$this->modelClass}->id,$parentClass,$photoModel);
 					} else {
 						# Go to crop (just uploaded)
 						$this->request->data = $this->{$this->modelClass}->read();

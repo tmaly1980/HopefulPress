@@ -1,4 +1,5 @@
-<?
+<? # OLD..... maybe convert to volunteer profile signup form???
+
 $id = !empty($this->request->data['Volunteer']['id']) ? $this->request->data['Volunteer']['id'] : null;
 <? if(false) {#!$this->Rescue->dedicated()) { # Will have to figure out how to handle dealing with dedicated sites
 

@@ -74,6 +74,7 @@ class AppController extends AppCoreController {
 	var $uses = array(
 		'User',
 		'Rescue',
+		'RescueVolunteer',
 		'Adoptable',
 		"Newsletter.MailchimpCredential",
 		'Resource',
@@ -388,9 +389,10 @@ class AppController extends AppCoreController {
 		if(isset($url['prefix']) && empty($url['prefix']) && !empty($this->request->params['prefix']))
 		{
 			$prefix = $this->request->params['prefix'];
-			unset($url[$prefix]);
+			$url[$prefix] = false;
+			unset($url['prefix']);
 		}
-		#error_log("RED_URL=".print_r($url,true));
+		error_log("RED_URL=".print_r($url,true));
 		#error_log("FINAL=".Router::url($url));
 
 		return parent::redirect($url, $status, $exit);
@@ -443,42 +445,59 @@ class AppController extends AppCoreController {
 	}
 	
 	# Must be here since controllers might not inherit from RescueApp (ie Users instead)
+	function rescue_admins($rescue_id=null) # For notifications.
+	{
+		if(empty($rescue_id)) { $rescue_id = $this->rescue_id; }
+
+		$admins = $this->RescueVolunteer->fields('user_id',array('RescueVolunteer.rescue_id'=>$rescue_id,'status'=>'Active','RescueVolunteer.admin'=>1)); # All admins.
+		$admins[] = $this->Rescue->field("user_id",array('id'=>$rescue_id)); # Site owner.
+
+		return  $admins;
+	}
+
 	function sendAdoptionEmail($adoption) # Form record.
 	{
 		$vars = array(
-			'adoption'=>$adoption,
+			'rescueAdopter'=>$adoption,
 		);
 		# For now, send to site owner (someday add setting)
-		$adoptionAdmins = $this->User->fields('id',array('admin'=>1)); # All admins.
-		$adoptionAdmins[] = $this->Multisite->get("user_id"); # Site owner.
+		$rescue_id = !empty($adoption['RescueAdopter']['rescue_id']) ? 
+			$foster['RescueAdopter']['rescue_id'] : $this->rescue_id;
+		$admins = $this->rescue_admins($rescue_id);
 
-		$from = !empty($adoption['Adoption']['email']) ?
-			$adoption['Adoption']['email'] : null;
+		$from = !empty($adoption['RescueAdopter']['email']) ?
+			$adoption['RescueAdopter']['email'] : null;
 		$vars['from'] = $from; # Reply will go to the requestor...
 
-		return $this->userEmail($adoptionAdmins, "Adoption application", "Rescue.adoption", $vars);
+		return $this->userEmail($admins, "Adoption application", "rescue/adoption", $vars);
 	}
 
 	function sendVolunteerEmail($volunteer)
 	{
+		$rescue_id = !empty($volunteer['RescueVolunteer']['rescue_id']) ? 
+			$volunteer['RescueVolunteer']['rescue_id'] : $this->rescue_id;
+
 		# FOR NOW.
-		$volunteerAdmins = $this->User->fields('id',array('admin'=>1)); # All admins.
-		$volunteerAdmins[] = $this->Multisite->get("user_id"); # Site owner too.
-		return $this->userEmail($volunteerAdmins, "Volunteer application", "Rescue.volunteer", array('volunteer'=>$volunteer));
+		$admins = $this->rescue_admins($rescue_id);
+		return $this->userEmail($admins, "Volunteer application", "rescue/volunteer", array('rescueVolunteer'=>$volunteer));
 	}
 
 	function sendFosterEmail($foster)
 	{ # FOR NOW...
-		$fosterAdmins = $this->User->fields('id',array('admin'=>1)); # All admins.
-		$fosterAdmins[] = $this->Multisite->get("user_id"); # Site owner too.
-		return $this->userEmail($fosterAdmins, "Foster application", "Rescue.foster", array('foster'=>$foster));
+		$rescue_id = !empty($foster['RescueFoster']['rescue_id']) ? 
+			$foster['RescueFoster']['rescue_id'] : $this->rescue_id;
+		$admins = $this->rescue_admins($rescue_id);
+		return $this->userEmail($admins, "Foster application", "rescue/foster", array('rescueFoster'=>$foster));
 	}
 
+	# If processed thru paypal, won't get.
 	function sendDonationEmail($donation)
 	{ # FOR NOW...
-		$donateAdmins = $this->User->fields('id',array('admin'=>1)); # All admins.
-		$donateAdmins[] = $this->Multisite->get("user_id"); # Site owner too.
-		return $this->userEmail($donateAdmins, "Donation Received", "Donation.donation", array('donation'=>$donation));
+		$rescue_id = !empty($donation['Donation']['rescue_id']) ? 
+			$foster['Donation']['rescue_id'] : $this->rescue_id;
+		$admins = $this->rescue_admins($rescue_id);
+
+		return $this->userEmail($admins, "Donation Received", "Donation.donation", array('donation'=>$donation));
 	}
 
 	function phpinfo()
@@ -501,8 +520,7 @@ class AppController extends AppCoreController {
 
 	function sendAdminEmail($subject,$template,$vars=array())
 	{
-		$site_owner_id = $this->site("user_id");
-		$admins = $this->User->fields('email',array('OR'=>array('admin'=>1,'id'=>$site_owner_id)));
+		$admins = $this->rescue_admins();
 		return $this->userEmail($admins,$subject,$template,$vars);
 	}
 
@@ -777,21 +795,20 @@ class AppController extends AppCoreController {
 
 		# On a rescue, deny access to non-volunteers, inactive, etc.
 		if($rid = $this->rescue_id) {
-			$rescue_user_id = $this->rescue("user_id");
-			error_log("RESCUE=$rid, OWNER_ID=$rescue_user_id, ME=$me");
-			if($rescue_user_id == $me) { return true; } # Rescue owner.
-			if($prefix == 'rescuer') { return false; } # Nobody else can do this.
+			if($this->rescue_owner($rid,$me)) { return true; }
+			if($prefix == 'rescuer') { return false; } # Nobody else can.
 
-			$admin = Set::extract("/[rescue_id=$rid][admin=1]/user_id", $user['Rescues']);
-			$volunteer = Set::extract("/[rescue_id=$rid][admin=0]/user_id", $user['Rescues']);
+			$admin = $this->rescue_admin($rid,$me);
+			$volunteer = $this->rescue_volunteer($rid,$me);
+			$foster = $this->rescue_foster($rid,$me);
 
-			if(empty($admin) && empty($volunteer)) # Random unauthorized user.
+			if(empty($admin) && empty($volunteer) && empty($foster)) # Random unauthorized user.
 			{
-				return $this->setError("Sorry, that page is available only to active volunteers of this rescue. If you would like to become a volunteer for this rescue, you may apply via their Volunteer page. If you've recently applied as a volunteer, the rescue's admins may still be processing your request.",
-					array('controller'=>'rescues','action'=>'view'));
+				return $this->setError("Sorry, that page is available only to active volunteers/fosters of this rescue. If you would like to become a volunteer or foster for this rescue, you may apply via their Volunteer or Foster page. If you've recently applied as a volunteer/foster, the rescue's admins may still be processing your request.",
+					array('prefix'=>false,'controller'=>'rescues','action'=>'view'));
 			} else if ($prefix == 'admin' && empty($admin)) { # Not an admin user.
 				return $this->setError("Sorry, that page is available only to active volunteers who have been given 'administrator' access. If you believe this is in error, contact your rescue's owner to grant you proper access. ",
-					array('controller'=>'rescues','action'=>'view'));
+					array('prefix'=>false,'controller'=>'rescues','action'=>'view'));
 			} else {
 				return true; # active volunteer and either admin level or not needing admin access.
 			}
@@ -818,6 +835,62 @@ class AppController extends AppCoreController {
 		error_log("FAIL bogus");
 
 		return false; # FAILSAFE, i dunno.
+	}
+
+	function rescue_owner($rid=null,$uid=null)
+	{
+		if(empty($rid)) { $rid = $this->rescue_id; }
+		if(empty($uid)) { $uid = $this->me(); }
+		if(empty($rid) || empty($uid)) { return false;}
+		$owner = $this->Rescue->field('user_id',array('id'=>$rid));
+		if($owner == $uid) { return true; }
+		return false;
+	}
+
+	function rescue_admin($rid,$uid)
+	{
+		return $this->rescue_user($rid,$uid,array('admin'=>1));
+	}
+
+	function rescue_volunteer($rid,$uid) # Non-admin
+	{
+		return $this->rescue_user($rid,$uid,array('admin'=>0)); 
+	}
+	
+	function rescue_foster($rid,$uid)
+	{
+		return $this->RescueFoster->count(array('rescue_id'=>$rid,'user_id'=>$uid,'status'=>'Active'));
+	}
+
+	function rescue_user($rid,$uid,$cond=array()) 
+	{
+		if(empty($rid)) { $rid = $this->rescue_id; }
+		if(empty($uid)) { $uid = $this->me(); }
+		if(empty($rid) || empty($uid)) { return false;}
+
+		$cond['rescue_id'] = $rid;
+		$cond['user_id'] = $uid;
+		$cond['status'] = 'Active';
+
+		return $this->RescueVolunteer->count($cond);
+	}
+
+	function rescue_member($rid=null,$uid=null) # Owner or volunteer.
+	{
+		if(empty($rid)) { $rid = $this->rescue_id; }
+		if(empty($uid)) { $uid = $this->me(); }
+
+		error_log("RESC_MEM???? $rid,$uid");
+		if(empty($rid) || empty($uid)) { error_log("SOMETHING MISSING"); return false;}
+
+		if($this->rescue_owner($rid,$uid)) { error_log("OWNER"); return true; }
+		if($this->rescue_user($rid,$uid)) { error_log("USER"); return true; }
+		if($this->rescue_foster($rid,$uid)) { error_log("FOSTER"); return true; }
+		# Includes volunteer admins
+
+		error_log("NOPE, $uid NOT MEMBER OF $rid");
+
+		return false;
 	}
 
 }

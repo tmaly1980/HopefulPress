@@ -6,7 +6,7 @@ class User extends UserCore {
 	# Works for find() but not save() - since flag is probably not passed.
 	# Better to pass autosite=>false when wanted to bypass save() injecting site_id
 
-	var $autoid = false; # Don't force rescue_id to match when searching/logging in.
+	var $autoid = false; # Don't force rescue_id to match when searching/logging in/etc.
 
 	var $displayField = "name_email";
 
@@ -18,24 +18,15 @@ class User extends UserCore {
 
 	var $hasMany = array(
 		'RescueVolunteer'=>array('foreignKey'=>'user_id'),
+		'RescueFoster'=>array('foreignKey'=>'user_id'),
 	);
 
 	var $belongsTo = array(
 		'Rescue', # Possibly
+		# Maybe turn into hasOne???or hasMany?
 		'PagePhoto'=>array(
 			'className'=>'PagePhotos.PagePhoto'
 		),
 	);
-
-	var $hasAndBelongsToMany = array(
-		'Rescues'=>array( # Rescues we are volunteers for.
-			'className'=>'Rescue',
-			'joinTable'=>'rescue_volunteers',
-			'foreignKey'=>'rescue_id',
-			'associationForeignKey'=>'user_id',
-			'conditions'=>array('RescueVolunteer.status'=>'Active'),
-			'unique'=>true
-		),
-	);
-
+	
 }

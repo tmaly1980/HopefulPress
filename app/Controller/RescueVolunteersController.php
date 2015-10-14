@@ -3,44 +3,48 @@ App::uses('UsersController', 'Controller');
 class RescueVolunteersController extends AppController #UsersController # Easy inherit.
 {
 	var $uses  = array('RescueVolunteer','Volunteer','VolunteerForm','Adoptable');
+	var $thing = 'volunteer';
+	var $ucThing = 'Volunteer';
+	var $rescueThing = 'RescueVolunteer';
+	# Could be overrwritten by foster.
 
 	# Applying to a specific rescue.
 
 	function index()
 	{
-		$this->redirect(array('controller'=>'volunteer_page_indices'));#"/volunteer");
+		$this->redirect(array('controller'=>"{$this->thing}_page_indices"));
 	}
 
-	# Eventually it won't be the rescue's responsibility to manage other volunteer accounts, enable, send account invite, reset passwords, etc.
+	# Eventually it won't be the rescue's responsibility to manage other {$this->thing} accounts, enable, send account invite, reset passwords, etc.
 	function _invite($id)  # Setting to 'Active' alone might give them  access if they have an account, but regardless we should explicitly contact them.
 	{
 		# Either "a user account has been created for you" or "you have been granted access to"
 
-		$this->RescueVolunteer->id = $id;
-		$volunteer = $this->RescueVolunteer->read();
-		$email = $volunteer['Volunteer']['email'];
+		$this->{$this->rescueThing}->id = $id;
+		$person = $this->{$this->rescueThing}->read();
+		$email = $person["{$this->ucThing}"]['email'];
 		
 		$this->Rescue->recursive = -1;
-		$this->Rescue->id = $volunteer['RescueVolunteer']['rescue_id'];
+		$this->Rescue->id = $person["{$this->rescueThing}"]['rescue_id'];
 		$rescue = $this->Rescue->read();
 
 		$vars = array(
 			'rescue'=>$rescue,
-			'volunteer'=>$volunteer
+			$this->thing=>$person
 		);
 
 		Configure::write("site_title", $rescue['Rescue']['title']);  # For emails...
 
-		if($user_id = $volunteer['Volunteer']['user_id']) { # User already assigned (to profile).
+		if($user_id = $person[$this->ucThing]['user_id']) { # User already assigned (to profile).
 			$user = $this->User->read(null,$user_id);
 
 		} else if (($user = $this->User->findByEmail($email)) && !empty($user)) { # Already signed up.
 			# that's it
 
 		} else {  # Create  user account...
-			if(!$this->User->save($volunteer['Volunteer'])) # Email, first_name, last_name
+			if(!$this->User->save($person[$this->ucThing])) # Email, first_name, last_name
 			{
-				return $this->setError("Could not create user account for volunteer");
+				return $this->setError("Could not create user account for {$this->thing}");
 			}
 			$user = $this->User->read();
 		}
@@ -60,19 +64,19 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 		}
 		$vars['user'] = $user;
 
-		# Assign that user_id to the volunteer account...
-		$this->RescueVolunteer->saveField("user_id",$user_id);
+		# Assign that user_id to the {$this->thing} account...
+		$this->{$this->rescueThing}->saveField("user_id",$user_id);
 
 		# Save profile too, so they can modify it, use it later, etc.
-		$this->RescueVolunteer->Volunteer->id = $volunteer['Volunteer']['id'];
-		$this->RescueVolunteer->Volunteer->saveField("user_id",$user_id);
+		$this->{$this->rescueThing}->{$this->ucThing}->id = $person[$this->ucThing]['id'];
+		$this->{$this->rescueThing}->{$this->ucThing}->saveField("user_id",$user_id);
 
 		# **** how do we give them a url that'll go directly to the rescue once  they log in (ie if not dedicated url) ???????
 
 		# pass  'redirect' field, that gets saved to Auth.redirect
 
 
-		$this->sendUserEmail($user_id, "Volunteer access","rescue/volunteer_invited",$vars);
+		$this->sendUserEmail($user_id, "{$this->ucThing} access","rescue/{$this->thing}_invited",$vars);
 
 		$name = !empty($user['User']['first_name']) ? $user['User']['first_name'] : "The user";
 		$email = $user['User']['email'];
@@ -81,81 +85,84 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 
 	function admin_edit($id=null)
 	{
-		$this->RescueVolunteer->autouser = false; # DOnt save as ours.
-		$this->RescueVolunteer->Volunteer->autouser = false; # DOnt save as ours.
+		$this->{$this->rescueThing}->autouser = false; # DOnt save as ours.
+		$this->{$this->rescueThing}->{$this->ucThing}->autouser = false; # DOnt save as ours.
 
 		if(!empty($this->request->data))
 		{
 			# Don't save to user account
-			if($this->RescueVolunteer->saveAll($this->request->data))
+			if($this->{$this->rescueThing}->saveAll($this->request->data))
 			{
-				if(!empty($this->request->data['RescueVolunteer']['invite']))
+				if(!empty($this->request->data[$this->rescueThing]['invite']))
 				{
 					return $this->_invite($id);
 				}
-				$this->setSuccess("The volunteer application has been ".($id?"updated. ":"submitted. "), array('action'=>'index'));
+				$this->setSuccess("The {$this->thing} application has been ".($id?"updated. ":"submitted. "), array('action'=>'index'));
 			} else {
-				$this->setError("Could not submit application. ".$this->Volunteer->errorString());
+				$this->setError("Could not submit application. ".$this->{$this->ucThing}->errorString());
 
 			}
 		} 
 
 		if(!empty($id))
 		{
-			$this->request->data = $this->RescueVolunteer->read(null, $id);
+			$this->request->data = $this->{$this->rescueThing}->read(null, $id);
 		}
 
-		$this->set("volunteerForm", $this->VolunteerForm->singleton());
+		$thingForm = $this->ucThing."Form";
+		$this->set("{$this->thing}Form", $this->{$thingForm}->singleton());
 		$this->set("adoptables", $this->Adoptable->find('list',array('conditions'=>array('status'=>'Available'))));
-		$this->set("statuses", $this->RescueVolunteer->dropdown('statuses'));
+		$this->set("statuses", $this->{$this->rescueThing}->dropdown('statuses'));
 	}
 
 	function edit()
 	{
-		# Don't save to user account if already signed in as a volunteer/rescuer with the rescue. ie doing for others.
+		# Don't save to user account if already signed in as a volunteer/foster with the rescue. ie doing for others.
 		if($this->rescue_member())
 		{
-			$this->RescueVolunteer->autouser = false;
-			$this->RescueVolunteer->Volunteer->autouser = false;
+			$this->{$this->rescueThing}->autouser = false;
+			$this->{$this->rescueThing}->{$this->ucThing}->autouser = false;
 		}
 
 		if(!empty($this->request->data))
 		{
-			# XXX even if they have a full volunteer application finished, we still should probably ask for 
+			# XXX even if they have a full volunteer/etc application finished, we still should probably ask for 
 			# "what you'd like to contribute/what you have to offer", etc for this specific instance.
 			#
-			if($this->RescueVolunteer->saveAll($this->request->data)) # Will save changes to volunteer profile as needed.#
+			if($this->{$this->rescueThing}->saveAll($this->request->data)) # Will save changes to {$this->thing} profile as needed.#
 			{
 				# Maybe later send to someone else with a specific role.
-				$this->sendVolunteerEmail($this->RescueVolunteer->read());
-				$this->setSuccess("Your volunteer application has been submitted. Someone will contact you shortly.", array('action'=>'index'));
+				$sendEmail = "send".$this->ucThing."Email";
+				$this->$sendEmail($this->{$this->rescueThing}->read());
+				$this->setSuccess("Your {$this->thing} application has been submitted. Someone will contact you shortly.", array('action'=>'index'));
 			} else {
-				$this->setError("Could not submit application. ".$this->RescueVolunteer->errorString());
+				$this->setError("Could not submit application. ".$this->{$this->rescueThing}->errorString());
 
 			}
 		} 
 
-		$this->set("volunteerForm", $this->VolunteerForm->first());
+		$this->set("{$this->thing}Form", $this->{$this->ucThing}Form->first());
 		$this->set("adoptables", $this->Adoptable->find('list',array('conditions'=>array('status'=>'Available'))));
-		$this->set("statuses", $this->RescueVolunteer->statuses);
+		$this->set("statuses", $this->{$this->rescueThing}->statuses);
 	}
 
 	function admin_index()
 	{
-		$this->set("volunteers", $this->RescueVolunteer->find('all',array('conditions'=>array('status'=>'Active'))));
-		$this->set("offlineVolunteers", $this->RescueVolunteer->find('all',array('conditions'=>array('status'=>'Active Offline'))));
-		$this->set("applicants", $this->RescueVolunteer->find('all',array('conditions'=>array('status'=>'Applied'))));
-		$this->set("inactives", $this->RescueVolunteer->find('all',array('conditions'=>array('status'=>'Inactive'))));
-		$this->set("ignoreds", $this->RescueVolunteer->find('all',array('conditions'=>array('status'=>'Ignored'))));
+		$this->set("{$this->thing}s", $this->{$this->rescueThing}->find('all',array('conditions'=>array('status'=>'Active'))));
+		$this->set("offline{$this->ucThing}s", $this->{$this->rescueThing}->find('all',array('conditions'=>array('status'=>'Active Offline'))));
+		$this->set("applicants", $this->{$this->rescueThing}->find('all',array('conditions'=>array('status'=>'Applied'))));
+		$this->set("inactives", $this->{$this->rescueThing}->find('all',array('conditions'=>array('status'=>'Inactive'))));
+		$this->set("ignoreds", $this->{$this->rescueThing}->find('all',array('conditions'=>array('status'=>'Ignored'))));
 	}
 
+	/* disabled.
 	function admin_status($id)
 	{
 		if(!empty($this->request->data))
 		{
-			if($this->RescueVolunteer->save($this->request->data))
+			if($this->{$this->rescueThing}->save($this->request->data))
 			{
-				if(!empty($this->request->data['RescueVolunteer']['invite']))
+				if(!empty($this->request->data[$this->rescueThing]['invite']))
 				{
 					# XXX TODO
 					return $this->_invite($id);
@@ -164,15 +171,16 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 					$this->setSuccess("Status updated",array('action'=>'index')); 
 				}
 			} else {
-				$this->setError("Could not update status: ".$this->RescueVolunteer->errorString(),array('action'=>'index'));
+				$this->setError("Could not update status: ".$this->{$this->rescueThing}->errorString(),array('action'=>'index'));
 			}
 		}
-		$this->request->data = $this->RescueVolunteer->read(null,$id);
-		$this->set("statuses", $this->RescueVolunteer->statuses);
+		$this->request->data = $this->{$this->rescueThing}->read(null,$id);
+		$this->set("statuses", $this->{$this->rescueThing}->statuses);
 	}
+	*/
 
 	function admin_view($id=null)
 	{
-		$this->set("rescueVolunteer", $this->RescueVolunteer->read(null,$id));
+		$this->set("rescue{$this->ucThing}", $this->{$this->rescueThing}->read(null,$id));
 	}
 }

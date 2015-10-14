@@ -21,7 +21,7 @@
 		<li class='dropdown <?= in_array($controller,$peopleControllers) ? "active":"" ?>'> 
 			<?= $this->Html->link("My People ".$this->Html->caret(),'javascript:void(0)',array('class'=>"dropdown-toggle",'data-toggle'=>'dropdown')); ?> 
 			<ul class='dropdown-menu' role='menu'>
-				<li class=''> <?= $this->Html->link("Adopters",array('plugin'=>null,'user'=>1,'controller'=>'adoptions')); ?> </li>
+				<li class=''> <?= $this->Html->link("Adopters",array('plugin'=>null,'user'=>1,'controller'=>'rescue_adopters')); ?> </li>
 				<li class=''> <?= $this->Html->link("Fosters",array('plugin'=>null,'admin'=>1,'controller'=>'rescue_fosters')); ?> </li>
 				<li class=''> <?= $this->Html->link("Volunteers",array('plugin'=>null,'admin'=>1,'controller'=>'rescue_volunteers')); ?> </li>
 			</ul>
@@ -50,7 +50,7 @@
       <? if($this->Rescue->dedicated()) { ?>
       	<?= $this->element("portal/login"); ?>
       <? } ?>
-      <? if($this->Rescue->rescuer()) { #request->params['controller'] == 'rescues' && $this->request->params['action'] == 'view') { # ONLY SHOW ON HOME PAGE ?>
+      <? if($this->Rescue->admin()) { #request->params['controller'] == 'rescues' && $this->request->params['action'] == 'view') { # ONLY SHOW ON HOME PAGE ?>
       <ul class='nav navbar-right'>
       	<li>
 		<div class='paddingright10'>
