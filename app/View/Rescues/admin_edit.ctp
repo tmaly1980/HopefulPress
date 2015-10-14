@@ -24,7 +24,7 @@
 <div id='intro' class='tab-pane active'>
 	<div class='row'>
 		<div class='col-md-2'>
-			<?= $this->element("PagePhotos.edit",array('modelClass'=>'Rescue.RescueLogo'));  ?>
+			<?= $this->element("PagePhotos.edit",array('photoModel'=>'RescueLogo'));  ?>
 		</div>
 		<div class='col-md-10 row'>
 			<div class='row'>
@@ -62,14 +62,14 @@
 		<div class='alert alert-info'>
 			Add a banner to show at the top of your home page.
 		</div>
-		<?= $this->element("PagePhotos.edit",array('modelClass'=>'Rescue.PagePhoto'));  ?>
+		<?= $this->element("PagePhotos.edit",array('photoModel'=>'PagePhoto'));  ?>
 	</div>
 	<div class='col-md-6'>
 		<h3>About page photo</h3>
 		<div class='alert alert-info'>
 			Add a picture with members for your 'About Us' page
 		</div>
-		<?= $this->element("PagePhotos.edit",array('modelClass'=>'Rescue.AboutPhoto'));  ?>
+		<?= $this->element("PagePhotos.edit",array('photoModel'=>'AboutPhoto'));  ?>
 	</div>
 	</div>
 	<?= $this->Form->input("about",array('label'=>'Tell the world a bit about your rescue','rows'=>5)); ?>

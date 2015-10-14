@@ -163,7 +163,7 @@ class RescuesController extends AppController
 		$this->set("plan", $plan);
 	}
 
-	function rescuer_edit() # Signup/edit
+	function admin_edit() # Signup/edit
 	{
 		# Prompt for Rescue record.
 		if(!empty($this->request->data))

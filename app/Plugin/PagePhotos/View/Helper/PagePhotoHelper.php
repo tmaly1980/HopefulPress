@@ -22,6 +22,8 @@ class PagePhotoHelper extends AppHelper
 		);
 		$vars = array_merge($defaults,$params);
 
+		if(empty($vars['photoAlias'])) { $vars['photoAlias'] = $vars['photoModel']; } # Set before load config since config might revert to PagePhoto (as alias)
+
 		
 		# Support per-parent customization in app's config file; sharing PagePhoto  (no need for custom model)
 		Configure::load("pagePhoto");
@@ -41,7 +43,6 @@ class PagePhotoHelper extends AppHelper
 
 		if(!isset($vars['plugin'])) { $vars['plugin'] = ($vars['photoModel'] == 'PagePhoto' ? 'page_photos' : null); }
 
-		if(empty($vars['photoAlias'])) { $vars['photoAlias'] = $vars['photoModel']; }
 
 		if(empty($vars['controller'])) {
 			$vars['controller'] = Inflector::pluralize(Inflector::underscore($vars['photoModel'])); # Implied from model class.

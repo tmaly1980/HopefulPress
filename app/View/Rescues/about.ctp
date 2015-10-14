@@ -7,7 +7,7 @@
 <div class="pages form">
 
 	<div class='minheight100'>
-			<?= $this->element("PagePhotos.view",array('modelClass'=>'Rescue.AboutPhoto')); ?>
+			<?= $this->element("PagePhotos.view",array('photoModel'=>'AboutPhoto')); ?>
 	<? if(empty($rescue['Rescue']['about']) && empty($rescue['Rescue']['history']) && $this->Html->can_edit()) { ?>
 		<div class='alert alert-info'>
 			You haven't filled out any information about your organization yet.
