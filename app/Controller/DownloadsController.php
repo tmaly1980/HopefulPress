@@ -4,13 +4,14 @@ class DownloadsController extends ListItemsController
 {
 	function index()
 	{
-		return $this->redirect(array('controller'=>'download_pages','action'=>'view','project_id'=>$this->pid())); # What OUR "index" page should be.
+		$controller = Inflector::underscore(Inflector::singular($this->modelClass)."Pages");
+		return $this->redirect(array('controller'=>$controller,'action'=>'view')); # What OUR "index" page should be.
 	}
 
 	function download($id = null)
 	{
 		#$this->track();
-		if(!$this->Download->echoFileContent($id))
+		if(!$this->{$this->modelClass}->echoFileContent($id))
 		{
 			return $this->invalid();
 		}

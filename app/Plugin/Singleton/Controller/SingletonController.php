@@ -7,12 +7,16 @@ class SingletonController extends AppController
 	{
 		if(!$this->model()->hasField("disabled"))
 		{
+			error_log("EN_ADD");
 			$this->redirect(array('action'=>'add'));
 		} else {
-			if($this->model()->count())
+			$this->model()->id = $this->model()->first_id();
+			if($this->model()->id)
 			{
+				error_log("EXISTS, set dis=0");
 				$this->model()->saveField("disabled", 0);
 			} else {
+				error_log("NOT EXISTS, new sing()");
 				$this->model()->singleton();
 			}
 			$this->redirect(array('action'=>'index'));
@@ -25,7 +29,8 @@ class SingletonController extends AppController
 		{
 			$this->redirect(array('action'=>'delete'));
 		} else {
-			if($this->model()->count())
+			$this->model()->id = $this->model()->first_id();
+			if($this->model()->id)
 			{
 				$this->model()->saveField("disabled", 1);#date("Y-m-d H:i:s"));
 			} # Else, not there, no issue.
@@ -45,7 +50,9 @@ class SingletonController extends AppController
 		} else {
 			$data = $this->{$this->modelClass}->singleton();
 		}
-		$this->set($this->{$this->modelClass}->thingVar(), $data);
+		$var = $this->{$this->modelClass}->thingVar();
+		error_log("SETTING $var");
+		$this->set($var,$data);
 	}
 
 	function edit()

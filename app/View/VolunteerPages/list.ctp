@@ -2,7 +2,7 @@
 <div id="<?= !empty($id) ? $id : null; ?>" class='pagelist'>
 	<? 
 	foreach ($pages as $page) { 
-		echo $this->element("Rescue.../VolunteerPages/listitem", array('page'=>$page));
+		echo $this->element("../VolunteerPages/listitem", array('page'=>$page));
 	}
 	?>
 </div>

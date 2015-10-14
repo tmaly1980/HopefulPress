@@ -2,7 +2,7 @@
 App::uses('UsersController', 'Controller');
 class RescueVolunteersController extends AppController #UsersController # Easy inherit.
 {
-	var $uses  = array('RescueVolunteer','Volunteer','VolunteerPageForm','Adoptable');
+	var $uses  = array('RescueVolunteer','Volunteer','VolunteerForm','Adoptable');
 
 	# Applying to a specific rescue.
 
@@ -15,7 +15,7 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 	{
 		if(!empty($this->request->data))
 		{
-			if($this->RescueVolunteer->save($this->request->data))
+			if($this->RescueVolunteer->saveAll($this->request->data))
 			{
 				/* ?????
 				# Can also set 'status' field...
@@ -38,7 +38,7 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 			$this->request->data = $this->RescueVolunteer->read(null, $id);
 		}
 
-		$this->set("volunteerForm", $this->VolunteerPageForm->singleton());
+		$this->set("volunteerForm", $this->VolunteerForm->singleton());
 		$this->set("adoptables", $this->Adoptable->find('list',array('conditions'=>array('status'=>'Available'))));
 		$this->set("statuses", $this->RescueVolunteer->statuses);
 	}
@@ -53,7 +53,7 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 			if($this->RescueVolunteer->saveAll($this->request->data)) # Will save changes to volunteer profile as needed.#
 			{
 				# Maybe later send to someone else with a specific role.
-				$this->sendVolunteerEmail($this->Volunteer->read());
+				$this->sendVolunteerEmail($this->RescueVolunteer->read());
 				$this->setSuccess("Your volunteer application has been submitted. Someone will contact you shortly.", array('action'=>'index'));
 			} else {
 				$this->setError("Could not submit application. ".$this->RescueVolunteer->errorString());
@@ -61,7 +61,7 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 			}
 		} 
 
-		$this->set("volunteerForm", $this->VolunteerPageForm->first());
+		$this->set("volunteerForm", $this->VolunteerForm->first());
 		$this->set("adoptables", $this->Adoptable->find('list',array('conditions'=>array('status'=>'Available'))));
 		$this->set("statuses", $this->RescueVolunteer->statuses);
 	}

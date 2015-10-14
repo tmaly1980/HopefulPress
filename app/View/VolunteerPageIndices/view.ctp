@@ -1,30 +1,30 @@
-<? $overview = $volunteerOverview; ?>
-<?= $this->assign("page_title", !empty($overview['VolunteerPageIndex']['title']) ? $overview['VolunteerPageIndex']['title'] : "Volunteer Information"); ?>
-<? if(empty($volunteerOverview['VolunteerPageIndex']['id'])) { ?>
+<? $index = $volunteerPageIndex; ?>
+<?= $this->assign("page_title", !empty($index['VolunteerPageIndex']['title']) ? $index['VolunteerPageIndex']['title'] : "Volunteer Information"); ?>
+<? if(empty($index['VolunteerPageIndex']['id'])) { ?>
 <div class='dashed alert alert-info'>
 	Volunteer information and forms are not currently available.
 	<? if($this->Html->can_edit()) { ?>
-		<?= $this->Html->add("Enable volunteer page", array('admin'=>1,'action'=>'enable'),array('short'=>false)); ?>
+		<?= $this->Html->add("Enable page", array('admin'=>1,'action'=>'enable'),array('short'=>false)); ?>
 	<? } ?>
 </div>
 <? } else { ?>
 <? if($this->Html->can_edit()) { ?>
 <? $this->start("title_controls"); ?>
 	<?= $this->Html->edit("Edit introduction", array('admin'=>1,'action'=>'edit')); ?>
-	<?= $this->Html->delete("Hide volunteer page", array('admin'=>1,'action'=>'disable'),array('confirm'=>'Are you sure you want to hide all volunteer information? You can always enable it again at any time.')); ?>
+	<?= $this->Html->remove("Hide page", array('admin'=>1,'action'=>'disable'),array('confirm'=>'Are you sure you want to hide all volunteer information? You can always enable it again at any time.')); ?>
 <? $this->end(); ?>
 <? } ?>
 
-<? if(!empty($overview['VolunteerPageIndex']['introduction']) || !empty($overview['VolunteerPageIndex']['page_photo_id']) || $this->Html->can_edit()) { ?>
+<? if(!empty($index['VolunteerPageIndex']['introduction']) || !empty($index['VolunteerPageIndex']['page_photo_id']) || $this->Html->can_edit()) { ?>
 <div class='view row'>
 	<div class='col-md-4 pull-right'>
 		<?= $this->element("PagePhotos.view"); ?>
 	</div>
 
 	<div class='col-md-8 push-left padding25'>
-		<? if(!empty($overview['VolunteerPageIndex']['introduction'])) { ?>
+		<? if(!empty($index['VolunteerPageIndex']['introduction'])) { ?>
 		<div id='VolunteerPageIndex_Introduction' class='medium double'>
-			<?= $overview['VolunteerPageIndex']['introduction'] ?>
+			<?= $index['VolunteerPageIndex']['introduction'] ?>
 		</div>
 		<? } else if($this->Html->me()) { ?>
 		<div class='dashed alert alert-info'>
@@ -42,7 +42,7 @@
 </div>
 <? } ?>
 
-<?= $this->element("rescue/overview_details",array('type'=>'volunteer','form_link'=>false)); ?>
+<?= $this->element("rescue/page_index_details",array('type'=>'volunteer','form_link'=>false)); ?>
 
 <? } ?>
 
@@ -63,7 +63,7 @@
 
 <div class='row'>
 <div class='col-md-9'>
-<? if($this->Site->can_edit()) { # By default, only owner can add sub page - and then can re-assign ?>
+<? if($this->Html->can_edit()) { # By default, only owner can add sub page - and then can re-assign ?>
 	<div class='right'>
 		<? if(count($pages) > 1) { # && $in_admin && $this->Admin->access()) { ?>
 			<?= $this->Html->blink("sort", "Resort", "javascript:void(0)",array('id'=>'Subpage_sorter')); ?>
@@ -71,7 +71,7 @@
 	</div>
 <? } ?>
 
-<? if($this->Site->can_edit()) { # By default, only owner can add sub page - and then can re-assign ?>
+<? if($this->Html->can_edit()) { # By default, only owner can add sub page - and then can re-assign ?>
 
 	<div class='right'>
 		<? if(count($downloads) > 1) { # && $in_admin && $this->Admin->access()) { ?>

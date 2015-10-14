@@ -68,6 +68,7 @@ class AppController extends AppCoreController {
 		'Rescue',
 		'Share'=>array('className'=>'Sharable.Share'),
 		'Less'=>array('className'=>'CakeLess.Less'),
+		'PagePhotos.PagePhoto',
 		'Facebook.Facebook',
 	);
 	var $uses = array(
@@ -78,7 +79,12 @@ class AppController extends AppCoreController {
 		'Resource',
 		'NewsPost','Event','PhotoAlbum',
 		'AboutPageBio',
-		'Contact'
+		'Contact',
+		'VolunteerPageIndex',
+		'FosterPageIndex',
+		'VolunteerForm',
+		'FosterForm',
+		'AdoptionForm',
 		/*
 		'Page',
 		'AboutPage',
@@ -611,7 +617,14 @@ class AppController extends AppCoreController {
 			$nav['photoCount'] = $this->PhotoAlbum->count(array('rescue_id'=>$rescue_id));
 			$nav['resourceCount'] = $this->Resource->count(array('rescue_id'=>$rescue_id));
 
-			$nav['adoptionEnabled']=$nav['adoptableCount'] + $nav['adoptionStoryCount'];
+			$nav['adoptionEnabled']= $nav['adoptableCount'] + $nav['adoptionStoryCount'] ;
+
+			$nav['volunteerEnabled'] = !$this->VolunteerPageIndex->count(array('disabled'=>1)); # Not explicitly disabled (default enabled)
+			$nav['volunteerFormEnabled'] = !$this->VolunteerForm->count(array('disabled'=>1)); # Not explicitly disabled (default enabled)
+			$nav['fosterEnabled'] = !$this->FosterPageIndex->count(array('disabled'=>1)); # Not explicitly disabled (default enabled)
+			$nav['fosterFormEnabled'] = !$this->FosterForm->count(array('disabled'=>1)); # Not explicitly disabled (default enabled)
+
+			$nav['adoptionFormEnabled'] = !$this->AdoptionForm->count(array('disabled'=>1)); # Not explicitly disabled (default enabled)
 
 			if(!empty($rescue['Rescue']['paypal_email']))
 			{

@@ -160,29 +160,31 @@ class PagePhotosController extends AppController
 		}
 	}
 
-	function upload($parentClass,$id=null) # Replace?
+	function upload($parentClass,$photoModel='PagePhoto',$id=null) # Replace?
 	{
 		error_log("UPLOAD");
-		return $this->edit($parentClass,$id);
+		return $this->edit($parentClass,$photoModel,$id);
 	}
 
-	function crop($parentClass,$id=null)
+	function crop($parentClass,$photoModel='PagePhoto',$id=null)
 	{
-		$this->set("modelClass",$parentClass); # Custom views/modals
+		$this->set("parentClass",$parentClass); # Custom views/modals
+		$this->set("photoModel",$photoModel); # Might just be an alias. If we really dont use PagePhoto, we need a custom controller w/uses set proper
 		$this->set("model_id",$id);
 		extract($this->vars());#$parentClass));
 
 		error_log("CROP CALLED");
-		$this->edit($parentClass,$id,true); # Process first.
+		$this->edit($parentClass,$photoModel,$id,true); # Process first.
 		error_log("CROP CONTINUED, DONE WITH EDIT");
 
 
 		$this->request->data = !empty($id) ? $this->{$this->modelClass}->read(null, $id) : array();
 	}
 
-	function edit($parentClass,$id = null, $incrop = false) 
+	function edit($parentClass,$photoModel='PagePhoto',$id = null, $incrop = false) 
 	{ # Model passed is parent object. We know who we are.
-		$this->set("modelClass",$parentClass); # So views can be custom.
+		$this->set("parentClass",$parentClass); # So views can be custom.
+		$this->set("photoModel",$photoModel); 
 		$this->set("model_id",$id);
 
 		extract($this->vars());#$pluginModelClass));

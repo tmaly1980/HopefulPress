@@ -1,14 +1,25 @@
 <?
-class RescueVolunteer extends AppModel
+class RescueVolunteer extends AppModel # Application for specific rescue.
 {
-	var $order = "RescueVolunteer.status ASC";
-
-	# DROPDOWNS
-	var $statuses = array('Applied'=>'Applied','Active'=>'Active','Inactive'=>'Inactive','Rejected'=>'Rejected');#Received','Pending','Accepted','Denied');
+	var $actsAs  = array(
+		# Which works?
+		'Core.JsonColumn'=>array('fields'=>array('data','home_details')), # Do this first.
+		'Core.CommaSeparated',
+	);
 
 	var $belongsTo = array(
-		'User',
 		'Rescue',
+		'User',
+		'Volunteer',
 	);
+
+	/*
+	function beforeValidate($options=array())
+	{
+		$this->validate['email']['isUnique']['message'] = "An application has already been submitted with that email.";
+		return parent::beforeValidate();
+	}
+	*/
+
 
 }

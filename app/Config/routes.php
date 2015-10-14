@@ -155,6 +155,10 @@ if (HostInfo::hostname() == 'todo') {
 	Router::connect("$specifier/about", array('controller' => 'rescues', 'action' => 'about'),$params);
 	Router::connect("$specifier/contact", array('controller' => 'rescues', 'action' => 'contact'),$params);
 	Router::connect("$specifier/resources", array('controller' => 'resource_pages', 'action' => 'view'),$params);
+
+	Router::connect("$specifier/volunteer", array('controller' => 'volunteer_page_indices', 'action' => 'view'),$params);
+	Router::connect("$specifier/foster", array('controller' => 'foster_page_indices', 'action' => 'view'),$params);
+
 	Router::connect("$specifier/donate", array('plugin'=>'donation','controller' => 'donation_pages', 'action' => 'view'),$params);
 	Router::connect("$specifier/donate/:action", array('plugin'=>'donation','controller' => 'donations'),$params);
 	Router::connect("$specifier/donate/:action/*", array('plugin'=>'donation','controller' => 'donations'),$params);

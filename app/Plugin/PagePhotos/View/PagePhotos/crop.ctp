@@ -1,33 +1,4 @@
-<?
-if(empty($modelClass)) { echo "ERROR: Unable to determine photo page settings"; return; }
-# Support per-model customization in app's config file
-Configure::load("pagePhoto");
-$config = Configure::read("PagePhoto.$modelClass");
-
-$scaledWidth = 300; 
-if(!empty($config['scaledWidth'])) { $scaledWidth = $config['scaledWidth']; }
-
-$placeholder = "/page_photos/images/add-a-picture.png"; 
-if(!empty($config['placeholder'])) { $placeholder = $config['placeholder']; }
-
-$photoModel = 'PagePhoto';
-if(!empty($config['photoModel'])) { $photoModel= $config['photoModel']; }
-
-$plugin = 'page_photos';
-if(isset($config['plugin'])) { $plugin= $config['plugin']; } # false allowed
-
-$controller = Inflector::pluralize(Inflector::underscore($photoModel)); # Implied from model class.
-if(!empty($config['controller'])) { $controller= $config['controller']; }
-
-$primaryKey = 'page_photo_id';
-if(!empty($config['primaryKey'])) { $primaryKey= $config['primaryKey']; }
-
-$thing = "picture";
-if(!empty($config['thing'])) { $thing= $config['thing']; }
-
-$ucThing = ucfirst($thing);
-
-?>
+<? extract($this->PagePhoto->config(compact('parentClass','photoModel'))); ?>
 <script>
 $.dialogheaderhide();
 </script>
@@ -37,7 +8,7 @@ $page_photo_id = $this->Form->fieldValue("$photoModel.id");
 ?>
 <?= $this->element("Image.js"); ?>
 <div id='<?=$photoModel?>Cropper'>
-<?= $this->Form->create($photoModel, array('url'=>array('plugin'=>$plugin,'controller'=>$controller,'action'=>'crop',$modelClass,$model_id),'class'=>'json')); ?>
+<?= $this->Form->create($photoModel, array('url'=>array('plugin'=>$plugin,'controller'=>$controller,'action'=>'crop',$parentClass,$photoModel,$model_id),'class'=>'json')); ?>
 
 <div class='right'>
 	<button type='button' class='btn btn-danger' id='<?=$photoModel?>CropperCancel'><span class='glyphicon glyphicon-remove'></span> Cancel</button>

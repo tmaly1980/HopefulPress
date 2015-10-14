@@ -11,7 +11,7 @@ if(!empty($page['VolunteerPage'])) { $page = $page['VolunteerPage']; } # Share w
 	<? if(!empty($children)) { ?>
 	<div class='children sortablehide marginleft25' Xstyle="display: none;" id="Children_<?= $page['id'] ?>">
 		<? foreach($children as $childpage) { ?>
-		<?= $this->element("Rescue.../VolunteerPages/listitem", array('page'=>$childpage)); ?>
+		<?= $this->element("../VolunteerPages/listitem", array('page'=>$childpage)); ?>
 		<? } ?>
 	</div>
 	<? } ?>

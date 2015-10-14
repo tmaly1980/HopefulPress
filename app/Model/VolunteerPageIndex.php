@@ -2,7 +2,7 @@
 class VolunteerPageIndex extends AppModel
 {
 	var $actsAs  = array(
-		'Singleton.Singleton',
+		'Singleton.Singleton'=>'rescue_id',
 	);
 
 	var $belongsTo = array(

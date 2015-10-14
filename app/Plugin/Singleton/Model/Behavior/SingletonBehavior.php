@@ -6,6 +6,7 @@ class SingletonBehavior extends ModelBehavior
 	);
 
   	public function setup(Model $Model, $config = array()) {
+		if(!is_array($config) && !empty($config)) { $config = array('field'=>$config); }
                 if (isset($config[0])) {
                         $config['field'] = $config[0];
                         unset($config[0]);
@@ -75,10 +76,26 @@ class SingletonBehavior extends ModelBehavior
 	function singleton(Model $model) # AUTO create record if not there...
 	{
 		$field = $this->settings[$model->alias]['field'];
-		#error_log("CALLING SINGLETON ON {$model->alias}");
+		error_log("CALLING SINGLETON ON {$model->alias} F=$field");
 		$model->id = false;
-		$record = $model->first();
-		if(!empty($field) && empty($record) && Configure::read($field))
+		if(empty($field) || !$model->hasField($field))
+		{
+			throw new notFoundException("OOPS, {$model->alias} is MISCONFIGURED, $field NOT FOUND");
+		}
+		if(!Configure::read($field))
+		{
+			throw new notFoundException("OOPS, {$model->alias} depends on $field, BUT NOT AVAILABLE");
+		}
+
+		# Hide disabled singletons.
+		$cond = array();
+		if($model->hasField("disabled"))
+		{
+			$cond[] = "({$model->alias}.disabled IS NULL OR {$model->alias}.disabled = 0)";
+		}
+
+		$record = $model->first($cond);
+		if(empty($record) && !$model->hasField("disabled"))
 		{
 			$model->create();
 			$model->save();

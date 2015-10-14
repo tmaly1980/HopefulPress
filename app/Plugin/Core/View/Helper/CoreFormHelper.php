@@ -11,7 +11,7 @@ class CoreFormHelper extends BoostCakeFormHelper
 	var $yesnobool = array(0=>'No',1=>'Yes');
 
 	# No difference between blanks and 0, so must use words.
-	var $yesno = array('No'=>'No','No'=>'Yes');
+	var $yesno = array('No'=>'No','Yes'=>'Yes');
 	var $yesnona = array(''=>'- N/A -','No'=>'No',"Yes"=>'Yes');
 	var $yesnoblank = array(''=>' - ','No'=>'No','Yes'=>'Yes');
 
@@ -486,6 +486,8 @@ class CoreFormHelper extends BoostCakeFormHelper
 		if(empty($model)) { $model = $this->model(); }
 
 		#echo("GETTING $model/$field=".print_r($data,true));
+
+		error_log("GETTING $model . $field=".print_r($data,true));
 
 		return isset($data[$model][$field]) ?
 			$data[$model][$field] : null;

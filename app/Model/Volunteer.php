@@ -9,9 +9,13 @@ class Volunteer extends AppModel # PROFILE/APPLICATION
 	#var $order = "Volunteer.status ASC";
 
 	var $belongsTo = array(
-		'PagePhoto'=>array('className'=>'PagePhotos.PagePhoto'),
+		#'PagePhoto'=>array('className'=>'PagePhotos.PagePhoto'),
 		'User',
 		#'Adoptable'=>array('className'=>'Rescue.Adoptable','foreignKey'=>'adoptable_id')
+	);
+
+	var $hasMany = array(
+		'RescueVolunteer', # Hopefully on a rescue, this will filtr to just to THAT rescue's record.
 	);
 
 	/*

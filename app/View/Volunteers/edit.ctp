@@ -1,28 +1,6 @@
 <?
 $id = !empty($this->request->data['Volunteer']['id']) ? $this->request->data['Volunteer']['id'] : null;
-$availabilities = array(
-	'Weekends',
-	'Weekdays',
-	'Mornings',
-	'Afternoon',
-	'Evenings',
-	'Varies'
-);
-$interests = array(
-	'Volunteering',
-	'Administration/Clerical',
-	'Publicity (fliers, brochures, newsletters)',
-	'Medical Team',
-	'Fundraising/Events',
-	'Grant Writing',
-	'Transportation',
-	'Adoptions/Consulting',
-	'Adoptions/Adoption days',
-	'Phones',
-	'Other'
-);
-?>
-<? if(true) {#!$this->Rescue->dedicated()) { # Will have to figure out how to handle dealing with dedicated sites
+<? if(false) {#!$this->Rescue->dedicated()) { # Will have to figure out how to handle dealing with dedicated sites
 
 # ???? how would a volunteer be able to sign-in if not permitted yet on this dedicated site?
 # Deny them access to /user/* - but give them a useful error message: 'sorry, only volunteers for RESCUE can do that. If youd like to apply as a volunteer, send a request'
@@ -60,23 +38,12 @@ $interests = array(
 
 	<?= $this->Form->create("Volunteer"); ?>
 		<?= $this->Form->hidden("id"); ?>
-		<?= $this->element("Rescue.forms/admin_status"); ?>
-		<?= $this->element("Rescue.forms/about"); ?>
-		<?= $this->element("Rescue.forms/home"); ?>
+
+		<?= $this->element("forms/admin_status"); ?>
+		<?= $this->element("forms/about"); ?>
+		<?= $this->element("forms/home"); ?>
+		<?= $this->element("forms/volunteer"); ?>
 		<hr/>
-
-		<?= $this->Form->input("Volunteer.data.over_18", array('div'=>'col-md-3','label'=>"I am over 18", "required"=>true, 'type'=>'select','options'=>$this->Form->yesno,'default'=>''));  ?>
-
-		<div class='inline-checkbox'>
-		<?= $this->Form->input("Volunteer.availability",array('type'=>'checkbox','legend'=>'I am available (check all that apply):','options'=>array_combine($availabilities,$availabilities))); ?>
-		<?= $this->Form->input("Volunteer.interests",array('type'=>'checkbox','legend'=>'I am interested in:','options'=>array_combine($interests,$interests))); ?>
-		</div>
-
-		<?= $this->Form->input("Volunteer.experience",array('type'=>'textarea','label'=>'Prior experience with animal welfare (list name and location of organizations, if any)','rows'=>4)); ?>
-
-
-		<hr/>
-
 	<? if(!empty($volunteerForm['VolunteerForm']['acknowledgment'])){ ?>
 	<h3>Acknowledgment/Disclaimer</h3>
 	<? } ?>
