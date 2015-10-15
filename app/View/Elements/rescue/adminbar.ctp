@@ -40,7 +40,7 @@
 			<?= $this->Html->link("My Pages ".$this->Html->caret(),'javascript:void(0)',array('class'=>"dropdown-toggle",'data-toggle'=>'dropdown')); ?> 
 			<ul class='dropdown-menu' role='menu'>
 				<li class=''> <?= $this->Html->link("Adopt",array('prefix'=>false,'plugin'=>null,'controller'=>'adoption_page_indices','action'=>'index')); ?> </li>
-				<li class=''> <?= $this->Html->link("Donate",array('prefix'=>false,'plugin'=>'donations','controller'=>'donations')); ?> </li>
+				<li class=''> <?= $this->Html->link("Donate",array('prefix'=>false,'plugin'=>'donation','controller'=>'donations')); ?> </li>
 				<li class=''> <?= $this->Html->link("Foster",array('prefix'=>false,'plugin'=>null,'controller'=>'foster_page_indices')); ?> </li>
 				<li class=''> <?= $this->Html->link("Volunteer",array('prefix'=>false,'plugin'=>null,'controller'=>'volunteer_page_indices')); ?> </li>
 				<li class=''> <?= $this->Html->link("Resources",array('prefix'=>false,'plugin'=>null,'controller'=>'resource_pages')); ?> </li>
