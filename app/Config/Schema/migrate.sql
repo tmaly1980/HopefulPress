@@ -47,6 +47,19 @@ INSERT INTO adoptables (id,rescue_id,adopter_id,name,adoptable_photo_id,biograph
 	(SELECT id,site_id,adoptable_owner_id,name,page_photo_id,biography,species,breed,mixed_breed,breed2,birthdate,gender,weight_lbs,adult_size,child_friendly,minimum_child_age,cat_friendly,dog_friendly,neutered_spayed,fostered,date_fosterable,date_available,adoption_cost,status,date_adopted,created,modified,energy_level,special_needs,microchip,enable_sponsorship,sponsorship_goal,sponsorship_goal_recurring,sponsorship_details 
 	FROM hp.rescue_adoptables h_adoptables);
 
+# Some go into adoptable_photos (main photo)
+#
+INSERT INTO adoptable_photos (id,rescue_id,adoptable_id,title,path,caption,filename,ext,type,size,ix,created,modified)
+ 	(SELECT p.id,adoptables.rescue_id,adoptables.id,p.title,p.path,p.caption,p.filename,p.ext,p.type,p.size,p.ix,p.created,p.modified
+	FROM hp.page_photos p JOIN adoptables ON p.id = adoptables.adoptable_photo_id);
+
+# Some go into success_story_photos
+#
+INSERT INTO success_story_photos (id,rescue_id,title,path,caption,filename,ext,type,size,ix,created,modified)
+ 	(SELECT p.id,success_stories.site_id,p.title,p.path,p.caption,p.filename,p.ext,p.type,p.size,p.ix,p.created,p.modified
+	FROM hp.page_photos p JOIN hp.rescue_adoption_stories success_stories ON p.id = success_stories.page_photo_id);
+
+
 # List photos for adoptable
 #
 INSERT INTO adoptable_photos (rescue_id,adoptable_id,ix,photo_url,title,path,filename,ext,type,size,caption,created,modified)
@@ -58,6 +71,9 @@ INSERT INTO adoptable_photos (rescue_id,adoptable_id,ix,photo_url,title,path,fil
 INSERT INTO adopters (id,rescue_id,adoptable_id,email,first_name,last_name,home_phone,cell_phone,work_phone,best_time_to_call,address,address_2,city,state,zip_code,pet_ownership_history,home_details,care_and_responsibility,preference,adopters.references,referral_source,data,status,created,modified)
  	(SELECT id,site_id,adoptable_id,email,first_name,last_name,home_phone,cell_phone,work_phone,best_time_to_call,address,address_2,city,state,zip_code,pet_ownership_history,home_details,care_and_responsibility,preference,ra.references,referral_source,data,status,created,modified
 	FROM hp.rescue_adoptions ra);
+
+#
+UPDATE adopters SET status = 'Approved' WHERE status = 'Accepted';
 
 
 # Split fosters into two/three tables.
@@ -89,36 +105,39 @@ INSERT INTO rescue_fosters (id,foster_id,user_id,rescue_id,status,created,modifi
 # Volunteer profiles...
 INSERT INTO volunteers (id,email,first_name,last_name,home_phone,cell_phone,work_phone,best_time_to_call,address,address_2,city,state,zip_code,referral_source,data,home_details,created,modified,disabled)
 	(SELECT id,email,first_name,last_name,home_phone,cell_phone,work_phone,best_time_to_call,address,address_2,city,state,zip_code,referral_source,data,home_details,created,modified,disabled 
-	FROM hp.volunteers h_volunteers);
+	FROM hp.rescue_volunteers h_volunteers);
 
 
 # Volunteer users
 INSERT INTO users (email,first_name,last_name,password,page_photo_id,invite)
-	(SELECT email,first_name,last_name,password,page_photo_id,invite)
-	FROM volunteers WHERE fosters.password != '' OR fosters.invite != '');
+	(SELECT email,first_name,last_name,password,page_photo_id,invite
+	FROM hp.rescue_volunteers WHERE hp.rescue_volunteers.password != '' OR hp.rescue_volunteers.invite != '');
 
 # Fix volunteer profiles.
-UPDATE volunteers (user_id) 
-	(SELECT id FROM users WHERE users.email = volunteers.email);
+UPDATE volunteers LEFT JOIN users ON users.email = volunteers.email
+	SET user_id = users.id;
 
 # Volunteer applicants
 # Needs to include proper volunteer_id
-INSERT INTO rescue_volunteers (id,volunteer_id,rescue_id,interests,availability,experience,status,admin,created,modified)
- 	(SELECT id,id,site_id,interests,availability,experience,status,admin,created,modified 
+INSERT INTO rescue_volunteers (id,volunteer_id,rescue_id,interests,availability,experience,status,created,modified)
+ 	(SELECT id,id,site_id,interests,availability,experience,status,created,modified 
 	FROM hp.rescue_volunteers h_rescue_volunteers);
 
 # Volunteer applicants also need user_id set from new user...
-UPDATE rescue_volunteers (user_id)
-	(SELECT user_id FROM volunteers WHERE volunteer_id = volunteers.id);
+UPDATE rescue_volunteers LEFT JOIN volunteers ON volunteer_id = volunteers.id
+	SET rescue_volunteers.user_id = volunteers.user_id;
 
 
 # Split success stories into adoptables and success_story_photos
-UPDATE adoptables (success_story,story_date,success_story_photo_id)
-	(SELECT content,created,page_photo_id
-	FROM hp.rescue_success_stories h_stories WHERE h_stories.site_id = adoptables.rescue_id AND h_stories.adoptable_id = adoptables.id);
+UPDATE adoptables LEFT JOIN hp.rescue_adoption_stories s 
+	ON s.site_id = adoptables.rescue_id AND s.adoptable_id = adoptables.id
+	SET adoptables.success_story = s.content, adoptables.story_date = s.created,
+	adoptables.success_story_photo_id = s.page_photo_id;
 
 
 #######################################
+
+# DONE BELOW....
 
 #
 INSERT INTO about_page_bios (id,name,title,page_photo_id,description,ix,created,modified,rescue_id)
@@ -209,26 +228,15 @@ INSERT INTO page_photos (id,user_id,title,path,thumb_path,caption,filename,ext,t
  	(SELECT id,user_id,title,path,thumb_path,caption,filename,ext,type,size,ix,created,modified,crop_x,crop_y,crop_h,crop_w
 	FROM hp.page_photos h_page_photos); 
 
-# Some go into adoptable_photos (main photo)
-#
-INSERT INTO adoptable_photos (id,title,path,caption,filename,ext,type,size,ix,created,modified)
- 	(SELECT p.id,p.title,p.path,p.caption,p.filename,p.ext,p.type,p.size,p.ix,p.created,p.modified
-	FROM hp.page_photos p JOIN adoptables ON p.id = adoptables.adoptable_photo_id);
-
-# Some go into success_story_photos
-#
-INSERT INTO success_story_photos (id,title,path,caption,filename,ext,type,size,ix,created,modified)
- 	(SELECT p.id,p.title,p.path,p.caption,p.filename,p.ext,p.type,p.size,p.ix,p.created,p.modified
-	FROM hp.page_photos p JOIN hp.rescue_success_stories success_stories ON p.id = success_stories.page_photo_id);
 
 #
 INSERT INTO photos (rescue_id,user_id,photo_album_id,ix,photo_url,title,path,filename,ext,type,size,caption,created,modified,rotate)
-      	(SELECT site_id,user_id,photo_album_id+500,ix,photo_url,title,path,filename,ext,type,size,caption,created,modified,rotate
+      	(SELECT site_id,user_id,photo_album_id,ix,photo_url,title,path,filename,ext,type,size,caption,created,modified,rotate
 	FROM hp.photos h_photos);
 
 #
 INSERT INTO photo_albums (id,rescue_id,user_id,title,description,created,modified,sticky,url,project_id,members_only)
- 	(SELECT id+500,site_id,user_id,title,description,created,modified,sticky,url,project_id,members_only
+ 	(SELECT id,site_id,user_id,title,description,created,modified,sticky,url,project_id,members_only
 	FROM hp.photo_albums h_photo_albums);
 
 #
@@ -242,12 +250,12 @@ UPDATE rescues LEFT JOIN rescue_logos ON rescues.id = rescue_logos.rescue_id SET
 
 #
 INSERT INTO resources (rescue_id,user_id,resource_category_id,url,title,description,address,phone,ix,created,modified)
-    	(SELECT site_id,user_id,resource_category_id+50,url,title,description,address,phone,ix,created,modified
+    	(SELECT site_id,user_id,resource_category_id,url,title,description,address,phone,ix,created,modified
 	FROM hp.resources h_resources);
 
 #
 INSERT INTO resource_categories (id,rescue_id,user_id,title,ix,created,modified)
-    	(SELECT id+50,site_id,user_id,title,ix,created,modified
+    	(SELECT id,site_id,user_id,title,ix,created,modified
 	FROM hp.resource_categories h_resource_categories);
 
 #

@@ -16,6 +16,6 @@
 <h3 id='success'>Success Stories</h3>
 <?= $this->element("../Adoptables/stories"); ?>
 <div class='right_align'>
-	<?= $this->Html->link("View all success stories", "/adoption/stories",array('class'=>'btn btn-default ')); ?>
+	<?= $this->Html->link("View all success stories", array('action'=>'stories'),array('class'=>'btn btn-default ')); ?>
 </div>
 <? } ?>

@@ -25,7 +25,7 @@
 
 	<div class='clear'></div>
 
-	<?= $this->Form->save("Update introduction",array('cancel'=>($rescue?"/adoption":"/sanctuary"))); ?>
+	<?= $this->Form->save("Update introduction",array('cancel'=>array('action'=>'view'))); ?>
 <?= $this->Form->end(); ?>
 </div>
 <div class='alert alert-info'>
