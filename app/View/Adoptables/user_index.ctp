@@ -42,7 +42,7 @@
 ?>
 	<tr>
 		<td>
-			<?= $this->Html->link($this->Html->image(!empty($imgid)?array('controller'=>'adoptable_photos','action'=>'thumb',$imgid,'50x50'):"/images/nophoto.png", array('class'=>'width50 border')), array('action'=>'view',$adoptable['Adoptable']['id']), array('class'=>'','title'=>$adoptable['Adoptable']['name']));  ?>
+			<?= $this->Html->link($this->Html->image(!empty($imgid)?array('user'=>false,'controller'=>'adoptable_photos','action'=>'thumb',$imgid,'50x50'):"/images/nophoto.png", array('class'=>'width50 border')), array('action'=>'view',$adoptable['Adoptable']['id']), array('class'=>'','title'=>$adoptable['Adoptable']['name']));  ?>
 		</td>
 		<td><?= $this->Html->link($adoptable['Adoptable']['name'], array('action'=>'view',$adoptable['Adoptable']['id']),array('class'=>'underline')); ?></td>
 		<td><?= $adoptable['Adoptable']['species'] ?></td>
