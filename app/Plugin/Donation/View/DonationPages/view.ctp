@@ -8,7 +8,7 @@
 
 <? if(!empty($donationPage['DonationPage']['introduction'])){ ?>
 <div class='view border rounded padding25 margintop10 marginbottom10'>
-	<?= $donationPage['DonationPage']['introduction'] ?>
+	<?= $this->Text->autolink($donationPage['DonationPage']['introduction']) ?>
 </div>
 <?} ?>
 

@@ -9,7 +9,7 @@ extract($this->PagePhoto->config(compact('parentClass','photoModel')));
 ?>
 <div id="<?= $photoAlias ?>" class="<?= !empty($div) ? (!empty($div['class']) ? $div['class'] : $div) : null; ?> relative <?#= $align ?> PagePhoto center_align ">
 	<? if(empty($page_photo_id) || empty($data[$photoModel])) { ?>
-		<?= $this->Html->link($this->Html->image($placeholder,array('class'=>'border')), array('plugin'=>$plugin,'controller'=>$controller,'action'=>'upload',$parentClass,$photoModel), array('class'=>'dialog','title'=>"Add $ucThing"));?>
+		<?= $this->Html->link($this->Html->image($placeholder,array('class'=>'border')), array('plugin'=>$plugin,'controller'=>$controller,'action'=>'upload',$parentClass,$photoAlias), array('class'=>'dialog','title'=>"Add $ucThing"));?>
 	<? } else { ?>
 	<?
 	if(empty($data[$photoModel])) {
