@@ -22,7 +22,6 @@
 				<? } else { ?>
 					<?= $this->Html->link($image, array('controller'=>'success_story_photos','action'=>'fullimage',$photo_id,'600x600'),array('class'=>'lightbox')); ?>
 				<? } ?>
-			<? } ?>
 		</div>
 		<div class='col-md-9 padding10'>
 			<? if(empty($inline)) { ?>
