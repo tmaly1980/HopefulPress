@@ -774,6 +774,11 @@ class AppController extends AppCoreController {
 		return $this->setError("Rescue not found",$this->hostname(null)."/rescues");#array('prefix'=>false,'plugin'=>null,'controller'=>'rescues','action'=>'index'));
 	}
 
+	function manager()
+	{
+		return $this->Auth->user("manager");
+	}
+
 	# Make sure this user/volunteer has been permitted access to this rescue.
 	# XXX Need to adjust Users::login to find account
 
@@ -783,6 +788,8 @@ class AppController extends AppCoreController {
 	{
 		if(empty($user)) { $user = $this->Auth->user(); }
 		#error_log("IS_AUTHORIZED....USER=".print_r($user,true));
+
+		if($this->manager()) { return true; }
 
 		$me = $user['User']['id'];
 
