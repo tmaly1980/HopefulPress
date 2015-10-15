@@ -97,7 +97,7 @@ class PagePhotosController extends AppController
 	}
 	*/
 
-	function delete($parentClass, $id = null) # Removes reference from parent object
+	function delete($parentClass, $photoModel, $id = null) # Removes reference from parent object
 	{
 		extract($this->vars());#$model));
 
@@ -113,33 +113,32 @@ class PagePhotosController extends AppController
 		$this->{$this->modelClass}->delete($id); # Delete self.
 
 		# Now remove reference from parent, if applicable.
-		if(!empty($parentClass))
+		if(!empty($parentClass) && !empty($photoModel))
 		{
-			list($parentModel,$photoModel) = pluginSplit($parentClass);
-
 			$this->loadModel($photoModel);
-			if(!empty($parentModel))# Grab better primary key
+			if(!empty($parentClass))# Grab better primary key
 			{
-				$this->loadModel($parentModel);
-				if(!empty($this->{$parentModel}->belongsTo[$photoModel]['primaryKey']))
+				$this->loadModel($parentClass);
+				if(!empty($this->{$parentClass}->belongsTo[$photoModel]['primaryKey']))
 				{
-					$primaryKey = $this->{$parentModel}->belongsTo[$photoModel]['primaryKey'];
+					$primaryKey = $this->{$parentClass}->belongsTo[$photoModel]['primaryKey'];
 				} else {
 					$primaryKey = Inflector::underscore($photoModel)."_id";
 				}
 			}
 
-			#error_log("LOOKING FOR $parentClass WITH $primaryKey => $id");
-			$parent_id = $this->{$parentModel}->field('id', array($primaryKey=>$id));
+			error_log("LOOKING FOR $parentClass WITH $primaryKey => $id");
+			$parent_id = $this->{$parentClass}->field('id', array($primaryKey=>$id));
 			#error_log("GOT=$parent_id");
 
 			if(!empty($parent_id))
 			{
-				$this->{$parentModel}->id = $parent_id;# Must be explicit since we didn't call read() before.
-				$this->{$parentModel}->saveField($primaryKey, null);
+				$this->{$parentClass}->id = $parent_id;# Must be explicit since we didn't call read() before.
+				$this->{$parentClass}->saveField($primaryKey, null);
 			}
 
-			$this->set("modelClass", $parentClass);
+			$this->set("parentClass", $parentClass);
+			$this->set("photoModel", $photoModel);
 			$this->set("model_id", $parent_id);
 			$this->render("PagePhotos.../Elements/edit");
 		} else if ($this->request->ext == 'json') { # For album list style, etc.

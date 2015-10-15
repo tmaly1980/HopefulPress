@@ -192,6 +192,7 @@ a.color.light_grey:hover { color: #1C4C7C; background-color: #DDD; }
 .minheight225 { min-height: 225px; }
 .minheight250 { min-height: 250px; }
 .minheight300 { min-height: 300px; }
+.minheight325 { min-height: 325px; }
 .minheight350 { min-height: 350px; }
 .minheight375 { min-height: 375px; }
 .minheight400 { min-height: 400px; }
@@ -202,6 +203,28 @@ a.color.light_grey:hover { color: #1C4C7C; background-color: #DDD; }
 .minheight800 { min-height: 800px; }
 .minheight900 { min-height: 900px; }
 .minheight1000 { min-height: 1000px; }
+
+.maxheight25 { max-height: 25px; }
+.maxheight50 { max-height: 50px; }
+.maxheight75 { max-height: 75px; }
+.maxheight100 { max-height: 100px; }
+.maxheight125 { max-height: 125px; }
+.maxheight150 { max-height: 150px; }
+.maxheight200 { max-height: 200px; }
+.maxheight225 { max-height: 225px; }
+.maxheight250 { max-height: 250px; }
+.maxheight300 { max-height: 300px; }
+.maxheight325 { max-height: 325px; }
+.maxheight350 { max-height: 350px; }
+.maxheight375 { max-height: 375px; }
+.maxheight400 { max-height: 400px; }
+.maxheight450 { max-height: 450px; }
+.maxheight500 { max-height: 500px; }
+.maxheight600 { max-height: 600px; }
+.maxheight700 { max-height: 700px; }
+.maxheight800 { max-height: 800px; }
+.maxheight900 { max-height: 900px; }
+.maxheight1000 { max-height: 1000px; }
 
 .autoheight { height: auto !important; }
 @media (max-width: 767px) {

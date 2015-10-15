@@ -22,7 +22,7 @@
 		$imgid = $adoptable['Photos'][0]['id'];
 	}
 ?>
-<div class='item <?= empty($i) ? "active" : "" ?> <?= $carousel ? "" : "left" ?> width200 maxheight300 center_align <?= empty($carousel) ? "padding25":""?>'>
+<div class='item <?= empty($i) ? "active" : "" ?> <?= $carousel ? "" : "left" ?> width200 maxheight325 center_align <?= empty($carousel) ? "padding25":""?>'>
 	<div class='maxheight225'>
 	<?= $this->Html->link($this->Html->image(!empty($imgid)?array('controller'=>'adoptable_photos','action'=>'thumb',$imgid,'200x200',1,'rescue'=>$adoptable['Rescue']['hostname']):"/images/nophoto.png", array('class'=>'border')), 
 		array('action'=>'view',$adoptable['Adoptable']['id'],'rescue'=>$adoptable['Rescue']['hostname'])); ?> 
