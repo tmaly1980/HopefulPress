@@ -77,8 +77,8 @@ if(empty($color1)) { $color1 = '559522'; }
 {
 	@media (min-width: 768px)
 	{
-		padding-left: 100px;
-		padding-right: 100px;
+		padding-left: 50px;
+		padding-right: 50px;
 	}
 }
 
@@ -94,12 +94,10 @@ if(empty($color1)) { $color1 = '559522'; }
 	.shadowbox()
 }
 
-/*
 #header h1
 {
-	font-size: 42px;
+	font-size: 36px;
 }
-*/
 	
 #main #navbar
 {
