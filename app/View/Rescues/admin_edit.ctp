@@ -105,7 +105,7 @@
 		<?#= $this->Form->input("service_area",array('div'=>'col-md-4','type'=>'number','label'=>'Service Area (mi)','note'=>'How far away do you accept or adopt animals?')); ?>
 </div>
 <div id='donations' class='tab-pane'>
-	<?= $this->Form->input_group("paypal_email",array('before'=>$this->Html->fa('gift'),'note'=>'To enable donations, please provide your PayPal email')); ?>
+	<?= $this->Form->input_group("paypal_email",array('type'=>'email','before'=>$this->Html->fa('gift'),'note'=>'To enable donations, please provide your PayPal email')); ?>
 </div>
 <div id='mailinglist' class='tab-pane'>
 	<?= $this->element("../Rescues/rescuer_edit_mailinglist"); ?>

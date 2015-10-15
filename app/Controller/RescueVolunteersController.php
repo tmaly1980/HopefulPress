@@ -141,7 +141,8 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 			}
 		} 
 
-		$this->set("{$this->thing}Form", $this->{$this->ucThing}Form->first());
+		$thingForm = $this->ucThing."Form";
+		$this->set("{$this->thing}Form", $this->{$thingForm}->singleton());
 		$this->set("adoptables", $this->Adoptable->find('list',array('conditions'=>array('status'=>'Available'))));
 		$this->set("statuses", $this->{$this->rescueThing}->statuses);
 	}
