@@ -18,9 +18,9 @@ $defaultAmount = 10;
 ?>
 <div>
 <? if(!empty($paypalCredentials)) { # Make seperate forms since so different. ?>
-	<?= $this->element("../Donations/donate_paypal",array('amounts'=>$amounts,'defaultAmount'=>$defaultAmount)); ?>
+	<?= $this->element("Donation.../Donations/donate_paypal",array('amounts'=>$amounts,'defaultAmount'=>$defaultAmount)); ?>
 <? } else if (!empty($stripeCredentials)) { ?>
-	<?= $this->element("../Donations/donate_stripe",array('amounts'=>$amounts,'defaultAmount'=>$defaultAmount)); ?>
+	<?= $this->element("Donation.../Donations/donate_stripe",array('amounts'=>$amounts,'defaultAmount'=>$defaultAmount)); ?>
 <? } ?>
 
 </div>
