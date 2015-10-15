@@ -66,6 +66,7 @@ class RescueHelper extends AppHelper
 		if(!$this->id()) { return false; }
 		$me = $this->me();
 		if(empty($me)) { return false; }
+		if($this->manager()) { return true; }
 		return $this->get("user_id") == $me;
 	}
 

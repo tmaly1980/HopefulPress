@@ -75,6 +75,7 @@ class AppController extends AppCoreController {
 		'User',
 		'Rescue',
 		'RescueVolunteer',
+		'RescueFoster',
 		'Adoptable',
 		"Newsletter.MailchimpCredential",
 		'Resource',
