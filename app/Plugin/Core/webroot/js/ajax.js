@@ -103,6 +103,14 @@
 							$(dialog).getModal().find('form').submit();
 						}
 					};
+				} else if (button == 'close') {
+					button = {
+						label: "<span class='glyphicon glyphicon-remove'></span> Close",
+						cssClass: 'btn-primary',
+						action: function(dialog) {
+							dialog.close();
+						}
+					};
 				}
 			}
 			buttonsOut[buttonsOut.length] = button;
@@ -379,7 +387,13 @@
 				opts.data = $(link).closest('form').serializeObject();
 			}
 
-			$.dialog(url, $(link).attr('title'), opts);
+			var title = $(link).attr('title');
+			if(!title)
+			{
+				title = $(link).text(); // link label itself.
+			}
+
+			$.dialog(url, title, opts);
 
 			return false;
 		});

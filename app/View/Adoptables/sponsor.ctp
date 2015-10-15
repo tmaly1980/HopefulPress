@@ -8,18 +8,21 @@
 <div  class='view'>
 
 <div class='row'>
-	<div class='col-md-3'>
-		<?= $this->Html->image(!empty($imgid)?"/page_photos/page_photos/image/$imgid":"/rescue/images/nophoto.png",array('class'=>'width100p')); ?>
+	<div class='col-md-6'>
+		<?= $this->element("PagePhotos.view",array('photoModel'=>'AdoptablePhoto','class'=>'width100p','width'=>400)); ?>
 	</div>
-	<div class='col-md-9'>
+	<div class='col-md-6 paddingtop50'>
 		<? if(!empty($adoptable['Adoptable']['sponsorship_details'])) { ?>
 		<h3>Sponsorship Details</h3>
+		<hr/>
 		<p>
 			<?= $adoptable['Adoptable']['sponsorship_details']; ?>
 		</p>
 		<? } ?>
 	</div>
 </div>
+
+<hr/>
 
 <?= $this->requestAction("/donation/donate/$id",array('return')); ?>
 

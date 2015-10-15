@@ -53,11 +53,11 @@ $statusClass = $statusClasses[$status];
 </div>
 <div align='center'>
 	<? if($status == 'Available') { ?>
-		<?= $this->Html->link("Adopt Me", array('action'=>'adopt','id'=>$id,'rescue'=>$rescuename), array('class'=>'controls btn btn-primary btn-lg bold')); ?>
+		<?= $this->Html->link("Adopt Me", array('action'=>'adopt','id'=>$id), array('class'=>'controls btn btn-primary btn-lg bold')); ?>
 		<? if(!empty($adoptable['Adoptable']['enable_sponsorship'])) { ?>
 		&nbsp;
 		&nbsp;
-			<?= $this->Html->link("Sponsor Me", array('action'=>'sponsor','id'=>$id,'rescue'=>$rescuename), array('class'=>'controls btn btn-warning btn-lg')); ?>
+			<?= $this->Html->link("Sponsor Me", array('action'=>'sponsor','id'=>$id), array('class'=>'controls btn btn-warning btn-lg')); ?>
 		<? } ?>
 		<?#= $this->Html->link("Foster Me", "/mockup/adoptables/foster/$id", array('class'=>'dialog controls btn btn-success btn-lg')); ?>
 	<? } ?>

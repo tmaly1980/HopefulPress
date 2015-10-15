@@ -77,7 +77,7 @@
 	<div class='margintop25'>
 		<!-- customize link -->
 		<? if(!empty($form_link)) { ?>
-			<?= $this->Html->link("Fill out our online $type form", array('controller'=>Inflector::pluralize("rescue_$type"),'action'=>'add'), array('class'=>'btn btn-warning white')); ?>
+			<?= $this->Html->link("Fill out our online $type form", array('controller'=>Inflector::pluralize("rescue_".(!empty($person)?$person:$type)),'action'=>'add'), array('class'=>'btn btn-warning white')); ?>
 		<? } ?>
 		<? if(empty($form_link)) { ?>
 			<?= $this->element("../".Inflector::pluralize(Inflector::camelize("rescue_$type"))."/edit"); ?>

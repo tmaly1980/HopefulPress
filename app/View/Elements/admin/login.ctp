@@ -15,9 +15,9 @@
 			<?= $current_user['first_name'] ?> <?= $this->Html->s("caret hidden-sm hidden-xs"); ?></a>
 		<ul class='dropdown-menu dropdown-menu-right right_align'>
 	    		<li><a href="/user/users/account">Account</a></li>
-			<? if($this->Site->get("webmail_enabled") && ($domain = $this->Site->get("domain"))) { ?>
+			<? /* if($this->Site->get("webmail_enabled") && ($domain = $this->Site->get("domain"))) { ?>
 	    			<li><a href="http://mail.<?=$domain ?>/">Web Mail</a></li>
-			<? } ?>
+			<? } */ ?>
 	    		<li><a href="/user/users/logout"><?= $this->Html->g("log-out"); ?> Sign Out</a></li>
 
 		</ul>

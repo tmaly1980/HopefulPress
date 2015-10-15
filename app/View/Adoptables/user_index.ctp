@@ -11,7 +11,7 @@
 		<?= $this->Form->input("name", array('div'=>'col-md-3','label'=>false,'placeholder'=>"Name")); ?>
 		<?= $this->Form->input("breed", array('div'=>'col-md-3','type'=>'select','options'=>$breeds,'empty'=>'- All breeds -','label'=>false)); ?>
 		<?= $this->Form->input("microchip", array('div'=>'col-md-3','label'=>false,'placeholder'=>"Microchip ID")); ?>
-		<?= $this->Form->input("Owner.name", array('div'=>'col-md-3','label'=>false,'placeholder'=>"Owner Name")); ?>
+		<?= $this->Form->input("Owner.full_name", array('div'=>'col-md-3','label'=>false,'placeholder'=>"Owner Name")); ?>
 
 	</div>
 	<div align='right'>
@@ -35,13 +35,14 @@
 		<th><?= $this->Paginator->sort("birthdate","Age"); ?></th>
 		<th><?= $this->Paginator->sort("status"); ?></th>
 		<th><?= $this->Paginator->sort("microchip"); ?></th>
+		<th><?= $this->Paginator->sort("Owner.full_name","Owner name"); ?></th>
 	</tr>
 <? foreach($adoptables as $adoptable) { 
 	$imgid = !empty($adoptable['AdoptablePhoto']['id']) ? $adoptable['AdoptablePhoto']['id'] : null;
 ?>
 	<tr>
 		<td>
-			<?= $this->Html->link($this->Html->image(!empty($imgid)?array('controller'=>'adoptable_photos','action'=>'thumb',$imgid,'50x50'):"/rescue/images/nophoto.png", array('class'=>'width50 border')), array('action'=>'view',$adoptable['Adoptable']['id']), array('class'=>'','title'=>$adoptable['Adoptable']['name']));  ?>
+			<?= $this->Html->link($this->Html->image(!empty($imgid)?array('controller'=>'adoptable_photos','action'=>'thumb',$imgid,'50x50'):"/images/nophoto.png", array('class'=>'width50 border')), array('action'=>'view',$adoptable['Adoptable']['id']), array('class'=>'','title'=>$adoptable['Adoptable']['name']));  ?>
 		</td>
 		<td><?= $this->Html->link($adoptable['Adoptable']['name'], array('action'=>'view',$adoptable['Adoptable']['id']),array('class'=>'underline')); ?></td>
 		<td><?= $adoptable['Adoptable']['species'] ?></td>
@@ -56,6 +57,7 @@
 		</td>
 		<td><?= $adoptable['Adoptable']['status'] ?></td>
 		<td><?= $this->Html->link($adoptable['Adoptable']['microchip'], array('user'=>1,'action'=>'edit',$adoptable['Adoptable']['id'])); ?></td>
+		<td><?= $adoptable['Owner']['full_name'] ?></td>
 	</tr>
 	<? } ?>
 </table>

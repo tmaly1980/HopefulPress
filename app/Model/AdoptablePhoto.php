@@ -1,5 +1,4 @@
 <?php
-App::uses('RescueAppModel', 'Rescue.Model');
 class AdoptablePhoto extends AppModel {
 	var $actsAs = array('Core.Upload');
 

@@ -148,20 +148,31 @@
 <div id='owner' class='tab-pane'>
 		<?= $this->Form->input("microchip",array('label'=>'Microchip #','Xdiv'=>'col-md-6')); ?>
 
-		<? if(empty($this->request->data['Owner']['id']) && !empty($this->request->data['ProspectiveOwner'])) { # Show dropdown of potential owners... ?>
-			<h3>Adoption Application(s)</h3>
-			<? $adoptions = array(); 
-			foreach($this->request->data['ProspectiveOwner'] as $owner)
-			{
-				$adoptions[] = array('Adoption'=>$owner);
-			}
-			?>
-			<?= $this->element("Rescue.../Adoptions/list",array('adoptions'=>$adoptions)); ?>
-		<? } # Even with prospective owners, STILL allow them to enter in a totally different owner.... ?>
-
 		<?= $this->Form->hidden("Owner.id"); ?>
 
+		<? if(!empty($id)) { ?>
+		<div class='right'>
+			<?= $this->Html->edit("Select owner from applicants",array('action'=>'select_adopters',$id),array('class'=>'dialog')); ?>
+		</div>
+		<? } ?>
+
 		<?= $this->element("forms/about",array('title'=>'Owner Information','model'=>'Owner','required'=>0));?>
+		<!-- XXX TODO
+
+			IF prospective owners (no current owner), show list (always show form)
+
+			setting adoptable's owner:
+			1) if prospective owners (they requested this adoptable), ACCEPT their application, will copy over
+
+			2) if adopters haven't chosen an adoptable, go to their app and update STATUS with ADOPTABLE dropdown - will copy over
+
+			3) from adoptable, allow selecting owner from full applications list (received, pending)
+				? centralized 'select from adoption applications' button ?
+
+			4) 
+
+
+		-->
 
 		<?= $this->Form->input("Owner.status", array('label'=>'Adoption Status','note'=>"Make sure you change the adoptable's status as well",'default'=>'Adopted','options'=>$adoptionStatuses,'empty'=>' - ')); # Let stay pending if so... ?>
 </div>

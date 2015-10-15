@@ -22,17 +22,17 @@ class Adoptable extends AppModel
 
 	###########
 	var $hasOne = array(
-		'Owner'=>array('className'=>'RescueAdopter','foreignKey'=>'adoptable_id','conditions'=>array('Owner.status'=>array('Accepted','Pending'))),
 	);
 
 	var $hasMany = array(
-		'ProspectiveOwner'=>array('className'=>'RescueAdopter','foreignKey'=>'adoptable_id'),
+		#'ProspectiveOwner'=>array('className'=>'Adopter','foreignKey'=>'adoptable_id'),
 		'Photos'=>array('className'=>'AdoptablePhoto','order'=>'Photos.ix IS NULL, Photos.ix ASC,Photos.id ASC'),
 		#'AdoptionStory'=>array('className'=>'AdoptionStory'),
 		#'Video'=>array('className'=>'Rescue.AdoptableVideo','foreignKey'=>'adoptable_id'),
 	);
 
 	var $belongsTo = array(
+		'Owner'=>array('className'=>'Adopter','foreignKey'=>'adopter_id'),
 		'AdoptablePhoto'=>array('className'=>'AdoptablePhoto'),
 		'Rescue'=>array('className'=>'Rescue'),
 		'SuccessStoryPhoto'=>array('className'=>'SuccessStoryPhoto','foreignKey'=>'success_story_photo_id'),

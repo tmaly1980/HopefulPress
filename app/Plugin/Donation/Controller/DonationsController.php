@@ -108,12 +108,7 @@ class DonationsController extends AppController
 
 		if(empty($creds))
 		{
-			if($this->is_site_admin())
-			{
-				$this->render("settings");
-			} else {
-				$this->render("disabled");
-			}
+			return; # DONT PROCESS
 		}
 
 		if(!empty($this->request->data['Donation']))

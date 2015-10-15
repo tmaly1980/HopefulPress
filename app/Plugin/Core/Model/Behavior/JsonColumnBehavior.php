@@ -28,7 +28,6 @@ class JsonColumnBehavior extends ModelBehavior {
  */
     public function setup(Model $model, $settings = array()) {
         $this->settings[$model->alias] = array_merge($this->_defaults, $settings);
-	error_log("JSONSETUP {$model->alias}");
     }
 
 /**
@@ -51,7 +50,6 @@ class JsonColumnBehavior extends ModelBehavior {
  * @access public
  */
     public function afterFind(Model $model, $results, $primary = false) {
-    	error_log("AFT#ER_FIND={$model->alias}");
         foreach($results as $i => &$res){
 	# Since this won't get called on belongsTo/etc associated models, we need to do the work FOR them...
             foreach($this->settings[$model->alias]['fields'] as $field){
@@ -66,7 +64,6 @@ class JsonColumnBehavior extends ModelBehavior {
 			if(is_numeric($m)) { $m = $cfg; }
 			if(!empty($this->settings[$m]) && !empty($res[$m])) # FILTER THEM TOO...
 			{
-				error_log("FILTERING $m");
             			foreach($this->settings[$m]['fields'] as $field) {
                 			if(isset($res[$m][$field])) {
                     				$res[$m][$field] = $this->_decode($res[$m][$field]);

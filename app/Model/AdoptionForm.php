@@ -1,19 +1,13 @@
 <?
-App::uses("RescueAppModel", "Rescue.Model");
-class RescueAdopter extends AppModel
+class AdoptionForm extends AppModel
 {
 	var $actsAs  = array(
-		'Core.JsonColumn'=>array('fields'=>array('data','pet_ownership_history','home_details','care_and_responsibility','preference','references')),
+		'Singleton.Singleton'=>'rescue_id',
+		'Core.JsonColumn'=>array('fields'=>array('custom_fields')),
 	);
-	var $order = "Adoption.status ASC";
-
-	# DROPDOWNS
-	var $statuses = array('Received','Pending','Accepted','Deferred','Denied');
-	###############
 
 	var $belongsTo = array(
 		#'PagePhoto'=>array('className'=>'PagePhotos.PagePhoto'),
-		'Adoptable'=>array('className'=>'Adoptable','foreignKey'=>'adoptable_id')
 	);
 
 	/* No relation  because no field connecting...

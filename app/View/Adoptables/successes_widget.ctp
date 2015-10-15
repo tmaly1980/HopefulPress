@@ -9,7 +9,7 @@
 <? } else { ?>
 <? for($i  = 0;  $i < count($successes); $i++) { 
 	$story = $successes[$i]; 
-	$imgurl = "/rescue/images/nophoto.png";
+	$imgurl = "/images/nophoto.png";
 	if(!empty($story['Adoptable']['success_story_photo_id']))
 	{
 		$imgurl = array('controller'=>'success_story_photos','action'=>'thumb',$story['Adoptable']['success_story_photo_id'],'200x200',1);

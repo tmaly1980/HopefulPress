@@ -1,7 +1,7 @@
 <?
 class AdoptablesController extends AppController
 {
-	var $uses  = array('Adoptable','Adoption');
+	var $uses  = array('Adoptable','Adopter');
 
 	var  $helpers = array('Stripe.Stripe');
 
@@ -24,34 +24,32 @@ class AdoptablesController extends AppController
 	{
 		$cond = $having = array();
 		$fields = array('*');
-		if(!empty($this->request->data['Adoptable']))
+		if(!empty($this->request->data))
 		{
-			$models = array('Adoptable','Owner','Adoption');
-
-			foreach($models as $m)
+			foreach($this->request->data['Adoptable'] as $k=>$v)
 			{
-				foreach($this->request->data[$m]  as $k=>$v)
+				if(empty($v)) { continue; }
+				if(!empty($this->Adoptable->virtualFields[$k]))
 				{
-					if(!empty($v))
-					{
-						//$fieldType  = $this->$m->fieldType($k);
-						//error_log("FT($m.$k)=$fieldType");
-						//if(in_array($fieldType, array('string','text')))
-						//{
-						if(!empty($this->$m->virtualFields[$k]))
-						{
-							$def = $this->$m->virtualFields[$k];
-							$cond[] = "$def REGEXP '$v'"; # screw virtual  field mess.
-						} else { # Real field
-							$cond["$m.$k REGEXP"] = $v;
-						}
-						//} else {
-						//	$cond["$m.$k"] = $v;
-						//}
-					}
+					$def = $this->Adoptable->virtualFields[$k];
+					$cond[] = "$def REGEXP '$v'"; # screw virtual  field mess.
+				} else { # REAL
+					$cond["Adoptable.$k REGEXP"] = $v;
+				}
+			}
+			foreach($this->request->data['Owner'] as $k=>$v)
+			{
+				if(empty($v)) { continue; }
+				if(!empty($this->Adoptable->Owner->virtualFields[$k]))
+				{
+					$def = $this->Adoptable->Owner->virtualFields[$k];
+					$cond[] = "$def REGEXP '$v'"; # screw virtual  field mess.
+				} else { # REAL
+					$cond["Owner.$k REGEXP"] = $v;
 				}
 			}
 		}
+		error_log("COND=".print_r($cond,true));
 		#$this->paginate = array(
 		#	'conditions' => $cond,
 		#	'fields'=>$fields,
@@ -168,7 +166,7 @@ class AdoptablesController extends AppController
 				$goto = array('rescuer'=>false,'action'=>'view','id'=>$newid,'rescue'=>$this->rescuename); 
 				if($this->request->data['Adoptable']['status'] == 'Adopted')
 				{
-					$msg .= " The adopted animal has been saved to the <a href='".Router::url(array('rescuer'=>1,'action'=>'index','rescue'=>$this->rescuename))."'>Adoption Database</a>";
+					$msg .= " The adopted animal has been saved to the <a href='".Router::url(array('user'=>1,'action'=>'index','rescue'=>$this->rescuename))."'>Adoption Database</a>";
 					return $this->setSuccess($msg, $goto);#array('action'=>'search','rescue'=>$this->rescuename)); 
 				} else if($this->request->data['Adoptable']['status'] == 'Available') { 
 					$msg .= empty($id) ? "Adoptable listing shared. " : "Adoptable listing saved. ";
@@ -197,8 +195,19 @@ class AdoptablesController extends AppController
 		$this->set("adoptionStatuses", $this->Adoptable->Owner->dropdown("statuses"));
 	}
 
-	function adopt($id)
+	function adopt($id=null)
 	{
+		if(empty($id) && !empty($this->request->params['id']))
+		{
+			$id=$this->request->params['id'];
+		}
+		if(empty($id))
+		{
+			return $this->setError("Invalid adoption link",array('action'=>'index'));
+		}
+		$this->redirect(array('controller'=>'adopters','action'=>'add','adoptable_id'=>$id));
+
+		/*
 		$this->set("adoptable", $adoptable = $this->Adoptable->read(null,$id));
 		if(!empty($this->request->data))
 		{
@@ -208,6 +217,7 @@ class AdoptablesController extends AppController
 			$this->setSuccess("Thanks for your interest in adopting {$adoptable['Adoptable']['name']}. We will contact you at our earliest convenience.", array('action'=>'view',$id));
 		}
 		# XXX TODO Load custom form fields...
+		*/
 	}
 
 	function foster($id)
@@ -215,8 +225,16 @@ class AdoptablesController extends AppController
 		$this->set("adoptable", $this->Adoptable->read(null,$id));
 	}
 
-	function sponsor($id)
+	function sponsor($id=null)
 	{
+		if(empty($id) && !empty($this->request->params['id']))
+		{
+			$id=$this->request->params['id'];
+		}
+		if(empty($id))
+		{
+			return $this->setError("Invalid sponsor link",array('action'=>'index'));
+		}
 		$this->set("adoptable", $this->Adoptable->read(null,$id));
 	}
 
@@ -228,6 +246,43 @@ class AdoptablesController extends AppController
 		}  else {
 			$this->setError("Could not remove adoptable page",array('action'=>'view',$id));
 		}
+	}
+
+	function user_select_adopters($id,$adopter_id=null) # Given a link...
+	{
+		if(!empty($adopter_id))
+		{
+			$this->request->data = array(
+				'Adoptable'=>array(
+					'id'=>$id,
+					'adopter_id'=>$adopter_id,
+					'status'=>'Adopted',
+					'date_adopted'=>date("Y-m-d"),
+				),
+				'Owner'=>array(
+					'id'=>$adopter_id,
+					'adoptable_id'=>$id,
+					'status'=>'Approved',
+				),
+			);
+
+			if($this->Adoptable->saveAll($this->request->data))
+			{
+				$this->setSuccess("The adoptable's owner has been chosen and the adoptable's status is now set to 'Adopted'", array('action'=>'edit',$id,'#'=>'owner'));
+			} else {
+				$this->setError("Could not save adoptable owner: ".$this->Adoptable->errorString(), array('action'=>'edit',$id,'#'=>'owner'));
+			}
+		}
+
+		# Two lists: adopters who chose this adoptable and OTHERS
+
+		$this->set('explicitAdopters', $this->Adopter->find('all',array('conditions'=>array('Adopter.adoptable_id'=>$id))));
+		$this->set('otherAdopters', $this->Adopter->find('all',array('conditions'=> array(
+			'Adopter.adoptable_id !='=>$id,
+			'Adopter.status'=>array('Received','Pending','Deferred')
+		))));
+
+		$this->set('adoptable_id',$id);
 	}
 
 	######################################

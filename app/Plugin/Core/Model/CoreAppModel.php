@@ -795,14 +795,11 @@ class CoreAppModel extends Model {
 			{
 				if(!empty($res[$this->alias][$key]))
 				{
-					$object = json_decode($res[$this->alias][$key]);
-					if(empty($object))
+					$data = json_decode($res[$this->alias][$key],true); # as hash. get_object_vars() doesnt recurse.
+
+					if(!empty($data))
 					{
-						error_log("JSON_DECODE NULL, $key=".print_r($res[$this->alias][$key],true));
-					}
-					if(!empty($object))
-					{
-						$res[$this->alias][$key] = get_object_vars($object);
+						$res[$this->alias][$key] = $data;
 					}
 				}
 			}

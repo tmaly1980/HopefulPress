@@ -37,15 +37,15 @@
 		<li class='dropdown toggle '>
 			<?= $this->Html->link("Adopt ".$this->Html->s("caret"), "javascript:void(0);"); ?>
 			<ul  class='dropdown-menu'>
-				<!--<li><?= $this->Html->link("Overview", '/adoption'); ?></li>-->
+				<li><?= $this->Html->link("Overview", array('plugin'=>null,'controller'=>'adoption_page_indices','action'=>'view')); ?></li>
 				<? if(!empty($nav['adoptableCount'])) { ?>
-				<li><?= $this->Html->link("Current Adoptables", array('controller'=>'adoptables')); ?></li>
+				<li><?= $this->Html->link("Current Adoptables", array('plugin'=>null,'controller'=>'adoptables')); ?></li>
 				<? } ?>
 				<? if(!empty($nav['adoptableFormEnabled'])) { ?>
-				<li><?= $this->Html->link("Adoption Form", array('controller'=>'adoption_forms')); ?></li>
+				<li><?= $this->Html->link("Adoption Form", array('plugin'=>null,'controller'=>'adoption_forms')); ?></li>
 				<? } ?>
 				<? if(!empty($nav['adoptionStoryCount'])) { ?>
-				<li><?= $this->Html->link("Happy Tails", array('controller'=>'adoptables','action'=>'stories')); ?></li>
+				<li><?= $this->Html->link("Happy Tails", array('plugin'=>null,'controller'=>'adoptables','action'=>'stories')); ?></li>
 				<?  } ?>
 			</ul>
 		</li>

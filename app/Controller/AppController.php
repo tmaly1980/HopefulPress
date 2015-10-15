@@ -461,12 +461,12 @@ class AppController extends AppCoreController {
 			'rescueAdopter'=>$adoption,
 		);
 		# For now, send to site owner (someday add setting)
-		$rescue_id = !empty($adoption['RescueAdopter']['rescue_id']) ? 
-			$foster['RescueAdopter']['rescue_id'] : $this->rescue_id;
+		$rescue_id = !empty($adoption['Adopter']['rescue_id']) ? 
+			$adoption['Adopter']['rescue_id'] : $this->rescue_id;
 		$admins = $this->rescue_admins($rescue_id);
 
-		$from = !empty($adoption['RescueAdopter']['email']) ?
-			$adoption['RescueAdopter']['email'] : null;
+		$from = !empty($adoption['Adopter']['email']) ?
+			$adoption['Adopter']['email'] : null;
 		$vars['from'] = $from; # Reply will go to the requestor...
 
 		return $this->userEmail($admins, "Adoption application", "rescue/adoption", $vars);

@@ -1,4 +1,4 @@
-<? if($this->Html->can_edit()) { ?>
+<? if($this->Html->admin()) { ?>
 <? if(!empty($nav['donationsEnabled'])) { /* ?>
 <div class='alert alert-info'>
 	<? if(!empty($stripeCredentials)) { ?>
@@ -14,11 +14,11 @@
 <? */ } else { ?>
 <div class='alert alert-info'>
 	Donations to your organization are available via 
-	<?#= $this->Html->link("Stripe", "http://www.stripe.com/"); ?> or
 	<?= $this->Html->link("Paypal", "http://www.paypal.com/"); ?>.
-	<p>To enable donations, simply <?= $this->Html->link("add your PayPal email to your rescue profile",array('plugin'=>false,'rescuer'=>1,'controller'=>'rescues','action'=>'edit','rescuename'=>$rescuename)); ?>
 	<br/>
 	<br/>
+	<?= $this->Html->add("Add your PayPal email",array('plugin'=>false,'admin'=>1,'controller'=>'rescues','action'=>'edit','#'=>'donations')); ?> 
+	to enable donations
 </div>
 <? } ?>
 <? } ?>

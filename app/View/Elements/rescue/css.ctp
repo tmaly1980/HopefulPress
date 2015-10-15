@@ -13,7 +13,7 @@ $namedParams = array(); foreach($rescue['Rescue'] as $k=>$v) {
 }
 ?>
 <?#= $this->Less->css("themes/$theme"); # Static portion ?>
-<link rel="stylesheet" type="text/css" href="<?=Router::url(array('controller'=>'rescues','action'=>'style',$theme, 'rescue'=>$rescuename,join("",$namedParams))) ?>.css"/> <!-- custom portion -->
+<link rel="stylesheet" type="text/css" href="<?=Router::url(array('plugin'=>null,'controller'=>'rescues','action'=>'style',$theme, 'rescue'=>$rescuename,join("",$namedParams))) ?>.css"/> <!-- custom portion -->
 <style>
 </style>
 <!-- end site design styling -->

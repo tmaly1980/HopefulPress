@@ -186,7 +186,7 @@ class RescuesController extends AppController
 				}
 
 				return $this->setSuccess(
-					(!empty($this->request->params['rescue']) ? 
+					(!empty($this->rescue_id) ? 
 						"Rescue listing updated!":"Rescue listing created!")
 					,$goto);
 			} else {
@@ -206,11 +206,6 @@ class RescuesController extends AppController
 	function view() #$hostname=null) # "home" page
 	{
 		$hostname = !empty($this->rescuename) ? $this->rescuename : null;
-
-		#if(!empty($this->request->params['rescue']))
-		#{
-		#	$hostname = $this->request->params['rescue'];
-		#}
 
 		if(empty($hostname) || !($rescue = $this->Rescue->findByHostname($hostname)))
 		{

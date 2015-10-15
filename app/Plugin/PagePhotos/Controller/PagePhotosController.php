@@ -290,6 +290,8 @@ class PagePhotosController extends AppController
 		# with $crop  off, it's perfect.
 
 		$image = $this->{$this->modelClass}->read(null, $id);
+		# IF NOT FOUND, MIGHT BE WRONG SITE/RESCUE...
+
 		$whparts = split("x", $wh);
 		if(empty($whparts[1])) { $whparts[1] = $whparts[0]; } # 300 => 300x300
 		list($w,$h) = $whparts;

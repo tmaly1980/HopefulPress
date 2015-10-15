@@ -4,7 +4,7 @@
 <div class='view'>
 <div class='row'>
 	<div class='col-md-6'>
-		<?= $this->Html->image(!empty($imgid)?array('controller'=>'adoptable_photos','action'=>'image',$imgid,'rescue'=>$rescuename):"/rescue/images/nophoto.png",array('class'=>'width100p')); ?>
+		<?= $this->Html->image(!empty($imgid)?array('controller'=>'adoptable_photos','action'=>'image',$imgid,'rescue'=>$rescuename):"/images/nophoto.png",array('class'=>'width100p')); ?>
 
 	</div>
 	<div class='col-md-6'>
