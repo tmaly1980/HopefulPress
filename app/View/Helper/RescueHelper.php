@@ -119,8 +119,10 @@ class RescueHelper extends AppHelper
 		$controller = $this->request->params['controller'];
 
 		# Check restricted controllers.
-		if(in_array($controller, $this->rescuer_controllers)) { return false; } # Already checked above.
-		if(in_array($controller, $this->admin_controllers)) { return $this->admin(); }
+		if(in_array($controller, $this->rescuer_controllers)) { return false; } # Already checked above. sensitive owner stuff only.
+		if($this->admin()) { return true; } 
+		if(in_array($controller, $this->admin_controllers)) { return false; } # Others cannot.
+
 		return !empty($data) ? ($data['user_id'] == $me) : true; # All other controllers (ie news, adoptables, etc).
 	}
 
