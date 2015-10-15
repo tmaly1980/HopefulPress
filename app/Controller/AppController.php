@@ -741,6 +741,17 @@ class AppController extends AppCoreController {
 			unset($url['rescue']);
 			unset($url['orig_action']);
 			unset($url['named']); # Redundant.
+
+			# Fix 'pass'
+			if(!empty($url['pass']))
+			{
+				foreach($url['pass'] as $p)
+				{
+					$url[] = $p;
+				}
+				unset($url['pass']);
+			}
+
 			$host = $this->hostname($this->rescue);
 			$urlstring = Router::url($url);
 			error_log("GOING TO $host $urlstring,  URL=".print_r($url,true));
