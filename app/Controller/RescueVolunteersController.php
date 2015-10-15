@@ -111,7 +111,7 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 
 		$thingForm = $this->ucThing."Form";
 		$this->set("{$this->thing}Form", $this->{$thingForm}->singleton());
-		$this->set("adoptables", $this->Adoptable->find('list',array('conditions'=>array('status'=>'Available'))));
+		$this->set("adoptables", $this->Adoptable->find('list',array('conditions'=>array('Adoptable.status'=>'Available'))));
 		$this->set("statuses", $this->{$this->rescueThing}->dropdown('statuses'));
 	}
 
@@ -143,17 +143,17 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 
 		$thingForm = $this->ucThing."Form";
 		$this->set("{$this->thing}Form", $this->{$thingForm}->singleton());
-		$this->set("adoptables", $this->Adoptable->find('list',array('conditions'=>array('status'=>'Available'))));
+		$this->set("adoptables", $this->Adoptable->find('list',array('conditions'=>array('Adoptable.status'=>'Available'))));
 		$this->set("statuses", $this->{$this->rescueThing}->statuses);
 	}
 
 	function admin_index()
 	{
-		$this->set("{$this->thing}s", $this->{$this->rescueThing}->find('all',array('conditions'=>array('status'=>'Active'))));
-		$this->set("offline{$this->ucThing}s", $this->{$this->rescueThing}->find('all',array('conditions'=>array('status'=>'Active Offline'))));
-		$this->set("applicants", $this->{$this->rescueThing}->find('all',array('conditions'=>array('status'=>'Applied'))));
-		$this->set("inactives", $this->{$this->rescueThing}->find('all',array('conditions'=>array('status'=>'Inactive'))));
-		$this->set("ignoreds", $this->{$this->rescueThing}->find('all',array('conditions'=>array('status'=>'Ignored'))));
+		$this->set("{$this->thing}s", $this->{$this->rescueThing}->find('all',array('conditions'=>array("{$this->rescueThing}.status"=>'Active'))));
+		$this->set("offline{$this->ucThing}s", $this->{$this->rescueThing}->find('all',array('conditions'=>array("{$this->rescueThing}.status"=>'Active Offline'))));
+		$this->set("applicants", $this->{$this->rescueThing}->find('all',array('conditions'=>array("{$this->rescueThing}.status"=>'Applied'))));
+		$this->set("inactives", $this->{$this->rescueThing}->find('all',array('conditions'=>array("{$this->rescueThing}.status"=>'Inactive'))));
+		$this->set("ignoreds", $this->{$this->rescueThing}->find('all',array('conditions'=>array("{$this->rescueThing}.status"=>'Ignored'))));
 	}
 
 	/* disabled.
