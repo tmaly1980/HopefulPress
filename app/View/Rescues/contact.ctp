@@ -74,7 +74,7 @@
 		<? } ?>
 	<? } else { ?>
 	<div id="RescueContacts">
-		<?#= $this->element("../Contacts/list"); ?>
+		<?= $this->element("../Contacts/list"); ?>
 	</div>
 	<? } ?>
 
