@@ -1,6 +1,6 @@
 <?
 $volunteer = $rescueVolunteer;
-$skip_keys = array('id','password','created','modified','full_name','status');
+$skip_keys = array('id','password','created','modified','full_name','status','disabled');
 ?>
 <table class='table table-responsive'>
 <tr>

@@ -291,3 +291,6 @@ INSERT INTO volunteer_page_indices (rescue_id,title,page_photo_id,introduction,d
       	(SELECT site_id,title,page_photo_id,introduction,disabled,created,modified
 	FROM hp.rescue_volunteer_overviews h_volunteer_page_indices);
 
+
+##################################
+UPDATE portal.rescue_volunteers LEFT JOIN portal.volunteers ON rescue_volunteers.volunteer_id = volunteers.id SET status = 'Active Offline' WHERE status = 'Active' AND disabled = 1;

@@ -85,11 +85,10 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 
 	function admin_edit($id=null)
 	{
-		$this->{$this->rescueThing}->autouser = false; # DOnt save as ours.
-		$this->{$this->rescueThing}->{$this->ucThing}->autouser = false; # DOnt save as ours.
-
+		$this->edit($id);
 		if(!empty($this->request->data))
 		{
+
 			# Don't save to user account
 			if($this->{$this->rescueThing}->saveAll($this->request->data))
 			{
@@ -117,15 +116,36 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 
 	function edit()
 	{
-		# Don't save to user account if already signed in as a volunteer/foster with the rescue. ie doing for others.
-		if($this->rescue_member())
-		{
-			$this->{$this->rescueThing}->autouser = false;
-			$this->{$this->rescueThing}->{$this->ucThing}->autouser = false;
-		}
 
 		if(!empty($this->request->data))
 		{
+			# Don't save to user account if already signed in as a volunteer/foster with the rescue. ie doing for others.
+			if($this->rescue_member())
+			{
+				$this->{$this->rescueThing}->autouser = false;
+				$this->{$this->rescueThing}->{$this->ucThing}->autouser = false;
+
+				$email = !empty($this->request->data[$this->ucThing]['email']) ?
+					$this->request->data[$this->ucThing]['email'] : null;
+
+				# Instead, find user account if any and link 
+				# user_id is always hidden so we know if set or not.
+				if(empty($this->request->data[$this->rescueThing]['user_id']) && $email)
+				{
+					if($user_id = $this->User->field('id',array('email'=>$email)))
+					{
+						# Link user to rescue_volunteer so their status is shown.
+						$this->request->data[$this->ucThing]['user_id'] = $user_id;
+							
+						# Don't assign Volunteer profile if they already have one.
+						if(!$this->{$this->ucThing}->count(array('user_id'=>$user_id)))
+						{
+							$this->request->data[$this->ucThing]['user_id'] = $user_id;
+						}
+					}
+				}
+			}
+
 			# XXX even if they have a full volunteer/etc application finished, we still should probably ask for 
 			# "what you'd like to contribute/what you have to offer", etc for this specific instance.
 			#

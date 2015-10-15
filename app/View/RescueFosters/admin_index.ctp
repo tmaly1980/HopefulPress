@@ -5,12 +5,16 @@
 
 <div class='index'>
 
-<? if(!empty($applicants)) { ?>
+<? if(isset($applicants)) { ?>
 <h3>Foster Applicants</h3>
 <div class='alert alert-info'>
 	The following fosters have recently submitted applications via your website. You can create user accounts for fosters to contribute content by setting their status as 'Active'.
 </div>
+	<? if(empty($applicants)) { ?>
+		<div class='nodata'>No recent foster applicants</div>
+	<? } else { ?>
 	<?= $this->element("../RescueFosters/list",array('fosters'=>$applicants)); ?>
+	<? } ?>
 <? } ?>
 
 <? if(!empty($fosters)) { ?>

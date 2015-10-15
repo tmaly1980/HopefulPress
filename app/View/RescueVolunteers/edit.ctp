@@ -38,6 +38,9 @@ if(false) {#!$this->Rescue->dedicated()) { # Will have to figure out how to hand
 		<?= $this->Form->hidden("RescueVolunteer.id"); ?>
 		<?= $this->Form->hidden("Volunteer.id"); ?>
 
+		<?= $this->Form->hidden("RescueVolunteer.user_id"); ?>
+		<?= $this->Form->hidden("Volunteer.user_id"); ?>
+
 	<? if(!empty($this->request->params['admin'])) { ?>
 	<div class='right_align'>
 		<?= $this->Form->save(!empty($id)?"Update Application":"Submit Application",array('cancel'=>false)); ?>
