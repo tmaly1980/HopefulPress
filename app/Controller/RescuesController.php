@@ -228,12 +228,12 @@ class RescuesController extends AppController
 
 	function about()
 	{
-		$this->set("aboutPageBios", $this->AboutPageBio->find('all',array('rescue_id'=>$this->rescuename)));
+		$this->set("aboutPageBios", $this->AboutPageBio->find('all',array('rescue_id'=>$this->rescue_id)));
 	}
 
 	function contact()
 	{
-		$this->set("contacts", $this->Contact->find('all',array('rescue_id'=>$this->rescuename)));
+		$this->set("contacts", $this->Contact->find('all',array('rescue_id'=>$this->rescue_id)));
 	}
 
 	function search()

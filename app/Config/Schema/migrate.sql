@@ -13,23 +13,26 @@ INSERT INTO portal.rescues (id,hostname,title,user_id,created,modified,disabled,
 UPDATE portal.rescues r LEFT JOIN hp.contact_pages c ON c.site_id = r.id
 	SET r.phone=c.phone,r.email=c.email,r.address=c.address,r.city=c.city,r.state=c.state,r.zip_code=c.zip_code;
 
+UPDATE portal.rescues r LEFT JOIN hp.paypal_credentials p ON r.id = p.site_id
+	SET r.paypal_email = p.account_email;
+
 
 # ABOUT
 #
 UPDATE portal.rescues r LEFT JOIN hp.about_pages a ON a.site_id = r.id
-	SET r.about=a.overview,r.history=a.history,r.about_photo_id=a.page_photo_id;
+	SET r.about=IFNULL(a.mission,a.overview),r.history=a.history,r.about_photo_id=a.page_photo_id;
 
 
 # HOMEPAGE
 #
 UPDATE portal.rescues r LEFT JOIN hp.homepages h ON h.site_id = r.id
-	SET r.page_photo_id=h.page_photo_id,r.sidebar_title=h.sidebar_title,r.sidebar_content=h.sidebar_content ;
+	SET r.page_photo_id=h.page_photo_id,r.facebook_url=h.facebook_like_url,r.sidebar_title=h.sidebar_title,r.sidebar_content=h.sidebar_content ;
 
 
 # DESIGN
 #
 UPDATE portal.rescues r LEFT JOIN hp.site_designs s ON s.site_id = r.id
-	SET r.color1=s.color1,r.color2=s.color2,r.facebook_url=s.facebook_url,r.twitter_url=s.twitter_url;
+	SET r.theme = s.theme, r.color1=s.color1,r.color2=s.color2,r.facebook_url=s.facebook_url,r.twitter_url=s.twitter_url;
 
 #
 INSERT INTO users (id,rescue_id,email,first_name,last_name,username,password,admin,manager,created,modified,invite,invited,page_photo_id,last_login,login_count)
