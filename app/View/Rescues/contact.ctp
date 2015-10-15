@@ -83,4 +83,6 @@
 	$('#contacts_sorter').sorter('.contactlist',{axis: 'y',controller: 'contacts'});
 	</script>
 	<? } ?>
+
+	<div class='clear'></div>
 </div>
