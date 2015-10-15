@@ -49,7 +49,6 @@ class AdoptablesController extends AppController
 				}
 			}
 		}
-		error_log("COND=".print_r($cond,true));
 		#$this->paginate = array(
 		#	'conditions' => $cond,
 		#	'fields'=>$fields,
