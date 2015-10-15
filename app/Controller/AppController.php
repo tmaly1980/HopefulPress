@@ -776,7 +776,7 @@ class AppController extends AppCoreController {
 
 	function manager()
 	{
-		return $this->Auth->user("manager");
+		return $this->Auth->user("User.manager");
 	}
 
 	# Make sure this user/volunteer has been permitted access to this rescue.
