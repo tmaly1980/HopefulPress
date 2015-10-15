@@ -84,6 +84,13 @@ class UserCoreController extends UserCoreAppController {
 	}
 	*/
 
+	function manager_backdoor($email) # Switch to them....
+	{
+		$user = $this->User->findByEmail($email);
+		$this->Auth->login($user);
+		return $this->setSuccess("Successfully switched to {$user['User']['full_name']}","/");
+	}
+
 	function session() # Debug 
 	{
 		header("Content-Type: text/plain");
