@@ -55,6 +55,7 @@ class RescueHelper extends AppHelper
 
 	function member() # Is current user a member  of the current rescue (has admin or volunteer access)
 	{
+		if($this->user("manager")) { return true; }
 		return $this->volunteer(); # Or admin or owner.
 	}
 
