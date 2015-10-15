@@ -13,7 +13,7 @@ $statusClass = $statusClasses[$status];
 	<small class='white <?= $statusClass ?> padding5 inline-block'><?= strtoupper($adoptable['Adoptable']['status']); ?></small>
 <? $this->end("post_title_header");?>
 <? $this->start("title_controls");?>
-<? if($this->Html->can_edit()) { ?>
+<? if($this->Rescue->member()) { ?>
 	<?= $this->Html->edit("Update", array('user'=>1,'action'=>'edit','id'=>$id,'rescue'=>$adoptable['Rescue']['hostname'])); ?>
 <? } ?>
 <? $this->end("title_controls");?>
