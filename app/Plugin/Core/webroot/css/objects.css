@@ -336,21 +336,27 @@ h1 a, h2 a, h3 a, h4 a, h5 a, h6 a
 {
 	float: none;
 	max-width: none;
+	clear: both;
 }
 
 .widget .item .PagePhoto
 {
-	width: 100%;
+	max-width: 250px;
+}
+
+.widget .item.wide .PagePhoto
+{
+	float: left;
 }
 
 @media (min-width: 768px) {
 	.widget .item.wide > *
 	{
-		float: left;
+		/*float: left;*/
 	}
 	.widget .item.wide .PagePhoto
 	{
-		max-width: 250px;
+	/*	max-width: 250px;*/
 	}
 }
 
