@@ -29,7 +29,7 @@ extract($this->PagePhoto->config(compact('parentClass','photoModel')));
 		<? $img_attrs = array('id'=>"{$photoModel}_$page_photo_id", 'class'=>"maxwidth100p margin5 $class"); ?>
 		<? if(!empty($width)) { $img_attrs['width'] = $width; } ?>
 		<? if(!empty($height)) { $img_attrs['height'] = $height; } ?>
-		<?= $this->Html->image(array('plugin'=>$plugin,'controller'=>$controller,'action'=>'image',$page_photo_id,$scaledWidth,'?'=>array('rand'=>rand(10000,50000))),$img_attrs); ?>
+		<?= $this->Html->image(array('prefix'=>false,'plugin'=>$plugin,'controller'=>$controller,'action'=>'image',$page_photo_id,$scaledWidth,'?'=>array('rand'=>rand(10000,50000))),$img_attrs); ?>
 
 		<div class='clear'></div>
 

@@ -371,4 +371,13 @@ class CoreHtmlHelper extends BoostCakeHtmlHelper
 		}
 	}
 
+	function image($url,$opts=array(),$attrs=array())
+	{
+		if(is_array($url) && isset($url['prefix']) && !empty($this->request->params['prefix']))
+		{
+			$url[$this->request->params['prefix']] = false;
+		}
+		return parent::image($url,$opts,$attrs);
+	}
+
 }
