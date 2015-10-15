@@ -49,7 +49,7 @@ if(empty($color1)) { $color1 = '559522'; }
 	.uppercase;
 	border-bottom: solid #ddd 1px;
 	margin: 0.5em;
-	padding: 0.1em;
+	padding: 0.5em 1em;
 }
 
 #header
