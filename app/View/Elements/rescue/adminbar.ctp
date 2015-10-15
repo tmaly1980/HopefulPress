@@ -54,7 +54,7 @@
       <ul class='nav navbar-right'>
       	<li>
 		<div class='paddingright10'>
-		<?= $this->Html->settings("Rescue Details",array('plugin'=>null,'rescuer'=>1,'controller'=>'rescues','action'=>'edit'),array('class'=>'')); ?>
+		<?= $this->Html->settings("Rescue Details",array('plugin'=>null,'admin'=>1,'controller'=>'rescues','action'=>'edit'),array('class'=>'')); ?>
 		</div>
 	</li>
       </ul>
