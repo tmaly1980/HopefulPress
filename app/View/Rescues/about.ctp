@@ -1,6 +1,11 @@
 <? $this->assign("page_title", "About ".$rescue['Rescue']['title']); ?>
 <? $this->assign("container_class", ""); ?>
 <? $this->assign("layout_main_class", ""); ?>
+<? if($this->Rescue->admin()) { ?>
+<? $this->start("title_controls"); ?>
+	<?= $this->Html->edit("Update",array('admin'=>1,'controller'=>'rescues','action'=>'edit','#'=>'about')); ?>
+<? $this->end("title_controls"); ?>
+<? } ?>
 
 <?= $this->element("Sortable.js"); ?>
 
@@ -8,7 +13,7 @@
 
 	<div class='minheight100'>
 			<?= $this->element("PagePhotos.view",array('photoModel'=>'AboutPhoto')); ?>
-	<? if(empty($rescue['Rescue']['about']) && empty($rescue['Rescue']['history']) && $this->Html->can_edit()) { ?>
+	<? if(empty($rescue['Rescue']['about']) && empty($rescue['Rescue']['history']) && $this->Rescue->admin()) { ?>
 		<div class='alert alert-info'>
 			You haven't filled out any information about your organization yet.
 			<?= $this->Html->edit("Add details", array('rescuer'=>1,'action'=>'edit','#'=>'about'),array('short'=>false)); ?>
@@ -40,7 +45,7 @@
 
 	<hr/>
 
-	<? if(!empty($aboutPageBios) && $this->Html->can_edit()) { ?>
+	<? if(!empty($aboutPageBios) && $this->Rescue->admin()) { ?>
 		<div class='right'>
 		<?= $this->Html->add("Add Staff Bio", array('admin'=>1,'controller'=>'about_page_bios','action'=>'add')); ?>
 		<? if(count($aboutPageBios) > 1) { ?>
@@ -48,19 +53,19 @@
 		<? } ?>
 		</div>
 	<? } ?>
-	<? if(!empty($aboutPageBios) || $this->Html->can_edit())  { ?>
+	<? if(!empty($aboutPageBios) || $this->Rescue->admin())  { ?>
 	<h3 id='Rescue_BioTitle'><?= !empty($rescue['Rescue']['bio_title']) ? $rescue['Rescue']['bio_title'] : "Our Staff" ?></h3>
 	<div class='clear'></div>
 	<? } ?>
 
-	<? if(empty($aboutPageBios) && $this->Html->can_edit()) { ?>
+	<? if(empty($aboutPageBios) && $this->Rescue->admin()) { ?>
 		<?= $this->Html->add("Add Staff Bios", array('admin'=>1,'controller'=>'about_page_bios','action'=>'add'),array('short'=>false)); ?>
 		<div class='alert alert-info'>
 			You can add biographies of individuals within your organization.
 		</div>
 	<? } ?>
 
-<? if($this->Html->can_edit()) { ?>
+<? if($this->Rescue->admin()) { ?>
 	<script>
 	//$('#Rescue_BioTitle').inline_edit({link: '', inline:'after'});
 	</script>
@@ -71,7 +76,7 @@
 		<?= $this->element("../AboutPageBios/list"); ?>
 	</div>
 
-<? if($this->Html->can_edit() && count($aboutPageBios) > 1) { ?>
+<? if($this->Rescue->admin() && count($aboutPageBios) > 1) { ?>
 	<script>
 	$('#bio_sorter').sorter('.biolist',{axis: 'y',controller: 'about_page_bios'});
 	</script>

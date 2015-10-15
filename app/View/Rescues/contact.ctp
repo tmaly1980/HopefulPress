@@ -1,11 +1,16 @@
 <? $this->assign("page_title", "Contact ".$rescue['Rescue']['title']); ?>
+<? if($this->Rescue->admin()) { ?>
+<? $this->start("title_controls"); ?>
+	<?= $this->Html->edit("Update",array('admin'=>1,'controller'=>'rescues','action'=>'edit','#'=>'contact')); ?>
+<? $this->end("title_controls"); ?>
+<? } ?>
 
 <div class="pages form">
 	<? if(
 		empty($rescue['Rescue']['phone']) &&
 		empty($rescue['Rescue']['email']) &&
 		empty($rescue['Rescue']['address']) &&
-		$this->Html->can_edit()
+		$this->Rescue->admin()
 	) { ?>
 		<div  class='alert alert-info'>
 			You haven't filled out any contact information for your organization yet.
@@ -51,7 +56,7 @@
 
 	<hr/>
 
-	<? if(!empty($contacts) && $this->Html->can_edit()) { ?>
+	<? if(!empty($contacts) && $this->Rescue->admin()) { ?>
 	<div class='right'>
 		<?= $this->Html->add("Add Contact", array('user'=>1,'controller'=>'contacts','action'=>'add'),array('short'=>false)); ?>
 		<? if(count($contacts) > 1) { ?>
@@ -60,13 +65,13 @@
 	</div>
 	<? } ?>
 
-	<? if(!empty($contacts) || $this->Html->can_edit()) { ?>
+	<? if(!empty($contacts) || $this->Rescue->admin()) { ?>
 	<h3 id='Rescue_ContactsTitle'>Contacts</h3>
 	<div class='clear'></div>
 	<? } ?>
 
 	<? if(empty($contacts)) { ?>
-		<? if($this->Html->can_edit()) { ?>
+		<? if($this->Rescue->admin()) { ?>
 		<?= $this->Html->add("Add Contact", array('admin'=>1,'controller'=>'contacts','action'=>'add','rescue'=>$rescuename),array('short'=>false)); ?>
 		<div class='alert alert-info'>
 			You can add individual contacts with their own phone and email details
@@ -78,7 +83,7 @@
 	</div>
 	<? } ?>
 
-	<? if($this->Html->can_edit() && count($contacts) > 1) { ?>
+	<? if($this->Rescue->admin() && count($contacts) > 1) { ?>
 	<script>
 	$('#contacts_sorter').sorter('.contactlist',{axis: 'y',controller: 'contacts'});
 	</script>
