@@ -645,7 +645,7 @@ class AppController extends AppCoreController {
 
 			$nav['adoptionFormEnabled'] = !$this->AdoptionForm->count(array('disabled'=>1)); # Not explicitly disabled (default enabled)
 
-			if(!empty($rescue['Rescue']['paypal_email']) || !$this->DonationPage->count(array("wishlist != ''")))
+			if(!empty($rescue['Rescue']['paypal_email']) || $this->DonationPage->count())
 			{
 				$nav['donationsEnabled'] = true;
 
