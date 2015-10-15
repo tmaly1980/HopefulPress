@@ -215,7 +215,7 @@ class HostInfo
 		*/
 	}
 
-	function domain_ready($domain)
+	static function domain_ready($domain)
 	{
 		$server = self::default_domain();
 
