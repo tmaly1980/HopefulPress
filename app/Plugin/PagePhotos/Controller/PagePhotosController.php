@@ -97,7 +97,7 @@ class PagePhotosController extends AppController
 	}
 	*/
 
-	function delete($parentClass, $photoModel, $id = null) # Removes reference from parent object
+	function delete($parentClass, $photoModel = null, $id = null) # Removes reference from parent object
 	{
 		extract($this->vars());#$model));
 
