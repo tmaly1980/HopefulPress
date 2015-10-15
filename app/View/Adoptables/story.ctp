@@ -42,11 +42,11 @@
 				<?php echo ($adoptable['Adoptable']['success_story']); ?>
 			</div>
 
-			<? if(empty($this->rescuename) && !empty($adoptable['Rescue']['id'])) { ?>
+			<? /* # DOESNT SEEM TO WORK.... still shows up on any site. $this->rescuename empty? # if(empty($this->rescuename) && !empty($adoptable['Rescue']['id'])) { ?>
 			<div class=''>
 			Adoption made possible by <?= $this->Html->link($adoptable['Rescue']['title'], array('controller'=>'rescues','action'=>'view',$adoptable['Rescue']['hostname'])); ?>, <?= $adoptable['Rescue']['city'] ?>, <?= $adoptable['Rescue']['state'] ?>
 			</div>
-			<? } ?>
+			<? } */ ?>
 			<div class='clear'></div>
 		</div>
 	</div>
