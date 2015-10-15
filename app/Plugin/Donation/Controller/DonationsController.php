@@ -293,8 +293,13 @@ class DonationsController extends AppController
 			#
 			$paypal['sandboxMode'] = Configure::read("prod") ? false : true;
 			#$this->Paypal = new Paypal($paypal);
+			if(Configure::read("debug")) { echo  "SETTING CREDS=".print_r($paypal,true); }
 			$this->set("paypalCredentials", $paypal); # 
 			return $paypal;
+		}
+		if(Configure::read('debug'))
+		{
+			echo "NO_CREDS?";
 		}
 	}
 	function _credentials_stripe()
@@ -305,6 +310,11 @@ class DonationsController extends AppController
 
 	function _credentials_paypal()
 	{
+		if(Configure::read("debug"))
+		{
+			echo "PPE=".$this->rescue("paypal_email");
+
+		}
 		#  HACKED
 		if(!empty($this->rescue('paypal_email')))
 		{
