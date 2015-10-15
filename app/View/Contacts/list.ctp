@@ -7,7 +7,7 @@
 	<td rowspan=2>
 		<b><?= $contact['Contact']['name'] ?><? if(!empty($contact['Contact']['title'])) { ?>, <i><?= $contact['Contact']['title'] ?></i><? } ?></b>
 		&nbsp;
-		<? if($this->Html->can_edit()) { ?>
+		<? if($this->Rescue->admin()) { ?>
 		<?= $this->Html->blink("edit", null, array('controller'=>'contacts','action'=>'edit',$contact['Contact']['id']),array('class'=>'btn-xs btn-info')); ?>
 		<?= $this->Html->blink("trash", null, array('controller'=>'contacts','action'=>'delete',$contact['Contact']['id']),array('confirm'=>'Are you sure you want to remove this contact?','class'=>'btn-xs btn-danger')); ?>
 		<? } ?>

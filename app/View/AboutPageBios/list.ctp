@@ -10,7 +10,7 @@
 	<div class='medium col-sm-4'>
 		<b><?= $bio['AboutPageBio']['name'] ?><? if(!empty($bio['AboutPageBio']['title'])) { ?>, <i><?= $bio['AboutPageBio']['title'] ?></i><? } ?></b>
 		&nbsp;
-		<? if($this->Html->can_edit()) { ?>
+		<? if($this->Rescue->admin()) { ?>
 		<?= $this->Html->edit(null, array('admin'=>1,'controller'=>'about_page_bios','action'=>'edit',$bio['AboutPageBio']['id']),array('class'=>'btn-xs ')); ?>
 		<?= $this->Html->delete(null, array('admin'=>1,'controller'=>'about_page_bios','action'=>'delete',$bio['AboutPageBio']['id']),array('confirm'=>'Are you sure you want to remove this staff bio?','class'=>'btn-xs')); ?>
 		<? } ?>
