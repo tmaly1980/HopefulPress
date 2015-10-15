@@ -33,12 +33,12 @@
 </div>
 <? } ?>
 
-<?= $this->element("rescue/topics"); ?>
 
 <? $updates_sidebar = $this->element("../Rescues/updates_sidebar");  ?>
 <? $updates = $this->element("../Rescues/updates");  ?>
 
 <? $this->start("after_content"); ?>
+	<?= $this->element("rescue/topics"); ?>
 	<?= $this->fetch("before_updates"); # ??? ?>
 <div class='row'>
 
