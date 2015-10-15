@@ -1,6 +1,8 @@
-		<? $this->element("defs/social"); ?>
 		<div class='social-icons'>
-		<?= $this->fetch("social_content"); ?>
+		<? if(!empty($nav['donationsEnabled'])) { ?>
+		        <?= $this->Html->link("Donate", "/donation", array('class'=>'btn btn-warning controls')); ?>
+		<? } ?>
+
 		<? if($fb = $rescue['Rescue']['facebook_url']) { ?>
 			<?= $this->Html->link($this->Html->fa("facebook fa-lg"), $fb, array('title'=>'Find us on Facebook','class'=>'btn white bluebg medium')); ?>
 		<? } ?>
