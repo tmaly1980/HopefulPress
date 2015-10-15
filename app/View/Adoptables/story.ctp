@@ -1,7 +1,20 @@
 	<div class='bordertop row'>
 		<div class='col-md-3 padding10'>
-			<? if($photo_id = $adoptable['SuccessStoryPhoto']['id']) { 
-				$image = $this->Html->image(array('controller'=>'success_story_photos','action'=>'thumb',$photo_id,'300x300'),array('class'=>'border maxwidth100p'));
+		<?
+			$imgurl = "/images/nophoto.png";
+			if(!empty($adoptable['Adoptable']['success_story_photo_id']))
+			{
+				$imgurl = array('controller'=>'success_story_photos','action'=>'thumb',$adoptable['Adoptable']['success_story_photo_id'],'200x200',1);
+			}
+			else if(!empty($adoptable['Adoptable']['rescue_photo_id']))
+			{
+				$imgurl = array('controller'=>'adoptable_photos','action'=>'thumb',$adoptable['Adoptable']['rescue_photo_id'],'200x200',1);
+			}
+			else if(!empty($adoptable['Photos'][0]['id']))
+			{
+				$imgurl = array('controller'=>'adoptable_photos','action'=>'thumb',$adoptable['Photos'][0]['id'],'200x200',1);
+			}
+			$image = $this->Html->image($imgurl,array('class'=>'border maxwidth100p'));
 			?>
 
 				<? if(empty($inline)) { ?>
