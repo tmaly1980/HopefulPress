@@ -3,7 +3,7 @@
 <? $this->start("post_title_header");?>
 <?
 $title_stats = array();
-$title_keys = array('name','breed','gender','birthdate','child_friendly','cat_friendly','dog_friendly');
+$title_keys = array('name','breed','gender','birthdate');# NOT SURE? ,'child_friendly','cat_friendly','dog_friendly');
 foreach($title_keys as $key)
 {
 	if(!empty($adoptable['Adoptable'][$key]))
@@ -12,6 +12,8 @@ foreach($title_keys as $key)
 		if($key == 'birthdate')
 		{
 			$value = $this->Time->age($value);
+		} else if ($key == 'gender') {
+			$value = substr($value,0,1);
 		} else if (is_numeric($value)) { 
 			$value = Inflector::humanize($key);
 		}
