@@ -8,7 +8,7 @@
 <div  class='view'>
 
 <div class='row'>
-	<div class='col-md-6'>
+	<div class='col-md-6 center_align'>
 		<?= $this->element("PagePhotos.view",array('photoModel'=>'AdoptablePhoto','class'=>'maxwidth100p maxheight500','width'=>400)); ?>
 	</div>
 	<div class='col-md-6 paddingtop50'>
