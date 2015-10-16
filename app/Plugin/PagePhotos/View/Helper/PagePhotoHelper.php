@@ -41,12 +41,15 @@ class PagePhotoHelper extends AppHelper
 			$vars = array_merge($vars,$config); # Update.
 		}
 
-		if(!isset($vars['plugin'])) { $vars['plugin'] = ($vars['photoModel'] == 'PagePhoto' ? 'page_photos' : null); }
 
 
 		if(empty($vars['controller'])) {
 			$vars['controller'] = Inflector::pluralize(Inflector::underscore($vars['photoModel'])); # Implied from model class.
 		}
+
+		$vars['formModel'] = Inflector::singularize(Inflector::classify($vars['controller'])); # MUST match.
+
+		if(!isset($vars['plugin'])) { $vars['plugin'] = ($vars['controller'] == 'page_photos' ? 'page_photos' : null); }
 		if(empty($vars['primaryKey']))
 		{
 			$vars['primaryKey'] = !empty($parentObject) && !empty($parentObject->belongsTo[$vars['photoAlias']]['foreignKey']) ?
@@ -60,8 +63,10 @@ class PagePhotoHelper extends AppHelper
 
 		# We might be passing  other vars explicitly, which we should ALSO save...
 		
+		# This is gathered  from the form  on initial  page load...
 		if(empty($vars['page_photo_id'])) { # Could be set after save.
-			$vars['page_photo_id'] = $this->Form->fieldValue($vars['primaryKey']);
+			$vars['page_photo_id'] = $this->Form->fieldValue($vars['primaryKey']); # ie Adoptable.adoptable_photo_id (what parent saves)
+			#error_log("grabbing  page_photo_id, mode={$this->Form->defaultModel}, {$vars['primaryKey']}={$vars['page_photo_id']}");
 		}
 		if(empty($vars['page_photo_id']))
 		{

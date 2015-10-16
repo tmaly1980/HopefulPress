@@ -1,14 +1,16 @@
-<? extract($this->PagePhoto->config(compact('parentClass','photoModel'))); ?>
+<? extract($config = $this->PagePhoto->config(compact('parentClass','photoModel'))); ?>
+<? error_log("CFG=".print_r($config,true));  ?>
 <script>
 $.dialogheaderhide();
 </script>
 <? 
 $scaledWidth = 300; 
-$page_photo_id = $this->Form->fieldValue("$photoModel.id");
 ?>
 <?= $this->element("Image.js"); ?>
 <div id='<?=$photoModel?>Cropper'>
-<?= $this->Form->create($photoModel, array('url'=>array('plugin'=>$plugin,'controller'=>$controller,'action'=>'crop',$parentClass,$photoModel,$model_id),'class'=>'json')); ?>
+<?= $this->Form->create($formModel, array('url'=>array('plugin'=>$plugin,'controller'=>$controller,'action'=>'crop',$parentClass,$photoModel,$model_id),'class'=>'json')); ?>
+
+<? $page_photo_id = $this->Form->fieldValue("id"); ?>
 
 <div class='right'>
 	<button type='button' class='btn btn-danger' id='<?=$photoModel?>CropperCancel'><span class='glyphicon glyphicon-remove'></span> Cancel</button>
@@ -24,11 +26,11 @@ $filename = $this->Form->fieldValue("$photoModel.filename");
 if($filename) { list($origWidth, $origHeight) = getimagesize(APP."/webroot/$path/$filename"); }
 ?>
 	
-	<?= $this->Form->hidden("$photoModel.id", array('value'=>$page_photo_id)); ?>
-	<?= $this->Form->hidden("$photoModel.crop_x", array('id'=>"{$photoModel}CropX")); ?>
-	<?= $this->Form->hidden("$photoModel.crop_y", array('id'=>"{$photoModel}CropY")); ?>
-	<?= $this->Form->hidden("$photoModel.crop_w", array('id'=>"{$photoModel}CropW")); ?>
-	<?= $this->Form->hidden("$photoModel.crop_h", array('id'=>"{$photoModel}CropH")); ?>
+	<?= $this->Form->hidden("id", array('value'=>$page_photo_id)); ?>
+	<?= $this->Form->hidden("crop_x", array('id'=>"{$photoModel}CropX")); ?>
+	<?= $this->Form->hidden("crop_y", array('id'=>"{$photoModel}CropY")); ?>
+	<?= $this->Form->hidden("crop_w", array('id'=>"{$photoModel}CropW")); ?>
+	<?= $this->Form->hidden("crop_h", array('id'=>"{$photoModel}CropH")); ?>
 
 	<div style="width: <?= $scaledWidth ?>px;" class='center padding25'>
 		<?= $this->Html->image(array('plugin'=>$plugin,'controller'=>$controller,'action'=>'fullimage',$page_photo_id,$scaledWidth), array('class'=>'cropper')); ?>

@@ -67,9 +67,13 @@ class PagePhotosController extends AppController
 			if(!empty($photo[$this->modelClass]['height'])) { $this->set("height", $photo[$this->modelClass]['height']); }
 			$this->Json->set("src", "$plugin/$controller/image/$id"); # 300x300
 			$this->Json->set("filelink", "$plugin/$controller/image/$id"); # redactor
-			$this->request->data = $photo; # For Model->field()
+
+			# Since might be PagePhoto and uses an alias, copy over to safe model.
+			$this->request->data[$photoModel] = $photo[$this->modelClass];
+
 			#$this->Json->set("thumb_src", "/page_photos/thumb/".$this->PagePhoto->id); # Unused for now... since above is so small anyway.
 		}
+		error_log("REPLACING $photoModel, PLUG=$plugin, CONT=$controller, ID=$id");
 		$this->Json->replace($photoModel);
 		$this->Json->render("PagePhotos.edit");
 	}
@@ -127,7 +131,7 @@ class PagePhotosController extends AppController
 				}
 			}
 
-			error_log("LOOKING FOR $parentClass WITH $primaryKey => $id");
+			#error_log("LOOKING FOR $parentClass WITH $primaryKey => $id");
 			$parent_id = $this->{$parentClass}->field('id', array($primaryKey=>$id));
 			#error_log("GOT=$parent_id");
 
@@ -161,6 +165,9 @@ class PagePhotosController extends AppController
 		$this->set("photoModel",$photoModel); # Might just be an alias. If we really dont use PagePhoto, we need a custom controller w/uses set proper
 		$this->set("model_id",$id);
 		extract($this->vars());#$parentClass));
+		$this->set($primaryKey, $id);
+		$this->set("page_photo_id", $id);
+		#error_log("CROP $id, PC=$parentClass, PM=$photoModel");
 
 		#error_log("CROP CALLED");
 		$this->edit($parentClass,$photoModel,$id,true); # Process first.
@@ -193,8 +200,11 @@ class PagePhotosController extends AppController
 			# This here is the Photo class...
 			if($this->{$this->modelClass}->save($this->request->data))
 			{
-				#error_log("SETTING $primaryKey ({$this->modelClass})=> ".$this->{$this->modelClass}->id);
+				#error_log("DATAFILE ".$this->{$this->modelClass}->id."=".print_r($this->{$this->modelClass}->read(),true));
+			#	#error_log("SETTING $primaryKey ({$this->modelClass})=> ".$this->{$this->modelClass}->id);
 				$this->set($primaryKey, $this->{$this->modelClass}->id);
+				$this->set("page_photo_id", $this->{$this->modelClass}->id);
+				# ie page_photo_id, for loading preview...
 
 				# primary key name is based on model class (and thus controller)....ie page_photo_id, rescue_logo_id
 
