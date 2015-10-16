@@ -385,8 +385,10 @@ class CoreTimeHelper extends TimeHelper
 	}
 
 	function age($date) # Assumes yyyy-mm-dd
-	{
-		return $this->timeAgoInWords($date,array('end'=>'100 year','relativeString'=>'%s old','accuracy'=>array('year'=>'month'))); 
+	{ # Rounds to one unit. ie 1 year, or 6 months
+		$age = $this->timeAgoInWords($date,array('end'=>'100 year','accuracy'=>array('year'=>'month'))); 
+		$ages = split(", ", $age);
+		return $ages[0]. " old"; # Just first (biggest) unit.
 	}
 
 	function timeago($date, $long = false) # MUCH smarter, nicer to look at. 

@@ -23,8 +23,8 @@
 	echo $this->fetch('css');
 	echo $this->fetch('script'); # May depend on libs
     ?>
-    <? $title = $this->fetch("browser_title"); ?>
     <? if($page_title = $this->fetch("page_title")) { $title = $page_title; }; ?>
+    <? if($browser_title = $this->fetch("browser_title")) { $title = $browser_title; } # Different ?>
 
     <title>
     	<?= !empty($title) ? "$title | " : "" ?>

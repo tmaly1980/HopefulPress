@@ -2,6 +2,30 @@
 <? $id = $adoptable['Adoptable']['id']; ?>
 <? $this->start("post_title_header");?>
 <?
+$title_stats = array();
+$title_keys = array('name','breed','gender','birthdate','child_friendly','cat_friendly','dog_friendly');
+foreach($title_keys as $key)
+{
+	if(!empty($adoptable['Adoptable'][$key]))
+	{
+		$value = $adoptable['Adoptable'][$key];
+		if($key == 'birthdate')
+		{
+			$value = $this->Time->age($value);
+		} else if (is_numeric($value)) { 
+			$value = Inflector::humanize($key);
+		}
+		$title_stats[] = $value;
+	}
+}
+
+if(!empty($adoptable['Rescue']['city']) || !empty($adoptable['Rescue']['state']))
+{
+	$title_stats[] = join(", ", array_filter(array($adoptable['Rescue']['city'],$adoptable['Rescue']['state'])));
+}
+$title_string = join(" | ", $title_stats);
+$this->assign("browser_title", $title_string);
+
 $statusClasses = array(
 	'Available'=>'btn-success',
 	'Pending Adoption'=>'btn-warning',
@@ -42,7 +66,7 @@ $statusClass = $statusClasses[$status];
 		<?= $this->Html->link($adoptable['Rescue']['title'], array('controller'=>'rescues','action'=>'view','rescue'=>$adoptable['Rescue']['hostname'])); ?>
 		<br/>
 		<? if(!empty($adoptable['Rescue']['city'])) { ?>
-		Location: <?= $adoptable['Rescue']['city'] ?>, <?= $adoptable['Rescue']['state'] ?>
+		Location: <?= join(", ", array_filter(array($adoptable['Rescue']['city'], $adoptable['Rescue']['state']))); ?>
 		<? } else if(!empty($adoptable['Rescue']['zip_code'])) { ?>
 			<!-- XXX DETERMINE CITY FROM ZIP CODE -->
 		<? } ?>
