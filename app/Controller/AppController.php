@@ -657,6 +657,8 @@ class AppController extends AppCoreController {
 			}
 
 			$this->set("nav", $nav);
+
+			Configure::write("site_title", $rescue['Rescue']['title']);
 		}
 	}
 
