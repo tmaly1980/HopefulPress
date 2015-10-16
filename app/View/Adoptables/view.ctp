@@ -3,7 +3,7 @@
 <? $this->start("post_title_header");?>
 <?
 $title_stats = array();
-$title_keys = array('name','breed','gender','birthdate');# NOT SURE? ,'child_friendly','cat_friendly','dog_friendly');
+$title_keys = array('name','status','breed','gender','birthdate');# NOT SURE? ,'child_friendly','cat_friendly','dog_friendly');
 foreach($title_keys as $key)
 {
 	if(!empty($adoptable['Adoptable'][$key]))

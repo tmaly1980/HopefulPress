@@ -119,7 +119,7 @@ class ShareHelper extends AppHelper {
 					} else {
 						var height = 450;
 						var width=550;
-						var top = ($(window).height()-height)/2 + 200;
+						var top = ($(window).height()-height)/2 + 100;
 						var left = ($(window).width()-width)/2;
 						window.open(shareurl, via+'-share', 'height='+height+', width='+width+', top=' + top + ', left=' + left + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
 					}
