@@ -106,7 +106,7 @@ class ShareHelper extends AppHelper {
 					var url = window.location.href;
 					var shareurl = '<?= Router::url(array($prefix=>null,'plugin'=>'sharable','controller'=>'share','action'=>'share')); ?>';
 					shareurl += '/'+via+'?page_url='+url;
-					if(page_title = $("head title").text())
+					if(page_title = $.trim($("head title").text()))
 					{
 						shareurl += "&page_title="+page_title;
 					}
