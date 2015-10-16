@@ -9,7 +9,7 @@
 
 <div class='row'>
 	<div class='col-md-6'>
-		<?= $this->element("PagePhotos.view",array('photoModel'=>'AdoptablePhoto','class'=>'width100p maxheight500','width'=>400)); ?>
+		<?= $this->element("PagePhotos.view",array('photoModel'=>'AdoptablePhoto','class'=>'maxwidth100p maxheight500','width'=>400)); ?>
 	</div>
 	<div class='col-md-6 paddingtop50'>
 		<? if(!empty($adoptable['Adoptable']['sponsorship_details'])) { ?>
