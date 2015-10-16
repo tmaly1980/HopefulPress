@@ -55,7 +55,7 @@ class AppController extends AppCoreController {
 			'support'=>'support@hopefulpress.com'
 		),
 		#'Project.Projectable',
-		'Tracker.Tracker',
+		#'Tracker.Tracker',
 		'Editable.Editable',
 	);
 
