@@ -20,7 +20,7 @@
 				<? if(empty($inline)) { ?>
 					<?= $this->Html->link($image, array('action'=>'view',$adoptable['Adoptable']['id'])); ?>
 				<? } else { ?>
-					<?= $this->Html->link($image, array('controller'=>'success_story_photos','action'=>'fullimage',$photo_id,'600x600'),array('class'=>'lightbox')); ?>
+					<?= $this->Html->link($image, array('controller'=>'success_story_photos','action'=>'fullimage',$adoptable['Adoptable']['id'],'600x600'),array('class'=>'lightbox')); ?>
 				<? } ?>
 		</div>
 		<div class='col-md-9 padding10'>

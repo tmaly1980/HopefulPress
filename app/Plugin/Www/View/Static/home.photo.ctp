@@ -14,13 +14,13 @@
 
 <div class='row'>
 <div class='col-md-8'>
-	<?= $this->element("Www.mission_intro"); ?>
+	<?#= $this->element("Www.mission_intro"); ?>
 	<div class='row'>
 		<div class='col-md-8'>
 			<?= $this->Html->link($this->Html->image("/rescue/images/screenshot.png", array('style'=>'border: solid 5px #999;','class'=>'width100p shadow')),"/pages/features"); ?>
 		</div>
 		<div class='col-md-4'>
-			<?= $this->requestAction("/blog/posts/recent", array('return')); ?>
+			<?#= $this->requestAction("/blog/posts/recent", array('return')); ?>
 		</div>
 	</div>
 </div>

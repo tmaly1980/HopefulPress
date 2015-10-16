@@ -365,7 +365,7 @@ class CoreHtmlHelper extends BoostCakeHtmlHelper
 
 			ob_start();
 			foreach($this->og_images as $og_image) { ?>
-				<meta property="og:image" content="<?= $og_image ?>"/>
+				<meta property="og:image" content="<?= Router::url($og_image,true); ?>"/>
 			<? }
 			return ob_get_clean();
 		}

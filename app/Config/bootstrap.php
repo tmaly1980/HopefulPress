@@ -76,7 +76,7 @@ CakePlugin::loadAll(array(
 	'Core'=>array('bootstrap'=>true),
 	'Stripe'=>array('bootstrap'=>true),  # Loads keys
 	'Paypal'=>array('bootstrap'=>true),  # Loads keys
-	'Rescue'=>array('routes'=>true),
+	#'Rescue'=>array('routes'=>true),
 	'Mail'=>array('routes'=>true),
 	'Donation'=>array('routes'=>true,'bootstrap'=>true),
 ));

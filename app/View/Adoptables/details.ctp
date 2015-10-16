@@ -5,7 +5,7 @@
 <div class='row'>
 	<div class='col-md-6'>
 		<?= $this->Html->image(!empty($imgid)?array('controller'=>'adoptable_photos','action'=>'image',$imgid,'rescue'=>$rescuename):"/images/nophoto.png",array('class'=>'width100p')); ?>
-
+		<? $this->Html->og_image(array('controller'=>'adoptable_photos','action'=>'image',$imgid,'rescue'=>$rescuename)); ?>
 	</div>
 	<div class='col-md-6'>
 		<div class='stats'>

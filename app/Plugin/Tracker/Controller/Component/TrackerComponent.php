@@ -1,9 +1,11 @@
 <?
 
+App::uses("HostInfo", "Core.Lib");
+
 class TrackerComponent extends Component
 {
 	var $uses = array("Tracker.SiteVisit",'Tracker.SitePageView','Tracker.SiteShare','Tracker.MarketingVisit','Tracker.MarketingPageView','Tracker.BlogVisit','Tracker.BlogPageView','Tracker.BlogShare');
-	var $components = array('Sites.Multisite','Auth','Session');
+	var $components = array('Auth','Session');
 
 	var $ip;
 	var $browser;
@@ -24,12 +26,14 @@ class TrackerComponent extends Component
 	function startup(Controller $controller)
 	{
 		$this->controller = $controller;
+		/*
 		foreach($this->uses as $model)
 		{
 			$this->controller->loadModel($model);
 			list($plugin,$modelClass) = pluginSplit($model);
 			$this->{$modelClass} = $this->controller->{$modelClass};
 		}
+		*/
 		$this->request = $this->controller->request;
 
 	}
@@ -37,7 +41,8 @@ class TrackerComponent extends Component
 
 	function internal_referer($host)
 	{
-		foreach($this->Multisite->default_domains as $domain)
+		$default_domains = HostInfo::default_domains();
+		foreach($default_domains as $domain)
 		{
 			if(preg_match("@http[s]?://[^/]*$domain/@", $host))
 			{
@@ -111,12 +116,25 @@ class TrackerComponent extends Component
 	{
 	}
 
+	function loadModels($prefix)
+	{
+		$this->controller->loadModel("{$prefix}Visit");
+		$this->{"{$prefix}Visit"} = $this->controller->{"{$prefix}Visit"};
+		$this->controller->loadModel("{$prefix}PageView");
+		$this->{"{$prefix}PageView"} = $this->controller->{"{$prefix}PageView"};
+		#$this->controller->loadModel("{$prefix}Share");
+		#$this->{"{$prefix}Share"} = $this->controller->{"{$prefix}Share"};
+
+	}
+
 	# Tracking is now done manually.... per each index() and view()
 
 	function track($prefix = 'Site')
 	{
 		#error_log("CALLED TRACK! $prefix");
 		if($this->isBanned()) { return false; }
+
+		$this->loadModels($prefix);
 
 
 		$this->prefix = $prefix;
@@ -298,7 +316,7 @@ class TrackerComponent extends Component
 			$refqs = !empty($refurl['query']) ? $refurl['query'] : null;
 			$refpath = !empty($refurl['path']) ? $refurl['path'] : null;
 
-			$domains = $this->Multisite->default_domains;
+			$domains = HostInfo::default_domains();
 			$domains[] = preg_replace("/^www[.]/", "", $_SERVER['HTTP_HOST']);
 
 			# May need better way to mark as internal, ie www, blog, etc...

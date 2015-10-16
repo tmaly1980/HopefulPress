@@ -40,7 +40,7 @@ class ShareController extends AppController
 	{
 		$url = !empty($this->request->query['page_url']) ? $this->request->query['page_url'] : null;
 		$title = !empty($this->request->query['page_title']) ? $this->request->query['page_title'] : null;
-		$this->redirect("http://www.facebook.com/sharer.php?u={$url}&t={$title}");
+		$this->redirect("http://www.facebook.com/sharer.php?p[url]={$url}&p[title]={$title}");
 	}
 
 	function twitter()

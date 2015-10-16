@@ -43,11 +43,13 @@
           		<li><a href="/pages/signup">Pricing &amp; Signup</a></li>
           		<li><a href="/pages/about">About Us</a></li>
           		<li><a href="/contact">Contact Us</a></li>
+			<!--
           		<li>
 				<div class='padding5'>
 				<a class='btn btn-danger' target='_new' href="http://blog.<?= $default_domain ?>/?HOPEFULPRESS=<?=session_id()?>">Blog</a></li>
 				</div>
 			</li>
+			-->
 			<!--
           		<li><a class='bold orange' target='_new' href="http://support.<?= $default_domain ?>/"><i class='fa fa-life-ring'></i> Support</a></li>
 			-->

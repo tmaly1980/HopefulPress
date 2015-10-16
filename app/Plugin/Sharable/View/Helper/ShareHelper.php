@@ -56,13 +56,13 @@ class ShareHelper extends AppHelper {
 		#if(empty($params['named'])) { $params['named'] = array(); }
 
 		#echo "UB=".print_r($params,true);
-		$url = Router::url($params);
+		$url = Router::url($params,true);
 		#$url = Router::url($params,true); # Absolute url, w/hostname
 		#echo "U=$url";
 		return $url;
 	}
 
-	function share($large = true, $class='right_align font12 black whitebg')
+	function share($large = true, $class='right_align medium black whitebg')
 	{
 		$prefix = !empty($this->params['prefix']) ? $this->params['prefix'] : null;
 		if(Configure::read("members_only")) { return; }
@@ -98,38 +98,51 @@ class ShareHelper extends AppHelper {
 		<script>
 		// Get title via JS, so accurate title....
 		(function($) { 
-			$.fn.share = function(via, url)
-			{
-				var shareurl = '<?= Router::url(array($prefix=>null,'plugin'=>null,'controller'=>'sharable','action'=>'share')); ?>';
-				shareurl += '/'+via+'?page_url='+url;
-				if(page_title = $("head title").text())
-				{
-					shareurl += "&page_title="+page_title;
-				}
-	
-				if(via == 'email')
-				{
-					$.dialog(shareurl);
-				} else {
-					window.location = shareurl;
-				}
-			};
+			$(document).ready(function() {
+				$('.share').click(function(e) {
+					var via = $(this).data('via');
+					e.preventDefault();
+
+					var url = window.location.href;
+					var shareurl = '<?= Router::url(array($prefix=>null,'plugin'=>'sharable','controller'=>'share','action'=>'share')); ?>';
+					shareurl += '/'+via+'?page_url='+url;
+					if(page_title = $("head title").text())
+					{
+						shareurl += "&page_title="+page_title;
+					}
+					
+					if(via == 'email')
+					{
+						window.location.href = "mailto:?subject="+page_title+"&body="+url;
+					} else if(via == 'copypaste') {
+						$.dialog(shareurl);
+					} else {
+						var height = 450;
+						var width=550;
+						var top = ($(window).height()-height)/2 + 200;
+						var left = ($(window).width()-width)/2;
+						window.open(shareurl, via+'-share', 'height='+height+', width='+width+', top=' + top + ', left=' + left + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+					}
+					return false;
+				});
+
+			});
 		})(jQuery);
 		</script>
 		<div id="share" class='<?= $class ?> black whitebg'>
 			<b>Share: </b>
-			<? $shares = array('facebook','twitter','email_message'); ?>
+			<? $shares = array('facebook','twitter','email'); ?>
 
 			<? foreach($shares as $via) { ?>
 				<?= $this->Html->link($this->Html->image(
 					$large ? "/sharable/images/icons/$via.png":"/sharable/images/icons/small/$via.png", 
-					array('title'=>"Share via ".ucwords($via),'class'=>'paddingsides2','align'=>'absmiddle')), "javascript:void(0)", array('e'=>0,'onClick'=>"$(this).share('$via', '$absurl');")); ?>
+					array('title'=>"Share via ".ucwords($via),'class'=>'paddingsides2','align'=>'absmiddle')), "javascript:void(0)", array('e'=>0,'class'=>'share','data-via'=>$via)); ?>
 			<? } ?>
 
 
 			<?= $this->Html->link($this->Html->image(
 				$large  ? "/sharable/images/icons/clipboard2.png" : "/sharable/images/icons/small/clipboard2.png", 
-				array('title'=>'Copy/Paste URL','class'=>'paddingsides5','align'=>'absmiddle')), array('plugin'=>'sharable','prefix'=>null,'controller'=>'sharable','action'=>'copypaste', '?'=>array('page_url'=>$url)), array('escape'=>false, 'title'=>"Copy/Paste",'class'=>'dialog')); ?>
+				array('title'=>'Copy/Paste URL','class'=>'paddingsides5','align'=>'absmiddle')), "javascript:void(0)",  array('e'=>0,'data-via'=>'copypaste', 'class'=>'share','title'=>'Copy/Paste URL')); ?>
 		</div>
 		<?
 		# Set var so wont show up a second time.

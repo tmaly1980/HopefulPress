@@ -48,6 +48,9 @@ if(!HostInfo::site_specified())
 {
 	Router::connectNamed(array('rescue'));
 
+	#router::connect('/', array('plugin'=>'www','controller' => 'static', 'action' => 'index')); 
+	router::connect('/pages/*', array('plugin'=>'www','controller' => 'static', 'action' => 'view')); 
+
 	# ADOPT homepage.
 	Router::connect('/', array('controller' => 'adoptables', 'action' => 'index')); 
 	Router::connect('/adopt', array('controller' => 'adoptables', 'action' => 'index')); 
