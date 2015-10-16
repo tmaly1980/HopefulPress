@@ -46,7 +46,7 @@ class ShareController extends AppController
 	function twitter()
 	{
 		$url = !empty($this->request->query['page_url']) ? $this->request->query['page_url'] : null;
-		$title = !empty($this->request->query['page_title']) ? $this->request->query['page_title'] : null;
+		$title = !empty($this->request->query['page_title']) ? preg_replace("/\|/",",", $this->request->query['page_title']) : null;
 		$this->redirect("http://twitter.com/home?status={$title}%0A{$url}");
 	}
 
