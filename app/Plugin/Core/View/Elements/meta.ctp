@@ -16,6 +16,12 @@ $models = !empty($this->request->params['models']) ? array_keys($this->request->
 <meta name="is_god" content="<?= $this->Admin->is_god(); ?>"/>
 <meta name="is_admin" content="<?= $this->Admin->site_admin(); ?>"/>
 */ ?>
+<?
+if($description = $this->fetch("meta_description"))
+{
+	$meta_description = $description;
+}
+?>
 
 <!-- stuff for search engines, etc. -->
 <meta name="description" content="<?= !empty($meta_description) ? $meta_description : null ?>"/>

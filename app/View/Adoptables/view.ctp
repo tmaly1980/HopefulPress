@@ -28,6 +28,8 @@ if(!empty($adoptable['Rescue']['city']) || !empty($adoptable['Rescue']['state'])
 $title_string = join(" | ", $title_stats);
 $this->assign("browser_title", $title_string);
 
+$this->assign("meta_description", $adoptable['Adoptable']['biography']);
+
 $statusClasses = array(
 	'Available'=>'btn-success',
 	'Pending Adoption'=>'btn-warning',
