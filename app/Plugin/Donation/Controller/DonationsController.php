@@ -4,7 +4,7 @@ App::uses("Paypal", "Paypal.Lib");
 class DonationsController extends AppController
 {
 	var $components = array();#'Stripe.Stripe');
-	var $uses = array('Donation.Donation','Donation.DonationPage');#,'Paypal.PaypalCredential','Stripe.StripeCredential','Donation.DonationPage','Stripe.StripeCredential');
+	var $uses = array('Adoptable','Donation.Donation','Donation.DonationPage');#,'Paypal.PaypalCredential','Stripe.StripeCredential','Donation.DonationPage','Stripe.StripeCredential');
 	var $helpers = array('Stripe.Stripe','Paypal.Paypal');
 
 	var $rescue_required = true;
@@ -161,6 +161,10 @@ class DonationsController extends AppController
 			$this->setSuccess("We greatly appreciate your contribution!", array('action'=>'index'));
 		}
 		$this->set("adoptable_id",$adoptable_id);
+		if(!empty($adoptable_id))
+		{
+			$this->set("adoptable", $this->Adoptable->read(null,$adoptable_id));
+		}
 	}
 
 	function _chargeRecurring($data,$creds,$email)

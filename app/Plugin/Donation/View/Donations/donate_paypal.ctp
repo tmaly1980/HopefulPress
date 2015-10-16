@@ -3,11 +3,16 @@
 <div class='col-md-6'>
 	<h3>Make a One-time Donation</h3>
 	<?= $this->Paypal->create(); ?>
+	<?
+		$description = !empty($adoptable) ? 
+			"Sponsorship for {$adoptable['Adoptable']['name']} to {$rescue['Rescue']['title']}"
+			: "Donation to ".$rescue['Rescue']['title'];
+	?>
 	<? if(!empty($adoptable_id)) { ?>
 		<?= $this->Form->hidden(false,array('name'=>'custom','value'=>$adoptable_id)); #($adoptable_id);#hidden("adoptable_id", array('value'=>$adoptable_id)); ?>
 	<? } ?>
 		<?= $this->Form->hidden(false,array('name'=>'business','value'=>$paypalCredentials['PaypalCredential']['paypal_email'])); ?>
-		<?= $this->Form->hidden(false,array('name'=>'item_name','value'=>"Donation to ".$rescue['Rescue']['title'])); ?>
+		<?= $this->Form->hidden(false,array('name'=>'item_name','value'=>$description)); ?>
 
 		<?= $this->Paypal->input('amount', array('default'=>$defaultAmount)); ?>
 		<?= $this->Form->input("amount_option", array('type'=>'radio','options'=>$amounts,'default'=>$defaultAmount,'class'=>'DonateAmounts','div'=>'inline-radio')); ?>
@@ -24,7 +29,7 @@
 		<?= $this->Form->hidden(false,array('name'=>'custom','value'=>$adoptable_id)); #($adoptable_id);#hidden("adoptable_id", array('value'=>$adoptable_id)); ?>
 	<? } ?>
 		<?= $this->Form->hidden(false,array('name'=>'business','value'=>$paypalCredentials['PaypalCredential']['paypal_email'])); ?>
-		<?= $this->Form->hidden(false,array('name'=>'item_name','value'=>"Recurring Donation to ".$rescue['Rescue']['title'])); ?>
+		<?= $this->Form->hidden(false,array('name'=>'item_name','value'=>"Recurring $description")); ?>
 
 		<?= $this->Paypal->input('amount', array('name'=>'a3','default'=>$defaultAmount)); ?>
 		<?= $this->Form->hidden(false,array('name'=>'p3','value'=>'1')); # Subscription duration ?>

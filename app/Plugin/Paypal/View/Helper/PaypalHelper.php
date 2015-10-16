@@ -1,4 +1,7 @@
 <?
+
+# https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/
+
 # FORGET THIS...
 App::uses("CoreFormHelper", "Core.Helper");
 class PaypalHelper extends CoreFormHelper
@@ -13,7 +16,7 @@ class PaypalHelper extends CoreFormHelper
 		echo parent::create(false,array('method'=>'post','url'=>"https://$server/cgi-bin/webscr",'validate'=>false),$attrs);
 		?>
 		<input type='hidden' name='cmd' value='<?= !empty($options['recurring'])?"_xclick-subscriptions":"_donations"?>'/>
-		<input type='hidden' name='no_shipping' value='1'/>
+		<!--<input type='hidden' name='no_shipping' value='1'/> ASK -->
 		<input type='hidden' name='return' value='<?= $this->Html->url("/donation/thanks",true); ?>'/>
 		<input type='hidden' name='notify_url' value='<?= $this->Html->url("/donation/ipn",true); ?>'/>
 
