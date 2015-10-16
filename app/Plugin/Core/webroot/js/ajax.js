@@ -9,7 +9,7 @@
 			title: title,
 			//message: content,
 			onshow: function(dialog) {
-				if(customOpts.header === 0) // should pass in link so dont get a flicker of the default header.
+				if(customOpts && customOpts.header === 0) // should pass in link so dont get a flicker of the default header.
 				{
 					dialog.getModalHeader().hide();
 				}
@@ -20,9 +20,9 @@
 		var content = $("<div></div>");
 		$.ajax({
 			url: url,
-			data: customOpts.data,
-			type: customOpts.data ? "POST" : "GET",
-			beforeSend: function(xhr) { if(customOpts.update) { xhr.setRequestHeader("X-Update", customOpts.update); } },
+			data: opts.data,
+			type: opts.data ? "POST" : "GET",
+			beforeSend: function(xhr) { if(opts.update) { xhr.setRequestHeader("X-Update", opts.update); } },
 			success: function(response) { 
 				opts.message = $(response).wrap("<div></div>");
 				BootstrapDialog.show(opts);

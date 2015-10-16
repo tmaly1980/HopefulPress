@@ -10,10 +10,10 @@ class ShareController extends AppController
 
 	function share($via = null)
 	{
-		error_log("V=$via, RQ=".print_r($this->request->query,true)); # ITS NOT A GET WITH THE EMAIL!
+		#error_log("V=$via, RQ=".print_r($this->request->query,true)); # ITS NOT A GET WITH THE EMAIL!
 		if(!empty($via) && method_exists($this, $via) && !empty($this->request->query['page_url']))
 		{
-			error_log("VALID EMAIL");
+			#error_log("VALID EMAIL");
 			$url = !empty($this->request->query['page_url']) ? 
 				$this->request->query['page_url'] : null;
 			$title = !empty($this->request->query['page_title']) ?
@@ -98,14 +98,13 @@ class ShareController extends AppController
 	function copypaste() # Friendly url copy/paste
 	{ # Pass as $_GET['page_url']
 		$page_url = $this->request->query['page_url'];
-		$public_url = $this->public_url($page_url);
 
-		if(empty($public_url))
+		if(empty($page_url))
 		{
 			$this->setFlash("There is an internal error creating this link.");
 			return;
 		}
-		$this->set("public_url", $public_url);
+		$this->set("page_url", $page_url);
 	}
 
 	function admin_copypaste() { return $this->setAction("copypaste"); }
