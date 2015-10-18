@@ -26,14 +26,12 @@ class TrackerComponent extends Component
 	function startup(Controller $controller)
 	{
 		$this->controller = $controller;
-		/*
 		foreach($this->uses as $model)
 		{
 			$this->controller->loadModel($model);
 			list($plugin,$modelClass) = pluginSplit($model);
 			$this->{$modelClass} = $this->controller->{$modelClass};
 		}
-		*/
 		$this->request = $this->controller->request;
 
 	}
@@ -256,6 +254,7 @@ class TrackerComponent extends Component
 		$session_id = $this->get_session_id();
 		# Upon login to admin/manager, we need to 
 		# cleanup stats for this user (based on session ID)
+
 
 		$this->{"{$this->prefix}Visit"}->deleteAll(" {$this->prefix}Visit.session_id = '$session_id' ");
 		$this->{"{$this->prefix}PageView"}->deleteAll(" {$this->prefix}PageView.session_id = '$session_id' ");
