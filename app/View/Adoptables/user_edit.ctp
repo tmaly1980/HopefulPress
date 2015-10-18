@@ -20,6 +20,7 @@
 	<li class='active'> <a href='#intro' id=''>Overview</a> </li>
 	<li class=''> <a href='#bio' id=''>Biography</a> </li>
 	<li class=''> <a href='#pictures' id=''>More Pictures</a> </li>
+	<li class=''> <a href='#video' id=''>Video</a> </li>
 	<li class=''> <a href='#sponsorship' id=''>Sponsorship</a> </li>
 	<li class=''> <a href='#story' id=''>Happy Tails</a> </li>
 	<li class=''> <a href='#owner' id=''>Microchip/Owner</a> </li>
@@ -102,6 +103,17 @@
 		<div class='border padding25 minheight50'>
 			<?= $this->element("../AdoptablePhotos/list",array('adoptable'=>$this->request->data)); ?>
 		</div>
+</div>
+<div id='video' class='tab-pane'>
+	<div class='alert alert-info'>
+		If you have a video of this adoptable available on YouTube, list the webpage here. A preview will load below.
+	</div>
+	<?= $this->Html->link("youtube_video_url",array('id'=>'YoutubeVideoUrl')); ?>
+	<div id='VideoContainer'>
+		<? #if(!empty($ ?>
+	</div>
+	<script>
+	</script>
 </div>
 
 <div id='sponsorship' class='tab-pane'>

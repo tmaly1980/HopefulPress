@@ -19,13 +19,13 @@
 			<a class='<?= in_array($controller, array('news_posts','events','photo_albums','photos','videos')) ? "selected" : "" ?>' href='javascript:void(0)'>Media Center <?= $this->Html->s("caret"); ?></a>
 			<ul class='dropdown-menu'>
 				<? if(!empty($nav['newsCount'])) { ?>
-	            		<li><?= $this->Html->link("News", array('plugin'=>null,'controller'=>'news_posts')); ?></li>
+	            		<li><?= $this->Html->link("News", array('plugin'=>null,'controller'=>'news_posts','action'=>'index')); ?></li>
 				<? } ?>
 				<? if(!empty($nav['eventCount'])) { ?>
-	            		<li><?= $this->Html->link("Events", array('plugin'=>null,'controller'=>"events")); ?></li>
+	            		<li><?= $this->Html->link("Events", array('plugin'=>null,'controller'=>"events",'action'=>'index')); ?></li>
 				<? } ?>
 				<? if(!empty($nav['photoCount'])) { ?>
-	            		<li><?= $this->Html->link("Photos", array('plugin'=>null,'controller'=>"photo_albums")); ?></li>
+	            		<li><?= $this->Html->link("Photos", array('plugin'=>null,'controller'=>"photo_albums",'action'=>'index')); ?></li>
 				<? } ?>
 				<!--
 	            		<li><?= $this->Html->link("Videos", "/videos"); ?></li>
@@ -39,10 +39,10 @@
 			<ul  class='dropdown-menu'>
 				<li><?= $this->Html->link("Overview", array('plugin'=>null,'controller'=>'adoption_page_indices','action'=>'view')); ?></li>
 				<? if(!empty($nav['adoptableCount'])) { ?>
-				<li><?= $this->Html->link("Current Adoptables", array('plugin'=>null,'controller'=>'adoptables')); ?></li>
+				<li><?= $this->Html->link("Current Adoptables", array('plugin'=>null,'controller'=>'adoptables','action'=>'index')); ?></li>
 				<? } ?>
 				<? if(!empty($nav['adoptableFormEnabled'])) { ?>
-				<li><?= $this->Html->link("Adoption Form", array('plugin'=>null,'controller'=>'adoption_forms')); ?></li>
+				<li><?= $this->Html->link("Adoption Form", array('plugin'=>null,'controller'=>'adoption_forms','action'=>'index')); ?></li>
 				<? } ?>
 				<? if(!empty($nav['adoptionStoryCount'])) { ?>
 				<li><?= $this->Html->link("Happy Tails", array('plugin'=>null,'controller'=>'adoptables','action'=>'stories')); ?></li>
@@ -52,17 +52,17 @@
 		<?  } ?>
 		<? if(!empty($nav['donationsEnabled'])) { ?>
 		<li class=''>
-			<?= $this->Html->link("Donate", array('plugin'=>'donation','controller'=>'donations')); ?>
+			<?= $this->Html->link("Donate", array('plugin'=>'donation','controller'=>'donation_pages','action'=>'view')); ?>
 		</li>
 		<? } ?>
 		<? if(!empty($nav['volunteerEnabled'])) { ?>
 		<li class=''>
-			<?= $this->Html->link("Volunteer", "/volunteer"); ?>
+			<?= $this->Html->link("Volunteer", array('plugin'=>null,'controller'=>'volunteer_page_indices','action'=>'view')); ?>
 		</li>
 		<? } ?>
-		<? if(!empty($nav['fosterEnabled']) && $rescue) { ?>
+		<? if(!empty($nav['fosterEnabled'])) { ?>
 		<li class=''>
-			<?= $this->Html->link("Foster", "/foster"); ?>
+			<?= $this->Html->link("Foster", array('plugin'=>null,'controller'=>'foster_page_indices','action'=>'view')); ?>
 		</li>
 		<? } ?>
 		<? if(!empty($nav['education_pages'])) { ?>
