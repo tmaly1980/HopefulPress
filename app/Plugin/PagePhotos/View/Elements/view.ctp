@@ -15,6 +15,11 @@ if($view_hidden) { return; }
 	<?= $this->Html->og_image(Router::url($url,true),true); # ONLY ONE ?>
 	<? $image = $this->Html->image($url, $img_attrs); ?>
 	<?= !empty($lightbox) ? $this->Html->link($image,$large_url,array('class'=>'lightbox','title'=>$caption)) : $image; ?>
+	<? if(!empty($download)) { ?>
+	<div class='center_align'>
+		<?= $this->Html->link($this->Html->g("download"). " Download", $large_url); ?>
+	</div>
+	<? } ?>
 	<div id='PagePhotoCaption_<?= $page_photo_id ?>' class='center_align caption font12 maxwidth600'>
 		<?= !empty($caption) ? $caption : "" ?>
 	</div>
