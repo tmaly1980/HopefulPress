@@ -1,5 +1,5 @@
 <? $controller = $this->request->params['controller']; ?>
-<nav class="navbar margin0 navbar-default">
+<nav class="navbar margin0">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">

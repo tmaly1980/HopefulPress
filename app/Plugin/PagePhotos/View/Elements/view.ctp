@@ -12,7 +12,9 @@ if($view_hidden) { return; }
 	<? $img_attrs = array('class'=>"border maxwidth100p"); ?>
 	<? if(!empty($width)) { $img_attrs['width'] = $width; } ?>
 	<? if(!empty($height)) { $img_attrs['height'] = $height; } ?>
-	<?= $this->Html->og_image(Router::url($url,true),true); # ONLY ONE ?>
+	<? if(!isset($og_image) || !empty($og_image)) { ?>
+		<?= $this->Html->og_image(Router::url($url,true),true); ?>
+	<? } ?>
 	<? $image = $this->Html->image($url, $img_attrs); ?>
 	<?= !empty($lightbox) ? $this->Html->link($image,$large_url,array('class'=>'lightbox','title'=>$caption)) : $image; ?>
 	<? if(!empty($download)) { ?>

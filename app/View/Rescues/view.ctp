@@ -7,7 +7,7 @@
 <? } ?>
 <? $this->end(); ?>
 <? $this->start("pre_content"); ?>
-	<?= $this->element("PagePhotos.view",array('width'=>'625','align'=>'block','margin'=>false,'class'=>'paddingbottom25')); ?>
+	<?= $this->element("PagePhotos.view",array('og_image'=>false,'width'=>'625','align'=>'block','margin'=>false,'class'=>'paddingbottom25')); ?>
 <? $this->end(); ?>
 
 <?= $this->Facebook->init(); ?>

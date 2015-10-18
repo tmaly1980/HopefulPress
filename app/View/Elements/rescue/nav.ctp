@@ -5,13 +5,13 @@
 <div>
     <div id='navbar' class="navbar navbar-default">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#rescue-navbar">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
         </div>
-        <div class="collapse navbar-collapse sidebar-navbar-collapse">
+        <div id='rescue_navbar' class="collapse navbar-collapse sidebar-navbar-collapse">
           <ul class="nav navbar-nav">
 	            <!--<li class=""><a href="/">Home</a></li>-->
 		<? if(!empty($nav['newsCount']) || !empty($nav['eventCount']) || !empty($nav['photoCount'])) { ?>
