@@ -11,7 +11,7 @@
 <div class="events view fontify <?#= $this->Admin->fontsize('default'); ?>">
 
 <div class='block'>
-	<?= $this->element("PagePhotos.view"); ?>
+	<?= $this->element("PagePhotos.view",array('lightbox'=>1)); ?>
 	
 	<div class='wrap'>
 		<? if(!empty($event["Event"]['summary'])) { ?>
