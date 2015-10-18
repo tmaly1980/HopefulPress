@@ -21,7 +21,7 @@
 	<li class=''> <a href='#bio' id=''>Biography</a> </li>
 	<li class=''> <a href='#pictures' id=''>More Pictures</a> </li>
 	<li class=''> <a href='#sponsorship' id=''>Sponsorship</a> </li>
-	<li class=''> <a href='#story' id=''>Success Story</a> </li>
+	<li class=''> <a href='#story' id=''>Happy Tails</a> </li>
 	<li class=''> <a href='#owner' id=''>Microchip/Owner</a> </li>
 </ul>
 
