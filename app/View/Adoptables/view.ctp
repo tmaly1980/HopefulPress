@@ -85,7 +85,7 @@ $statusClass = $statusClasses[$status];
 		<? if(!empty($adoptable['Adoptable']['enable_sponsorship'])) { ?>
 		&nbsp;
 		&nbsp;
-			<?= $this->Html->link("Sponsor Me", array('action'=>'sponsor','id'=>$id), array('class'=>'controls btn btn-warning btn-lg')); ?>
+			<?= $this->Html->link(!empty($rescue['Rescue']['sponsor_label']) ? $rescue['Rescue']['sponsor_label'] : "Sponsor Me", array('action'=>'sponsor','id'=>$id), array('class'=>'controls btn btn-warning btn-lg')); ?>
 		<? } ?>
 		<?#= $this->Html->link("Foster Me", "/mockup/adoptables/foster/$id", array('class'=>'dialog controls btn btn-success btn-lg')); ?>
 	<? } ?>

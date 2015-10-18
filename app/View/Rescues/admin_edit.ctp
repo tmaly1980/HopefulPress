@@ -30,6 +30,7 @@
 			<div class='row'>
 				<div class='col-md-6'>
 					<?= $this->Form->input("title", array('label'=>'Rescue name','class'=>'large','required'=>1)); ?>
+					<?= $this->Form->input("subtitle", array('label'=>'Slogan','class'=>'','note'=>'Appears underneath main page title/logo')); ?>
 					<? if($id) { ?>
 					<hr/>
 					<div>
@@ -106,6 +107,7 @@
 </div>
 <div id='donations' class='tab-pane'>
 	<?= $this->Form->input_group("paypal_email",array('type'=>'email','size'=>30,'before'=>$this->Html->fa('gift'),'note'=>'To enable donations, please provide your PayPal email')); ?>
+	<?= $this->Form->input("sponsor_label",array('size'=>24,'label'=>'Button text for sponsoring','default'=>'Sponsor Me','note'=>'When you enable sponsorship for an adoptable, they will click on a button with this wording')); ?>
 </div>
 <div id='mailinglist' class='tab-pane'>
 	<?= $this->element("../Rescues/rescuer_edit_mailinglist"); ?>

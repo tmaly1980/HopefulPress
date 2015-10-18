@@ -1,7 +1,7 @@
 <? $id = $adoptable['Adoptable']['id']; ?>
 <? $imgid = $adoptable['Adoptable']['adoptable_photo_id']; ?>
 <?  $name = $adoptable['Adoptable']['name']; ?>
-<? $this->assign("page_title",  "Sponsor $name");  ?>
+<? $this->assign("page_title",  (!empty($rescue['Rescue']['sponsor_label'])  ? $rescue['Rescue']['sponsor_label'] :  "Sponsor"). ": $name");  ?>
 <? $this->start("title_controls");?>
 	<?= $this->Html->back("View more about $name", array('action'=>'view',$id)); ?>
 <? $this->end("title_controls");?>
