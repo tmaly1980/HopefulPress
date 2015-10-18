@@ -4,8 +4,8 @@
 <? $this->assign("page_title", $id?"Update Adoptable Details":"Add Adoptable Listing");# .(!empty($this->request->data['Adoptable']['name']) ? " &mdash;  ".$this->request->data['Adoptable']['name']:"")); ?>
 <? $this->start("title_controls"); ?>
 <? if(!empty($id)) { ?>
-	<?= $this->Html->back("View profile", array('user'=>false,'action'=>'view','id'=>$id,'rescue'=>$rescuename)); ?>
-	<?= $this->Html->delete("Delete Adoptable", array('action'=>'delete',$id,'rescue'=>$rescuename),array('confirm'=>"Are you sure you want to remove all records of this $animal? If this adoptable has just been adopted, you can always set the status to 'Adopted' instead.")); ?>
+	<?= $this->Html->back("View profile", array('user'=>false,'action'=>'view','id'=>$id)); ?>
+	<?= $this->Html->delete("Delete Adoptable", array('action'=>'delete',$id),array('confirm'=>"Are you sure you want to remove all records of this $animal? If this adoptable has just been adopted, you can always set the status to 'Adopted' instead.")); ?>
 <? } ?>
 <? $this->end("title_controls"); ?>
 <div class='form'>

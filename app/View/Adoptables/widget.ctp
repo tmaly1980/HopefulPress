@@ -8,7 +8,7 @@
 		No available adoptables listed
 	</div>
 	<? if($this->Html->can_edit()) { ?>
-		<?= $this->Html->add("Add adoptables", array('user'=>1,'controller'=>'adoptables','action'=>'add','rescue'=>$rescuename),array('class'=>'')); ?>
+		<?= $this->Html->add("Add adoptables", array('user'=>1,'controller'=>'adoptables','action'=>'add'),array('class'=>'')); ?>
 	<? } ?>
 <? } else { ?>
 <div id='adoptables' class='<?= !empty($carousel) ? "carousel slide" : "" ?>' <?= !empty($carousel) ? 'data-ride="carousel" data-wrap="true"' : "" ?> >
@@ -80,7 +80,7 @@ $(document).ready(function() {
 
 
 <div class='right_align margintop10'>
-	<?= $this->Html->link("More adoptables".$this->Html->g("chevron-right"), array('controller'=>'adoptables','rescue'=>$rescuename),array('class'=>'btn')); ?>
+	<?= $this->Html->link("More adoptables".$this->Html->g("chevron-right"), array('controller'=>'adoptables'),array('class'=>'btn')); ?>
 </div>
 
 

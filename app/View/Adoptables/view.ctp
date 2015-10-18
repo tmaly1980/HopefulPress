@@ -54,9 +54,9 @@ $statusClass = $statusClasses[$status];
 		<?= $this->Html->back("Search Database", array('action'=>'search')); ?>
 	<? } else { */ ?>
 	<? if($status == 'Adopted' && !empty($adoptable['Adoptable']['success_story'])) { ?>
-		<?= $this->Html->back("View all happy tails", array('action'=>'stories','rescue'=>$rescuename)); ?>
+		<?= $this->Html->back("View all happy tails", array('action'=>'stories')); ?>
 	<? } else { ?>
-		<?= $this->Html->back("View all $animals", array('action'=>'index','rescue'=>$rescuename)); ?>
+		<?= $this->Html->back("View all $animals", array('action'=>'index')); ?>
 	<? } ?>
 	<? # } # XXX TODO 'back to search' - w/session saved search criteria... ?>
 <? $this->end("subtitle_nav"); ?>

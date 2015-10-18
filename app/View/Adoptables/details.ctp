@@ -4,9 +4,9 @@
 <div class='view'>
 <div class='row'>
 	<div class='col-md-6 center_align'>
-		<?= $this->Html->image(!empty($imgid)?array('controller'=>'adoptable_photos','action'=>'image',$imgid,'rescue'=>$rescuename):"/images/nophoto.png",array('class'=>'maxwidth100p maxheight500')); ?>
+		<?= $this->Html->image(!empty($imgid)?array('controller'=>'adoptable_photos','action'=>'image',$imgid):"/images/nophoto.png",array('class'=>'maxwidth100p maxheight500')); ?>
 		<? $this->assign("og_image_single",true); ?>
-		<? $this->Html->og_image(array('controller'=>'adoptable_photos','action'=>'image',$imgid,'rescue'=>$rescuename)); ?>
+		<? $this->Html->og_image(array('controller'=>'adoptable_photos','action'=>'image',$imgid)); ?>
 	</div>
 	<div class='col-md-6'>
 		<div class='stats'>
