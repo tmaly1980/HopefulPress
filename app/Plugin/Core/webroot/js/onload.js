@@ -18,6 +18,13 @@
 				menu.show();
 			}
 		});
+		$('body').on('click', function(e) {
+			var target = $(e.target);
+			if(!target.closest('.dropdown.toggle').size())
+			{
+				$('.dropdown.toggle > .dropdown-menu:visible').hide();
+			}
+		});
 		/* DO NOT hide dropdown menu if click elsewhere on screen 
 		$(document).on('click', function(e) { 
 			if(!$(e.target).closest('.dropdown.toggle').size() && $('.dropdown.toggle .dropdown-menu:visible').size()) // clicked outside of open dropdown menu 
