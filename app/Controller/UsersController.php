@@ -41,12 +41,12 @@ class UsersController extends UserCoreController {
 		# We cannot rely upon 'rescue_id' field matching. User might be a volunteer for multiple rescues.
 		# If we're on a dedicated site, this SHOULD deny login, as if user does not exist.
 
-		if($this->rescue_dedicated()) # Filter successful logins to volunteers of site.
+		if(true)#$this->rescue_dedicated()) # Filter successful logins to volunteers of site.
 		{
 			# Get ACTIVE volunteer list.
 			$volunteers = $this->User->RescueVolunteer->fields("user_id",array('RescueVolunteer.rescue_id'=>$this->rescue_id,'status'=>'Active'));
 			$this->userModels['User'] = array(
-				'id'=>$volunteers
+				'User.id'=>$volunteers
 			);
 		}
 
