@@ -361,6 +361,10 @@ class UserCoreController extends UserCoreAppController {
 					break;
 				}
 			}
+			if(empty($user))
+			{
+				error_log("USER FAILED TO SIGN IN...=".print_r($conditions,true));
+			}
 
 			#error_log("LOGGING IN=".print_r($user,true));
 			if(!empty($user) && $this->Auth->login($user))#['User']))
