@@ -4,7 +4,11 @@
 <div class='view'>
 <div class='row'>
 	<div class='col-md-6 center_align'>
-		<?= $this->Html->image(!empty($imgid)?array('controller'=>'adoptable_photos','action'=>'image',$imgid):"/images/nophoto.png",array('class'=>'maxwidth100p maxheight500')); ?>
+		<?
+			$imgurl = !empty($imgid)?array('controller'=>'adoptable_photos','action'=>'image',$imgid,'600x600'):"/images/nophoto.png";
+			$image = $this->Html->image($imgurl,array('class'=>'maxwidth100p maxheight500'));
+		?>
+		<?= !empty($imgid) ? $this->Html->link($image,$imgurl,array('class'=>'lightbox','title'=>$adoptable['Adoptable']['name'])) : $image; ?>
 		<? $this->assign("og_image_single",true); ?>
 		<? $this->Html->og_image(array('controller'=>'adoptable_photos','action'=>'image',$imgid)); ?>
 	</div>
