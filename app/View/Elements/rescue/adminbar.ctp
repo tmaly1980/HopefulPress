@@ -11,7 +11,6 @@
       </button>
       <? $logo = !empty($rescue['RescueLogo']['id']) ? $this->Html->image("/rescue_logos/image/{$rescue['RescueLogo']['id']}/x24",array('class'=>'left paddingright10')) : null; ?>
       <?= $this->Html->link($logo.$rescue['Rescue']['title'], array('plugin'=>null,'prefix'=>false,'controller'=>'rescues','action'=>'view'),array('class'=>'navbar-brand')); ?>
-      </a>
     </div>
 <div class="collapse navbar-collapse" id="header-navbar">
       <ul class="nav navbar-nav">
