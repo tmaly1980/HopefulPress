@@ -248,3 +248,9 @@ div.form
 {
 	padding-right: 25px;
 }
+
+.header-subtitle
+{
+	font-weight: bold;
+	font-size: 1.2em;
+}
