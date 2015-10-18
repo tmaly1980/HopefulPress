@@ -80,7 +80,7 @@ class StripeBillingComponent extends Component
 		$sub = $this->subscription($customer,$subId,array('plan'=>$data['plan']));
 		if(is_string($sub))
 		{
-			return $subscription;
+			return $sub;
 		} else { # Save 
 			$subId = $sub['id'];
 			$this->controller->site('subscription_id',$subId); # Save...
