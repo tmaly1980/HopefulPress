@@ -22,11 +22,11 @@ class StripeBillingController extends AppController {
 			
 		if(!empty($this->request->data))
 		{
-			$this->request->data['Site']['disabled'] = null; # re-enable.
-			$this->request->data['Site']['trial'] = 0; # No longer.
-			if(empty($old_plan) && !empty($this->request->data['Site']['plan']))
+			$this->request->data['Rescue']['disabled'] = null; # re-enable.
+			$this->request->data['Rescue']['trial'] = 0; # No longer.
+			if(empty($old_plan) && !empty($this->request->data['Rescue']['plan']))
 			{
-				$this->request->data['Site']['upgraded'] = date("Y-m-d H:i:s");
+				$this->request->data['Rescue']['upgraded'] = date("Y-m-d H:i:s");
 			}
 
 			if($this->Rescue->save($this->request->data, true,array('plan','disabled')))
@@ -39,6 +39,8 @@ class StripeBillingController extends AppController {
 		Configure::load("Stripe.billing");
 		$this->config = Configure::read("Billing");
 		$this->set($this->config);
+		$plans = Set::combine($this->config, "{n}.id", "{n}.name");
+		$this->set("plans",$plans);
 		$this->request->data = $this->Rescue->read();
 	}
 
