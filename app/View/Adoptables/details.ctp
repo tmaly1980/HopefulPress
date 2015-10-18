@@ -5,10 +5,11 @@
 <div class='row'>
 	<div class='col-md-6 center_align'>
 		<?
-			$imgurl = !empty($imgid)?array('controller'=>'adoptable_photos','action'=>'image',$imgid,'600x600'):"/images/nophoto.png";
+			$large_imgurl = !empty($imgid)?array('controller'=>'adoptable_photos','action'=>'original',$imgid):"/images/nophoto.png";
+			$imgurl = !empty($imgid)?array('controller'=>'adoptable_photos','action'=>'image',$imgid,'600x600',1):"/images/nophoto.png";
 			$image = $this->Html->image($imgurl,array('class'=>'maxwidth100p maxheight500'));
 		?>
-		<?= !empty($imgid) ? $this->Html->link($image,$imgurl,array('class'=>'lightbox','title'=>$adoptable['Adoptable']['name'])) : $image; ?>
+		<?= !empty($imgid) ? $this->Html->link($image,$large_imgurl,array('class'=>'lightbox','title'=>$adoptable['Adoptable']['name'])) : $image; ?>
 		<? $this->assign("og_image_single",true); ?>
 		<? $this->Html->og_image(array('controller'=>'adoptable_photos','action'=>'image',$imgid)); ?>
 	</div>
