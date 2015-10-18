@@ -5,7 +5,7 @@ if(empty($page_photo_id)) { return; } # NONE
 if(empty($wh)) { $wh = (!empty($width) || !empty($height)) ? "{$width}x{$height}" : ""; }
 
 $url = array('plugin'=>$plugin,'controller'=>$controller,'action'=>'image', $page_photo_id, $wh);
-$large_url = array('plugin'=>$plugin,'controller'=>$controller,'action'=>'image', $page_photo_id);
+$large_url = array('plugin'=>$plugin,'controller'=>$controller,'action'=>'original', $page_photo_id);
 if($view_hidden) { return; }
 ?>
 <div class='PagePhoto <?= $align ?> maxwidth100p <?= $margin ?> <?= !empty($class) ? $class : "" ?>'>
