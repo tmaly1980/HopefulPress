@@ -1,15 +1,17 @@
 <?
+# Add init() at end of view,
+# then set name=>false for card number, exp_month,exp_year
+# then pass data-stripe= number, exp_month, exp_year 
 App::uses("CoreFormHelper", "Core.Helper"); 
 class StripeHelper extends CoreFormHelper
 {
-	function init($id)
+	function init($id) # ASSUME the id is the model name too....  we need to qualify stripeToken below...
 	{
 		ob_start();
 		?>
 		<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 		<script type="text/javascript">
 			Stripe.setPublishableKey('<?= Configure::read("Stripe.PublishableKey") ?>');
-			//$('#<?=$formId?>').prepend("<div class='payment-errors alert alert-warning marginbottom25' style='display:none;'></div>");
 		</script>
 		<script type="text/javascript">
 		$('#<?=$id ?>').on('success.form.bv', function(event) { // pass to form validator so it doesnt submit twice!
@@ -31,7 +33,7 @@ class StripeHelper extends CoreFormHelper
 				} else {
 					//form.find('.payment-errors').text('').hide();
 					var token = response.id;
-					form.append($("<input type='hidden' name='data[<?= $this->defaultModel ?>][stripeToken]'/>").val(token));
+					form.append($("<input type='hidden' name='data[<?=$id?>][source]'/>").val(token));
 					console.log("TOKEN="+token);
 					validator.defaultSubmit();  // CONTINUE
 				}

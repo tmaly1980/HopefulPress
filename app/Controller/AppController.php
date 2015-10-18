@@ -167,10 +167,12 @@ class AppController extends AppCoreController {
 		return $this->get_site_id();
 	}
 
-	function site($var = null)
+	function site($var = null,$val=null)
 	{
-		if(empty($this->Multisite)) { return null; }
-		return $this->Multisite->site($var);
+		return $this->rescue($var,$val); #  FOR NOW...
+
+		#if(empty($this->Multisite)) { return null; }
+		#return $this->Multisite->site($var);
 	}
 
 	function beforeRender()
@@ -593,10 +595,17 @@ class AppController extends AppCoreController {
 		$this->dedicated_redirect(); # If they have a fancy plan, show fancy URL.
 	}
 
-	function rescue($field=null)
+	function rescue($field=null, $val=null)
 	{
-		if(!empty($field))
+		if(!empty($field) && !empty($val)) # Write.
 		{
+			if(empty($this->rescue_id))
+			{
+				throw NotFoundException("Could not find rescue information");
+			}
+			$this->Rescue->id = $this->rescue_id;
+			return $this->Rescue->saveField($field,$val);
+		} else if(!empty($field)) {
 			list($model,$key) = pluginSplit($field);
 			if(empty($model)) { $model = 'Rescue'; }
 			return !empty($this->rescue[$model][$key]) ? $this->rescue[$model][$key] : null;

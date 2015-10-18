@@ -25,6 +25,28 @@ class StripeBillingComponent extends Component
 		return parent::startup($controller);
 	}
 
+	function defaultCard($custId=null)
+	{
+		if(empty($custId))
+		{
+			$custId = $this->controller->site('stripe_id'); # Existing...
+		}
+		$customer = $this->customer($custId);
+		$defaultCardId = !empty($customer['default_source']) ? $customer['default_source'] : null;
+		if(!empty($customer['sources']['data']))
+		{
+			$cards = $customer['sources']['data'];
+			if(empty($defaultCardId))  { $defaultCardId  = $cards[0]['id']; } # First.
+			foreach($cards as $card) { 
+				if($card['id'] == $defaultCardId)
+				{
+					return $card;
+				}
+			}
+		}
+		return null;
+	}
+
 	# Create hosting subscription.
 	function hostingSubscription($data=null) # Plan is passed...
 	{
@@ -33,7 +55,10 @@ class StripeBillingComponent extends Component
 		$subId = $this->controller->site('subscription_id'); # Existing...
 		if(!empty($data))
 		{
-			$data['description'] = "Website Hosting - Hopeful Press (".$this->controller->site("title") . "; ".$this->controller->site("hostname").".hopefulpress.com)";
+			$data['description'] = $this->controller->site("title") . " / ".$this->controller->site("hostname").".hopefulpress.com";
+
+			# Clean  up card if source (token) provided.
+			#if(!empty($data['source'])) { unset($data['card']); } # 
 
 			$plan = $this->plan($data['plan']); # Make sure plan exists.
 			if(is_string($plan))
@@ -42,89 +67,28 @@ class StripeBillingComponent extends Component
 			}
 		}
 
+		# Passing plan to the customer object will ADD a new subscription, NOT replace it...
+
 		$customer = $this->customer($custId,$data); # Create if needed.
 		if(is_string($customer))
 		{
 			return $customer;
 		}
+		$custId = $customer['id'];
+		$this->controller->site('stripe_id',$custId); # Save...
 
-		return $this->subscription($customer,$subId,$data);
+		$sub = $this->subscription($customer,$subId,array('plan'=>$data['plan']));
+		if(is_string($sub))
+		{
+			return $subscription;
+		} else { # Save 
+			$subId = $sub['id'];
+			$this->controller->site('subscription_id',$subId); # Save...
+		}
+		return $sub;  # Need to check is_string()
+		# Sometimes we want the subscription itself assuming customer.
 	}
 
-	/* OBSOLETE/REDUNDANT
-	# Centralized charging/updating of credit card....
-	function saveSubscription($data,$customer_id=null,$subscription_id=null) # Creates customer profile if needed. And initiates charge if none exists...
-	{
-		$status = $this->controller->site('plan'); # Existing...
-
-		if(!empty($status) && empty($data['plan'])) { 
-			$data['plan'] = $status;
-		} # default
-		# What site already has is default, no need to throw away.
-		# Not changing, so keep.
-
-		# Might be passed string OR object (ie domain_registration details)
-
-		# PLAN NEEDS TO EXIST BEFORE CUSTOMER
-		$planNames = array_keys($this->config['plans']);
-		$planName = !empty($data['plan']) ? $data['plan'] : $planNames[0];
-		$plan = $this->plan($planName);
-		if(is_string($plan))
-		{
-			return $plan; # Error
-		}
-
-		$new = !empty($status);
-
-		$customer = $this->customer($customer_id,$data);
-
-		if(is_string($customer)) # FAIL
-		{
-			return "Unable to process your payment information: $customer";
-		} else { # Success.
-			if(!$this->controller->Site->saveField('stripe_id',$customer->id))
-			{
-				return "Unable to save your payment information";
-			}
-
-			error_log("CUST=".print_r($customer,true));
-			error_log("PLAN=".print_r($plan,true));
-
-			# Make sure they have a valid subscription... If they don't, it'll charge them immediately...
-
-			# XXX pass payment information in case account already existed but without card.
-				$subDetails = array('plan'=>$plan['id']);
-				if(empty($customer['sources'])) {  # NO payment info
-					if(empty($data['source'])) # None just given
-					{
-						return "No payment information provided";
-					}
-					$subDetails['source'] = $data['source']; # Pass.
-				}
-				$subscription = $this->subscription($customer,$subscription_id,$subDetails);
-				if(is_string($subscription)) { return "Could not process your payment: $subscription"; }
-
-				if(!$this->controller->Site->saveField('subscription_id',$subscription->id))
-				{
-					return "Unable to update your account subscription";
-				}
-
-				# NOTIFY MANAGER OF UPGRADE (if new)
-				if($new)
-				{
-					$this->controller->managerEmail("Subscription upgrade", "sites/manager_upgrade");
-				}
-
-				# Also save site account status
-				if(!$this->controller->Site->saveField('plan',$planName))
-				{
-					return "Unable to upgrade your account";
-				}
-		}
-		return;
-		# Default is ok, no error message.
-	}
-	*/
 
 	# Cancel subscription
 	function cancelHostingSubscription() # Hosting.
@@ -202,46 +166,64 @@ class StripeBillingComponent extends Component
 		{
 			try {
 				# If plan does not exist, add. Otherwise, just retrieve.
+				error_log("RETR?");
 				return \Stripe\Plan::retrieve($name);
 			} catch(\Stripe\Error\InvalidRequest $e) { 
 				# Plan doesn't exist, add.
+				error_log("INVALID RETRIEVE,  PRAMS=".print_r($details,true));
 				if(empty($details))
 				{
 					return "Could not create plan: No details provided";
 				}
-				$plan = \Stripe\Plan::create($params);
+				$plan = \Stripe\Plan::create($details);
 
 				return $plan; # Object.
 			}
 		} catch(Exception $e) { # All wrappers catch generic exceptions
-			return $e->getMessage();
+			return "PLAN ERROR: ". $e->getMessage();
 		}
 	}
 
 	function customer($customer_id,$data=null)
 	{
+		error_log("CUSTOMER($customer_id)=".print_r($data,true));
 		try {
 			try {
 				if(empty($customer_id))
 				{
-					throw \Stripe\Error\InvalidRequest("No customer yet");
+					throw new \Stripe\Error\InvalidRequest("No customer yet",null);
 					# To go below. AND ADD..
 				} else {
 					$customer = \Stripe\Customer::retrieve($customer_id);
 				}
+				error_log("RETRIEVED  CUSTOMER=".print_r($customer,true));
 				if(!empty($customer->deleted))
 				{
-					throw \Stripe\Error\InvalidRequest("Deleted customer");
-				} else { # Update customer while we're at it.
-					foreach($data as $key=>$val)
-					{
-						$customer->$key = $val;
+					throw new \Stripe\Error\InvalidRequest("Deleted customer",null);
+				} else if(!empty($data)) { # Update customer while we're at it.
+					try {
+						# How do we make sure this is using the same customer key?
+						foreach($data as $key=>$val)
+						{
+							if(!in_array($key, array('plan'))) # Never  specify since always  adds a new subscription
+							{ # We always call ->subscription later...
+								$customer->$key = $val;
+							}
+						}
+						$customer->save();
+					} catch(Exception $e) {
+						return "UPDATE CUSTOMER FAIL: ".$e->getMessage();
+
 					}
-					$customer->save();
 				}
 			} catch(\Stripe\Error\InvalidRequest $e) {
+				if(empty($data)) { return null; } # No (valid) customer.
+
+				# NO customer, create.... ONLY IF we're trying to set data AT ALL... reading should just blatantly fail.
+				error_log("INVALID REQUEST, data=".print_r($data,true).", CREATING CUSTOMR=".$e->getMessage());
 				if(empty($data['source']))
 				{
+					
 					return "No payment information provided";
 				}
 				$customer = \Stripe\Customer::create($data);
@@ -253,7 +235,7 @@ class StripeBillingComponent extends Component
 	}
 
 	# Get or set/update subscription
-	function subscription($customer,$subscription_id=null,$details=array())
+	function subscription($customer,$subscription_id=null,$details=array()) # just 'plan'=>'plan_id'
 	{
 		try {
 			if(empty($customer)) { 
@@ -262,21 +244,21 @@ class StripeBillingComponent extends Component
 				$customer = $this->customer($customer);
 				if(is_string($customer))
 				{
-					return  $customer; # Error.
+					return "CUSTOMER ERROR: $customer"; # Error.
 				}
 			} 
 			try {
 				if(empty($subscription_id))
 				{
-					throw \Stripe\Error\InvalidRequest("No subscription yet");
+					throw new  \Stripe\Error\InvalidRequest("No subscription yet",null);
 				} else { # Existing.
 					$subscription = $customer->subscriptions->retrieve($subscription_id);
 					# If invalid, throws exception, then creates.
 				}
 				if($subscription->status != 'active')
 				{
-					throw \Stripe\Error\InvalidRequest("Deleted subscription");
-				} else { # Update subscription while we're at it.
+					throw new \Stripe\Error\InvalidRequest("Deleted subscription",null);
+				} else if(!empty($data)) { # Update subscription while we're at it.
 					foreach($data as $key=>$val)
 					{
 						$subscription->$key = $val;
@@ -294,7 +276,7 @@ class StripeBillingComponent extends Component
 			return $subscription;
 
 		} catch (Exception $e) {
-			return $e->getMessage();
+			return "SUBSCRIPTION ERROR: ".$e->getMessage();
 
 		}
 	}
@@ -325,6 +307,8 @@ class StripeBillingComponent extends Component
 
 		if(empty($cust_id)) { return false; }
 		$customer = $this->customer($cust_id);
+
+		error_log("CHEKING CARD=".print_r($customer,true));
 
                 if(is_string($customer) || empty($customer) || empty($customer['sources']) || empty($customer['sources']['data']) || $customer['sources']['total_count'] < 1)
                 { 

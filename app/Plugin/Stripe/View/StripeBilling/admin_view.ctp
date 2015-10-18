@@ -1,26 +1,27 @@
-<? $disabled = $this->Site->get("disabled"); ?>
+<? $disabled = $this->Rescue->get("disabled"); ?>
 <? $this->start("title_controls"); ?>
+	<?=  $this->Html->back("Back to Website Details",array('admin'=>1,'plugin'=>null,'controller'=>'rescues','action'=>'edit')); ?>
 <? if($this->Html->manager()) { ?>
 	<?= $this->Html->edit("Change Plan", array('manager'=>1,'action'=>'edit')); ?>
 <? }?>
-<? if($this->Html->site_owner() && !$disabled) { ?>
+<? /* if($this->Rescue->owner() && !$disabled) { ?>
 	<?= $this->Html->remove("Cancel Website", array('admin'=>1,'action'=>'disable'),array('confirm'=>'Are you sure you want to cancel your website?')); ?>
-<? } ?>
+<? } */ ?>
 <? $this->end("title_controls"); ?>
 <? $mode = Configure::read("Stripe.mode"); ?>
 <? $this->assign("page_title", "Website Billing ".($mode == 'Test' ? ' - TEST':'')); ?>
 <?
-$signup = $current_site['Site']['created'];
+$signup = $this->Rescue->get("created");
 $days = floor( (time() - strtotime($signup))/(60*60*24) );
 $expires = 30 - $days;
-$plan = $current_site['Site']['plan'];
-$trial = $current_site['Site']['trial'];
+$trial = $this->Rescue->get("trial");
+if(empty($plans[$plan])) { $plan = null; } # Invalid/trial. Treat like need to pick a plan.
 ?>
 <div>
 	<? if($disabled) { ?>
 		<div class='alert alert-danger'>
 			Your website is currently disabled. 
-			<? if($this->Site->get("stripe_id")) { # Billing on file, let them restore as is ?>
+			<? if($this->Rescue->get("stripe_id")) { # Billing on file, let them restore as is ?>
 			<?= $this->Html->add("Restore Your Website", array('action'=>'restore')); ?> to continue.
 			<? } ?>
 		</div>
@@ -36,20 +37,20 @@ $trial = $current_site['Site']['trial'];
 		<? } ?>
 	<? } ?>
 
-	<? if(!$disabled){ ?>
+	<? if(!$disabled && !empty($plan)){ ?>
 	<div class='row margintop20 marginbottom20'>
 		<div class='col-md-6'>
 			<b>Current Plan:</b>
 			<? if(!empty($plans[$plan])) { ?>
 				<?= $plans[$plan]['metadata']['title']; ?>
 				&mdash;
-				<?= sprintf("$%u / month", $plans[$plan]['amount']/100) ?>
+				<?= sprintf("$%u / %s", $plans[$plan]['amount']/100, $plans[$plan]['interval']) ?>
 			<? } else { ?>
 				Free Trial
 			<? } ?>
 		</div>
 		<div class='col-md-6'>
-			<? if(!empty($subscription['card'])) { $card = $subscription['card']; ?>
+			<? if(!empty($card)) { ?>
 			<b>Payment Method:</b>
 			<?= !empty($card['type']) ? $card['type'] : "Card" ?> ending in <?= $card['last4'] ?>
 			<br/>
@@ -74,7 +75,7 @@ $trial = $current_site['Site']['trial'];
 
 	<hr/>
 
-	<h2><?= $disabled ? "Restore Website" : (empty($plan) ? "Upgrade Plan" : "Change Your Plan") ?></h2>
+	<h2><?= $disabled ? "Restore Website" : (empty($plan) ? "Choose a Plan" : "Change Your Plan") ?></h2>
 	<?= $this->element("Stripe.plans"); ?>
 
 	<!-- todo cancel website -->

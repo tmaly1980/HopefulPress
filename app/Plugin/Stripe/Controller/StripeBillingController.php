@@ -2,11 +2,9 @@
 #App::uses('StripeAppController', 'Sites.Controller');
 class StripeBillingController extends AppController {
 	var $setup = false;
-	var $components = array('Stripe.Stripe','Stripe.StripeBilling');
+	var $components = array('Stripe.StripeBilling');
 	var $uses = array();
 	var $config = null;
-
-	var $layout = 'admin';
 
 	function index()
 	{
@@ -20,7 +18,7 @@ class StripeBillingController extends AppController {
 
 	function manager_edit() # Changing plan.
 	{
-		$old_plan = $this->site("plan");
+		$old_plan = $this->rescue("plan");
 			
 		if(!empty($this->request->data))
 		{
@@ -31,11 +29,11 @@ class StripeBillingController extends AppController {
 				$this->request->data['Site']['upgraded'] = date("Y-m-d H:i:s");
 			}
 
-			if($this->Site->save($this->request->data, true,array('plan','disabled')))
+			if($this->Rescue->save($this->request->data, true,array('plan','disabled')))
 			{
 				$this->setSuccess("Plan has been updated",array('user'=>1,'action'=>'index'));
 			} else {
-				$this->setError("Could not update plan: ".$this->Site->errorString());
+				$this->setError("Could not update plan: ".$this->Rescue->errorString());
 			}
 		}
 		Configure::load("Stripe.billing");
@@ -44,19 +42,19 @@ class StripeBillingController extends AppController {
 		foreach($this->config['plans'] as $pid=>$pdetails) { $plans[$pid] = $pdetails['metadata']['title']; }
 		foreach($this->config['yearlyPlans'] as $pid=>$pdetails) { $plans[$pid] = $pdetails['metadata']['title']; }
 		$this->set("plans", $plans);
-		$this->request->data = $this->Site->read();
+		$this->request->data = $this->Rescue->read();
 	}
 
 	function admin_disable()
 	{
-		if($plan = $this->site("plan") && $this->StripeBilling->validHostingSubscription())
+		if($plan = $this->rescue("plan") && $this->StripeBilling->validHostingSubscription())
 		{
 			if($error = $this->StripeBilling->cancelHostingSubscription())
 			{
 				return $this->setError($error,"/admin/billing");
 			}
 		}
-		if($this->Site->saveField("disabled",date("Y-m-d H:i:s")))
+		if($this->Rescue->saveField("disabled",date("Y-m-d H:i:s")))
 		{
 			return $this->setSuccess("Your website has been cancelled. You can always sign in again to restore it at any time.","/");
 		}
@@ -67,25 +65,25 @@ class StripeBillingController extends AppController {
 	function admin_restore()
 	{
 		# If has a plan, re-instate billing.
-		if($plan = $this->site("plan") && $this->StripeBilling->validCreditCard())
+		if($plan = $this->rescue("plan") && $this->StripeBilling->validCreditCard())
 		{
-			if($error = $this->StripeBilling->hostingSubscription(array('plan'=>$plan)))
+			if(($error = $this->StripeBilling->hostingSubscription(array('plan'=>$plan))) && is_string($error))
 			{
 				return $this->setError($error);
 			}
 		} else { # If site is expired/past 30 days trial w/o plan, force them to upgrade
 			return $this->setError("Please upgrade to a paid plan below to restore your website","/admin/billing");
 		}
-		if($this->Site->saveField("disabled",null))
+		if($this->Rescue->saveField("disabled",null))
 		{
 			return $this->setSuccess("Your website has been restored","/");
 		}
 		$this->setError("Could not restore your website","/admin/billing");
 	}
 
-	function admin_upgrade($plan='standard')
+	function admin_upgrade($plan='basic')
 	{
-		$old_plan = $this->site("plan");
+		$old_plan = $this->rescue("plan");
 
 		# If no credit card, prompt for payment & add plan.
 		if(!$this->StripeBilling->validCreditCard())
@@ -94,8 +92,8 @@ class StripeBillingController extends AppController {
 		}
 
 		# If already has credit card, add new plan then cancel existing plan (if any)
-		$data = array('plan'=>$plan,'disabled'=>null,'trial'=>0);
-		if($error = $this->StripeBilling->hostingSubscription($data)) # Will cancel existing and prorate if needed.
+		$data = array('plan'=>$plan);
+		if(($error = $this->StripeBilling->hostingSubscription($data)) && is_string($error)) # Will cancel existing and prorate if needed.
 		{
 			return $this->setError("Could not update plan: $error", "/admin/billing");
 		}
@@ -103,7 +101,9 @@ class StripeBillingController extends AppController {
 		{
 			$data['upgraded'] = date("Y-m-d H:i:s");
 		}
-		if($this->Site->save($data))
+		$data['disabled'] = null;
+		$data['trial']  = 0;
+		if($this->Rescue->save($data))
 		{
 			return $this->setSuccess("Plan successfully updated", "/admin/billing");
 		}
@@ -114,23 +114,24 @@ class StripeBillingController extends AppController {
 	{
 		Configure::load("Stripe.billing");
 		$this->config = Configure::read("Billing");
-		$this->set("plans", $this->config['plans']);
+		$this->set($this->config);
+		$this->set('plan', $this->rescue("plan"));
+		$this->set('disabled', $this->rescue("disabled"));
 
 		$subscription = $this->StripeBilling->hostingSubscription();
-		if(is_string($subscription)) { $subscription = null; } # Invalid.
-		$this->set("subscription", $subscription);
+		$this->set("card", $this->StripeBilling->defaultCard());
 	}
 
 	function admin_setup() # Adding payment for first time, in site setup.
 	{
 		if(!empty($this->request->data['StripeBilling'])) # Process
 		{
-			if($error = $this->StripeBilling->hostingSubscription($this->request->data['StripeBilling']))
+			if(($error = $this->StripeBilling->hostingSubscription($this->request->data['StripeBilling'])) && is_string($error))
 			{
 				return $this->setError($error);
 			}
 			/* No worries for now....
-			if(!$this->site("completed"))
+			if(!$this->rescue("completed"))
 			{
 				$this->redirect("/setup");
 			} else { # ie restore after cancel, just ask for billing then to go admin home
@@ -141,29 +142,32 @@ class StripeBillingController extends AppController {
 		}
 	}
 
-	function admin_edit($plan='standard')
+	function admin_edit($plan=null)
 	{
+		#$this->require_https(); # DAMNIT.
+
+		if(empty($plan)) { $plan = $this->rescue('plan'); }
+
 		if(!empty($this->request->data['StripeBilling'])) # Process
 		{
-			error_log("FORM DATA=".print_r($this->request->data['StripeBilling'],true));
-			$this->Site->id = Configure::read("site_id");
-			if($error = $this->StripeBilling->hostingSubscription($this->request->data['StripeBilling']))
+			error_log("FORM DATA=".print_r($this->request->data,true));
+			$this->Rescue->id = Configure::read("site_id");
+			if(($error = $this->StripeBilling->hostingSubscription($this->request->data['StripeBilling'])) && is_string($error)) # Could get object back.
 			{
 				$this->setError($error);
 			} else {
-				$old_plan = $this->site("plan");
+				$old_plan = $this->rescue("plan");
 				$data = array('plan'=>$plan,'disabled'=>null);
 				if(empty($old_plan) && !empty($plan)) { $data['upgraded'] = date("Y-m-d H:i:s"); }
 
-				$this->Site->save($data);
+				$this->Rescue->save($data);
 				$this->redirect(array('action'=>'view'));
 			}
 		}
 
 		Configure::load("Stripe.billing");
 		$this->config = Configure::read("Billing");
-		$this->set("plans", $this->config['plans']);
-		$this->set("yearlyPlans", $this->config['yearlyPlans']);
+		$this->set($this->config);
 		$this->set("plan", $plan);
 	}
 

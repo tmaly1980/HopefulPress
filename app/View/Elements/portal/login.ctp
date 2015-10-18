@@ -6,7 +6,7 @@
 		</div>
 		</li>
 	<? } else { ?>
-	<? if(!$this->Rescue->dedicated()) { ?>
+	<? /* if(!$this->Rescue->id()) { ?>
 	<li class='paddingright25'>
 		<div class=''>
 		<? if($myrescue = $this->Rescue->mine()){ ?>
@@ -16,7 +16,7 @@
 		<? } ?>
 		</div>
 	</li>
-	<? } ?>
+	<? } */ ?>
 	<li class='dropdown'>
 	<div class=''>
 	    	<a href='javascript:void(0);' class='btn btn-default'>

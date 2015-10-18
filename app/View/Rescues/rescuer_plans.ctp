@@ -107,6 +107,7 @@ if(empty($plan)) { $plan  = 'free'; }
 		</table>
 	</div>
 	<div class='col-md-4'>
+		<!--
 		<h4>With every account, you can:</h4>
 		<ul>
 			<li>Find volunteers and fosters via our <?= $this->Html->link("Volunteer Directory", "http://{$default_domain}/volunteers",array('target'=>'_new')); ?>
@@ -115,5 +116,6 @@ if(empty($plan)) { $plan  = 'free'; }
 			<li>List your adoptables for FREE in our <?= $this->Html->link("Adoptables Directory", "http://{$default_domain}/adoptables",array('target'=>'_new')); ?>
 			<li>List your rescue organization for FREE in our <?= $this->Html->link("Rescue Directory", "http://{$default_domain}/rescues",array('target'=>'_new')); ?>
 		</ul>
+		-->
 	</div>
 </div>

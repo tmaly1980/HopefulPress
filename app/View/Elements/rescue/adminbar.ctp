@@ -47,7 +47,7 @@
 			</ul>
 		</li>
       </ul>
-      <? if($this->Rescue->dedicated()) { ?>
+      <? if($this->Rescue->id()) { ?>
       	<?= $this->element("portal/login"); ?>
       <? } ?>
       <? if($this->Rescue->admin()) { #request->params['controller'] == 'rescues' && $this->request->params['action'] == 'view') { # ONLY SHOW ON HOME PAGE ?>

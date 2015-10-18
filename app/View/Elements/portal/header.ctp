@@ -1,5 +1,5 @@
 <?
-$dedicated = $this->Rescue->dedicated();
+$dedicated = $this->Rescue->id(); # ALL rescues, remove our branding/bars/etc.
 $prefix = !empty($this->request->params['prefix']) ? $this->request->params['prefix'] : null;
 $plugin = !empty($this->request->params['plugin']) ? $this->request->params['plugin'] : null;
 $controller = !empty($this->request->params['controller']) ? $this->request->params['controller'] : null;
@@ -14,7 +14,7 @@ if($plugin == 'volunteer') { $active = 'volunteer'; }
 # check for other tabs.
 
 ?>
-<? if(!$dedicated) { ?>
+<? if(!$this->Rescue->id()) { ?>
 <nav class="navbar margin0 navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -46,15 +46,15 @@ if($plugin == 'volunteer') { $active = 'volunteer'; }
 </nav>
 <? } ?>
 
-<? if(($active == 'adopt' || (empty($prefix) && in_array($controller,array('adoptables')))) && !$dedicated) { ?>
+<? /* if(($active == 'adopt' || (empty($prefix) && in_array($controller,array('adoptables')))) && !$dedicated) { ?>
 	<?= !$this->fetch("search_disabled") ? $this->requestAction("/adoptables/search_bar",array('return')) : null; # We get redirect loop if we omit  prefix, since this shows up on user login page ?>
-<? } ?>
+<? } */ ?>
 
-<? if($active == 'rescue' || $dedicated) { 
-	if(empty($prefix) && !$dedicated)
+<? if($this->Rescue->id() ){#|| $active == 'rescue' || $dedicated) { 
+	/*if(empty($prefix) && !$dedicated)
 	{
 		echo $this->requestAction(array('prefix'=>null,'plugin'=>null,'controller'=>'rescues','action'=>'search_bar','rescue'=>$rescuename),array('return')); 
-	} 
+	} */
 	if($this->Rescue->member())
 	{
 		echo $this->element("rescue/adminbar"); 

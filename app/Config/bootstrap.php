@@ -74,7 +74,7 @@ Configure::write("prod_domain", "hopefulpress.com"); # IMPORTANT
 
 CakePlugin::loadAll(array(
 	'Core'=>array('bootstrap'=>true),
-	'Stripe'=>array('bootstrap'=>true),  # Loads keys
+	'Stripe'=>array('bootstrap'=>true,'routes'=>true),  # Loads keys
 	'Paypal'=>array('bootstrap'=>true),  # Loads keys
 	#'Rescue'=>array('routes'=>true),
 	'Mail'=>array('routes'=>true),
