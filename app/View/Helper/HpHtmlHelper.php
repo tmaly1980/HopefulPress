@@ -13,10 +13,11 @@ class HpHtmlHelper extends CoreHtmlHelper
 		if(($rescuename = Configure::read("rescuename")) && is_array($url) && !isset($url['rescue']) && !$this->Rescue->dedicated())
 		{
 			$url['rescue'] = $rescuename;
-		} else if(is_array($url) && $this->Rescue->dedicated()) {
+		} else */ if(is_array($url) && !empty($url['rescue'])) { #$this->Rescue->dedicated()) {
 			unset($url['rescue']); # Never show.
 		}
-		*/
+		# Fix until remove nasty code stuff...
+		
 			
 		# Remove prefix if unwanted. (it's implied so we have to set proper false)
 		if(is_array($url) && isset($url['prefix']) && empty($url['prefix']) && !empty($this->request->params['prefix']))
