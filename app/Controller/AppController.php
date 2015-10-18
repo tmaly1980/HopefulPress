@@ -55,7 +55,7 @@ class AppController extends AppCoreController {
 			'support'=>'support@hopefulpress.com'
 		),
 		#'Project.Projectable',
-		#'Tracker.Tracker',
+		'Tracker.Tracker',
 		'Editable.Editable',
 	);
 
@@ -534,7 +534,7 @@ class AppController extends AppCoreController {
 		return $this->userEmail($site_owner_id,$subject,$template,$vars);
 	}
 
-	function track($thing=null)
+	function track($thing='Site')
 	{
 		if(!empty($this->Tracker)) { return $this->Tracker->track($thing); }
 		return false;

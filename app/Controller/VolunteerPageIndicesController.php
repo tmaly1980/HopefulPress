@@ -6,6 +6,7 @@ class VolunteerPageIndicesController extends SingletonController
 
 	function view($id=null)
 	{
+		$this->track();
 		$this->set("statuses", $this->RescueVolunteer->statuses);
 		$this->set("downloads", $this->VolunteerDownload->find('all'));
 		$this->set("pages", $this->VolunteerPage->find('all'));

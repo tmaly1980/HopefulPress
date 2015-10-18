@@ -10,6 +10,7 @@ class DonationPagesController extends SingletonController
 
 	function view($id=null)
 	{
+		$this->track();
 		if(!empty($this->request->query['initialized']))
 		{
 			$this->setSuccess("You've been successfully signed in to Stripe and can now accept donations on your website!");

@@ -9,12 +9,14 @@ class HpHtmlHelper extends CoreHtmlHelper
 
 	function link($title, $url=null, $opts=array(), $confirmMessage = false)
 	{
+		/* ALWAYS assume own site NOW!!!!
 		if(($rescuename = Configure::read("rescuename")) && is_array($url) && !isset($url['rescue']) && !$this->Rescue->dedicated())
 		{
 			$url['rescue'] = $rescuename;
 		} else if(is_array($url) && $this->Rescue->dedicated()) {
 			unset($url['rescue']); # Never show.
 		}
+		*/
 			
 		# Remove prefix if unwanted. (it's implied so we have to set proper false)
 		if(is_array($url) && isset($url['prefix']) && empty($url['prefix']) && !empty($this->request->params['prefix']))

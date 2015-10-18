@@ -86,6 +86,7 @@ class AdoptablesController extends AppController
 
 	function index()
 	{
+		$this->track();
 		$this->set("adoptables", $this->Adoptable->findAll(
 			array("Adoptable.status != 'Adopted'")
 		));
@@ -98,6 +99,7 @@ class AdoptablesController extends AppController
 
 	function stories()
 	{
+		$this->track();
 		$this->set("adoptionStories", $this->Adoptable->find('all',array('conditions'=>array("Adoptable.status = 'Adopted'","Adoptable.success_story != ''"))));
 	}
 
@@ -111,6 +113,7 @@ class AdoptablesController extends AppController
 
 	function view($id=null)
 	{
+		$this->track();
 		if(empty($id) && !empty($this->request->params['id'])) { $id =$this->request->params['id']; } 
 		if(empty($id) && !empty($this->request->named['id'])) { $id =$this->request->named['id']; }  # In case no exact route
 		if(empty($id) || !($adoptable = $this->Adoptable->read(null,$id))) { return $this->setError("No such adoptable $id",array('action'=>'index','rescue'=>$this->rescuename)); }
@@ -141,6 +144,7 @@ class AdoptablesController extends AppController
 			$adoptableCount = $this->Adoptable->count(array('status'=>'Available'));
 			$plan = $this->rescue("plan");
 			if(empty($plan)) { $plan = 'free'; }
+			# Eventually grab from  billing file...
 			$maxAdoptables = array(
 				'free'=>10,
 				'basic'=>25,
@@ -196,6 +200,7 @@ class AdoptablesController extends AppController
 
 	function adopt($id=null)
 	{
+		$this->track();
 		if(empty($id) && !empty($this->request->params['id']))
 		{
 			$id=$this->request->params['id'];
@@ -221,11 +226,13 @@ class AdoptablesController extends AppController
 
 	function foster($id)
 	{
+		$this->track();
 		$this->set("adoptable", $this->Adoptable->read(null,$id));
 	}
 
 	function sponsor($id=null)
 	{
+		$this->track();
 		if(empty($id) && !empty($this->request->params['id']))
 		{
 			$id=$this->request->params['id'];

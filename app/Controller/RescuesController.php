@@ -205,6 +205,7 @@ class RescuesController extends AppController
 
 	function view() #$hostname=null) # "home" page
 	{
+		$this->track();
 		$hostname = !empty($this->rescuename) ? $this->rescuename : null;
 
 		if(empty($hostname) || !($rescue = $this->Rescue->findByHostname($hostname)))
@@ -228,11 +229,13 @@ class RescuesController extends AppController
 
 	function about()
 	{
+		$this->track();
 		$this->set("aboutPageBios", $this->AboutPageBio->find('all',array('rescue_id'=>$this->rescue_id)));
 	}
 
 	function contact()
 	{
+		$this->track();
 		$this->set("contacts", $this->Contact->find('all',array('rescue_id'=>$this->rescue_id)));
 	}
 

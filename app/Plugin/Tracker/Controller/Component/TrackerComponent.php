@@ -4,7 +4,7 @@ App::uses("HostInfo", "Core.Lib");
 
 class TrackerComponent extends Component
 {
-	var $uses = array("Tracker.SiteVisit",'Tracker.SitePageView','Tracker.SiteShare','Tracker.MarketingVisit','Tracker.MarketingPageView','Tracker.BlogVisit','Tracker.BlogPageView','Tracker.BlogShare');
+	var $uses = array("Tracker.SiteVisit",'Tracker.SitePageView','Tracker.SiteShare','Tracker.MarketingVisit','Tracker.MarketingPageView');#,'Tracker.BlogVisit','Tracker.BlogPageView','Tracker.BlogShare');
 	var $components = array('Auth','Session');
 
 	var $ip;

@@ -6,6 +6,7 @@ class FosterPageIndicesController extends SingletonController
 
 	function view($id=null)
 	{
+		$this->track();
 		$this->set("statuses", $this->RescueFoster->statuses);
 		$this->set("downloads", $this->FosterDownload->find('all'));
 		$this->set("pages", $this->FosterPage->find('all'));

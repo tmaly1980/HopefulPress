@@ -25,6 +25,7 @@ class AdoptionPageIndicesController extends SingletonController
 
 	function view($id=null)
 	{
+		$this->track();
 		$this->set("downloads", $this->AdoptionDownload->find('all'));
 		$this->set("pages", $this->AdoptionPage->find('all'));
 		$this->set("faqs", $this->AdoptionFaq->find('all'));
