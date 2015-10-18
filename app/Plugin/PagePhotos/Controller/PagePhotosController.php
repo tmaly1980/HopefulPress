@@ -259,7 +259,7 @@ class PagePhotosController extends AppController
 		return $this->original($id);
 	}
 	
-	function image($id,$wh='300x300') # Cropped version.
+	function image($id,$wh='300x300',$crop=false) # Cropped version.
 	{
 		extract($this->vars());
 		$image = $this->{$this->modelClass}->read(null, $id);
@@ -272,10 +272,10 @@ class PagePhotosController extends AppController
 				$image[$this->modelClass]['crop_h']
 			);
 		}
-		return $this->fullimage($id,$wh);
+		return $this->fullimage($id,$wh,$crop);
 	}
 
-	function fullimage($id,$wh='300x300') # Non-cropped version
+	function fullimage($id,$wh='300x300',$crop=false) # Non-cropped version
 	{ # 
 		extract($this->vars());
 
@@ -287,7 +287,7 @@ class PagePhotosController extends AppController
 		$image = $this->{$this->modelClass}->read(null, $id);
 		if(!empty($this->request->query['fullsize'])) { $w = null; $h = null; }
 
-		return $this->Image->render($image[$this->modelClass], $w, $h);
+		return $this->Image->render($image[$this->modelClass], $w, $h, $crop);
 	}
 
 	# Allow size parameters to omit w or h, so we can fit by w or h
