@@ -38,10 +38,7 @@ class StripeBillingController extends AppController {
 		}
 		Configure::load("Stripe.billing");
 		$this->config = Configure::read("Billing");
-		$plans = array();
-		foreach($this->config['plans'] as $pid=>$pdetails) { $plans[$pid] = $pdetails['metadata']['title']; }
-		foreach($this->config['yearlyPlans'] as $pid=>$pdetails) { $plans[$pid] = $pdetails['metadata']['title']; }
-		$this->set("plans", $plans);
+		$this->set($this->config);
 		$this->request->data = $this->Rescue->read();
 	}
 
