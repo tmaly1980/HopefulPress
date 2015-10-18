@@ -390,3 +390,8 @@ body .dropdown-menu
 {
 	margin: 0px;
 }
+
+.lightbox:hover
+{
+	cursor: zoom-in;
+}
