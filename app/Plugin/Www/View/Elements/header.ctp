@@ -10,7 +10,7 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand nobr" href="/">
-	  	<img src='/www/images/logo-small.png'/>
+	  	<img src='/www/images/paw-logo-small.png'/>
 	  	Hopeful Press
 		<? if($hostname == 'blog') { ?>
 		Blog
