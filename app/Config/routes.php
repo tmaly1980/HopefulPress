@@ -217,6 +217,12 @@ if (HostInfo::hostname() == 'todo') {
 
 
 }
+
+if (HostInfo::hostname() == 'rescue') { 
+{
+	Configure::write("dev",true);
+}
+
 #Configure::write("layout","Rescue.rescue");
 
 Router::connect('/login', array('user'=>1,'controller' => 'users','action'=>'login'));
