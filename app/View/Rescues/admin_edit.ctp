@@ -128,7 +128,7 @@
 	</div>
 	<h3>Theme</h3>
 	<? Configure::load("SiteDesigns"); $themes = Configure::read("SiteDesigns.themes"); ?>
-	<?= $this->Form->thumbs("theme",array('options'=>$themes,'path'=>'/images/themes','large_path'=>'/images/themes/large')); ?>
+	<?= $this->Form->thumbs("theme",array('options'=>$themes,'path'=>'/images/themes','BROKEN_EVENT_BYPASS_IMG_BAD_URL_Xlarge_path'=>'/images/themes/large')); ?>
 
 	<h3>Colors</h3>
 	<?= $this->Form->color("color1"); ?>
