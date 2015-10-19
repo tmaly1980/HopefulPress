@@ -218,7 +218,7 @@ if (HostInfo::hostname() == 'todo') {
 
 }
 
-if (HostInfo::hostname() == 'rescue') { 
+if (HostInfo::hostname() == 'rescue') 
 {
 	Configure::write("dev",true);
 }
