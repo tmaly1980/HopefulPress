@@ -1,4 +1,4 @@
-		<h1>Grow your Helping rescues find homes<br/>for forgotten animals</h1>
+		<h1>Promote your rescue with a professional image</h1>
 		<br/>
 		<p class='medium bold'>
 			Same-day websites for just $10/mo
