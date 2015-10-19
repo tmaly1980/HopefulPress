@@ -5,12 +5,12 @@
 <? $this->assign("title_container_class","gradientbg"); ?>
 
 <div id='' class='row'>
-	<div class='col-md-6 col-md-push-6'>
+	<div class='col-md-6'>
 		<div  class='padding25'>
 			<?= $this->Html->link($this->Html->image("/rescue/images/screenshot.png", array('style'=>'border: solid 5px #999;','class'=>'width100p shadow')),"/pages/features"); ?>
 		</div>
 	</div>
-	<div class='col-md-6 col-md-pull-6 padding25'>
+	<div class='col-md-6 padding25'>
 		<?= $this->element("../Static/home_summary"); ?>
 	</div>
 </div>

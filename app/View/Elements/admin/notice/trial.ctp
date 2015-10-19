@@ -1,6 +1,6 @@
 <?
-if(!$this->Html->is_admin()) { return false; }
-$created = $current_site["Site"]["created"];
+if(!$this->Rescue->admin()) { return false; }
+$created = $rescue["Rescue"]["created"];
 $trial_days = floor((time() - strtotime($created))/(24*60*60));
 $trial_days_max = Configure::read("trial_days");
 $trial_days_percent = $trial_days/$trial_days_max*100;

@@ -30,14 +30,14 @@ class IntakeSurveysController extends WwwAppController
 		}
 
 		# XXX FIX! (or maybe cake is ok?)
-		$this->set("species", $this->IntakeSurvey->getSetValues("species"));
-		$this->set("homepageContents", $this->IntakeSurvey->getSetValues("homepage_content"));
-		$this->set("adoptionPages", $this->IntakeSurvey->getSetValues("adoption_pages"));
-		$this->set("fosterPages", $this->IntakeSurvey->getSetValues("foster_pages"));
-		$this->set("volunteerPages", $this->IntakeSurvey->getSetValues("volunteer_pages"));
-		$this->set("typesOfEmailMessages", $types=$this->IntakeSurvey->getSetValues("types_of_email_messages"));
-		$this->set("basicPages", $types=$this->IntakeSurvey->getSetValues("basic_pages"));
-		$this->set("donationFeatures", $types=$this->IntakeSurvey->getSetValues("donation_features"));
+		$this->set("species", $this->IntakeSurvey->dropdown("species"));
+		$this->set("homepageContents", $this->IntakeSurvey->dropdown("homepage_content"));
+		$this->set("adoptionPages", $this->IntakeSurvey->dropdown("adoption_pages"));
+		$this->set("fosterPages", $this->IntakeSurvey->dropdown("foster_pages"));
+		$this->set("volunteerPages", $this->IntakeSurvey->dropdown("volunteer_pages"));
+		$this->set("typesOfEmailMessages", $types=$this->IntakeSurvey->dropdown("types_of_email_messages"));
+		$this->set("basicPages", $types=$this->IntakeSurvey->dropdown("basic_pages"));
+		$this->set("donationFeatures", $types=$this->IntakeSurvey->dropdown("donation_features"));
 	}
 
 

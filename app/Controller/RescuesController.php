@@ -5,7 +5,7 @@ class RescuesController extends AppController
 
 	var $uses = array('Rescue','NewsPost','Event','PhotoAlbum','AboutPageBio','Contact');
 
-	var $globalActions = array('index','search','search_bar','rescuer_add','rescuer_edit'); # What doesn't require the rescue to be specified.
+	var $globalActions = array('signup','index','search','search_bar','rescuer_add','rescuer_edit'); # What doesn't require the rescue to be specified.
 
 	function beforeFilter()
 	{
@@ -347,6 +347,140 @@ class RescuesController extends AppController
 			$this->setWarn("Please provide your email address to process your unsubscription");
 		} 
 		$this->redirect(array('action'=>'view'));
+	}
+
+	################################################
+	public function signup($plan=null) {
+		#$this->layout = 'www';
+		#$this->theme = 'www';
+		#$this->multisite = false;
+
+		if ($this->request->is('post')) {
+			$this->Rescue->create();
+			#
+			# Allow for email duplicates between sites.... since rescue_id doesn't seem to be ready yet during signup to filter.
+			unset($this->Rescue->Owner->validate['email']['isUnique']);
+			#
+			if($visit_id = $this->Session->read("Marketing.visit_id"))
+			{
+				# Save tracking info into site; where signups come from
+				$visit = $this->MarketingVisit->read(null, $visit_id);
+				$this->request->data['Rescue']['marketing_visit_id'] = $visit_id; # This too helps.
+				if(!empty($visit)) { 
+					$keys = array('session_id','campaign_code','campaign_subcode');
+					foreach($keys as $key)
+					{
+						$this->request->data['Rescue'][$key] = 
+							$visit['MarketingVisit'][$key];
+					}
+				}
+			}
+
+			if ($this->Rescue->saveAll($this->request->data)) {
+				# Saves user account as  well!
+				$rescue = $this->Rescue->read();
+
+				# Save rescue_id to user account
+				$this->Rescue->Owner->saveField("rescue_id", $this->Rescue->id);
+
+				# Log them in.
+				$user = $this->Rescue->Owner->read();
+
+				error_log("SITE=".print_r($rescue,true));
+				error_log("USER=".print_r($user,true));
+				error_log("USER_ID=".$this->Rescue->Owner->id);
+
+				#$this->Auth->login(array('anon'=>1,'owner'=>1)); # So not tripping Auth requirements....
+
+				# Email them with info
+				$vars = array('current_site'=>$rescue, 'current_user'=>$user);
+				$this->sendUserEmail($user['Owner']['email'], "Your new website for ".$rescue['Rescue']['title'], "sites/created", $vars, 'support@hopefulpress.com');
+
+				# NOTIFY ME OF NEW SITE
+				$this->sendManagerEmail("New website {$rescue['Rescue']['title']} ({$rescue['Rescue']['hostname']})", "sites/created", $vars, 'support@hopefulpress.com');
+
+				#$this->Session->setFlash(__('The site has been created.'), 'default', array('class' => 'alert alert-success'));
+
+				# Sign in user
+				$user['User'] = $user['Owner'];
+				$this->Auth->login($user);
+				error_log("LOGGING IN as=".print_r($user,true));
+
+				# Now go to site itself.
+				#return $this->Multisite->redirect("/users/invite/$email/$invite", $rescue['Rescue']['hostname']);#sites/setup");
+				return $this->rescue_redirect("/", $rescue);
+			} else {
+				$this->setError('The site could not be created');
+			}
+		} else {
+			$this->track('Marketing'); # Page view tracked
+		}
+
+		Configure::load("Stripe.billing");
+		$this->billing = Configure::read("Billing");
+		$this->set($this->billing);
+		$this->set("plan",$plan);
+	}
+
+	function  manager_index()
+	{
+		$this->set("sites", $this->Rescue->find('all'));
+	}
+
+	function manager_disable($id)
+	{
+		if(!empty($id))
+		{
+			$this->Rescue->id = $id;
+			# Stop billing...
+			if($error = $this->StripeBilling->cancelSubscription())
+			{
+				return $this->setError($error, array('action'=>'index'));
+			}
+	
+			$this->Rescue->saveField("disabled", date('Y-m-d H:i:s'));
+			$this->setSuccess("The website has been disabled. Any recurring billing has been cancelled.", array('action'=>'index'));
+		}
+	}
+
+	function manager_add()
+	{
+		$this->setAction("manager_edit");
+	}
+
+	function manager_edit($id=null)
+	{
+		$this->Rescue->id = $id;
+		$old_site = !empty($id) ? $this->Rescue->read(null,$id) : null;
+		$owner_id = !empty($old_site['Rescue']['user_id'])  ? $old_site['Rescue']['user_id'] : null;
+		$plan = !empty($old_site['Rescue']['plan'])  ? $old_site['Rescue']['plan'] : null;
+
+		# Disable validation for Owner if empty...
+		if(empty($this->request->data['Owner']['email'])) { unset($this->request->data['Owner']); }
+
+		if(!empty($this->request->data))
+		{
+			if(!empty($this->request->data['Rescue']['plan']) && empty($plan)) { $this->request->data['Rescue']['upgraded'] = date('Y-m-d H:i:s'); }
+			if($this->Rescue->saveAll($this->request->data))
+			{
+				# If site owner has changed...
+				$new_owner_id = $this->Rescue->field("user_id");
+				$rescue = $this->Rescue->read();
+				if(!empty($new_owner_id))
+				{
+					$user = $this->User->read(null, $new_owner_id);
+					$vars = array('rescue'=>$rescue, 'current_user'=>$user);
+					$this->sendUserEmail($user['User']['email'], "Your new website for ".$rescue['Rescue']['title'], "sites/created", $vars, 'support@hopefulpress.com');
+				}
+				$this->setSuccess("Rescue saved",array('action'=>'index'));
+			} else {
+				$this->setError("Could not save site: ".$this->Rescue->errorString());
+			}
+		} 
+		if(!empty($id))
+		{
+			$this->request->data = $this->Rescue->read(null,$id);
+		}
 	}
 
 

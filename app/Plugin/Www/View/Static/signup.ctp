@@ -3,16 +3,14 @@
 <div class='row col-md-9 center'>
 	<? 
 	Configure::load("Stripe.billing");
-	$plans = Configure::read("Billing.plans");
-	# Give them an opportunity to decide on a paid plan before they try...
-	# OR give them an option with a "Free Trial" button to not fuss with costs yet.
-	# XXX We will need to have a 'trial' flag for the site,  which will trigger the trial warning if need be.
+	$billing = Configure::read("Billing");
+	extract($billing);
 	?>
 
 	<div class='alert alert-success'>
-	All of our website plans include a <b>30-DAY FREE TRIAL</b> and a <b>http://YourRescue.hopefulpress.com</b> address. No credit card required, no setup fees and no long-term contracts/obligations. Cancel any time.
+	All of our website plans include a <b>30-DAY FREE TRIAL</b> and a <b>http://YourRescue.hopefulpress.com</b> address. No credit card required, no setup fees and no long-term contracts/obligations. Cancel any time. Just choose a plan to start with below and get your site online <b>instantly!</b>
 	</div>
-	<?= $this->element("Stripe.plans",array('plans'=>$plans,'signup'=>true)); ?>
+	<?= $this->element("Stripe.plans",array('signup'=>true)); ?>
 
 	<hr/>
 

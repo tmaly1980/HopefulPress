@@ -394,7 +394,7 @@ class CoreFormHelper extends BoostCakeFormHelper
 					?>
 					"data[<?= $model ?>][<?= $field ?>]": {
 						validators: {
-							<? if($rule === true) { # AJAX ?>
+							<? if($rule === true || $rule === 1) { # AJAX ?>
 							remote: {
 								url: '/<?= !empty($this->request->params['plugin']) ? $this->request->params['plugin'].'/':"" ?><?= $this->request->params['controller'] ?>/validateField/<?= $model ?>/<?= $field ?>',
 								type: 'POST',

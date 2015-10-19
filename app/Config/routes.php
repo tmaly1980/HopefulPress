@@ -48,11 +48,11 @@ if(!HostInfo::site_specified())
 {
 	Router::connectNamed(array('rescue'));
 
-	#router::connect('/', array('plugin'=>'www','controller' => 'static', 'action' => 'index')); 
+	router::connect('/', array('plugin'=>'www','controller' => 'static', 'action' => 'index')); 
 	router::connect('/pages/*', array('plugin'=>'www','controller' => 'static', 'action' => 'view')); 
 
 	# ADOPT homepage.
-	Router::connect('/', array('controller' => 'adoptables', 'action' => 'index')); 
+	#Router::connect('/', array('controller' => 'adoptables', 'action' => 'index')); 
 	Router::connect('/adopt', array('controller' => 'adoptables', 'action' => 'index')); 
 
 	Configure::write("www",true);
@@ -65,8 +65,11 @@ if(!HostInfo::site_specified())
 	Router::connect('/websites', array('plugin'=>'www','controller' => 'static', 'action' => 'index'));
 	Router::connect('/websites/*', array('plugin'=>'www','controller' => 'static', 'action' => 'view'));
 
-	Router::connect('/websites/contact', array('plugin'=>'www','controller' => 'contact_requests', 'action' => 'add'));
-	Router::connect('/websites/consult', array('plugin'=>'www','controller' => 'intake_surveys', 'action' => 'add'));
+	Router::connect('/contact', array('plugin'=>'www','controller' => 'contact_requests', 'action' => 'add'));
+	Router::connect('/consult', array('plugin'=>'www','controller' => 'intake_surveys', 'action' => 'add'));
+
+	Router::connect('/signup', array('controller' => 'rescues', 'action' => 'signup'));
+	Router::connect('/signup/*', array('controller' => 'rescues', 'action' => 'signup'));
 
 	#Configure::write("favicon", "/www/images/logo.ico");
 	#Configure::write("rss", "/blog/posts/index.rss");
@@ -87,8 +90,6 @@ if(!HostInfo::site_specified())
 	Router::connect('/blog', array('plugin'=>'blog','controller' => 'posts', 'action' => 'index'));
 	Router::connect('/pages/*', array('plugin'=>'www','controller' => 'static', 'action' => 'view'));
 
-	Router::connect('/signup', array('controller' => 'sites', 'action' => 'signup'));
-	Router::connect('/signup/*', array('controller' => 'sites', 'action' => 'signup'));
 
 	#Router::connect('/:ref', array('plugin'=>'www','controller' => 'static', 'action' => 'view','home'),array('ref'=>'r\d+'));
 	# Not very meaningful as a weird code

@@ -35,14 +35,15 @@
           		<li><a href="/">Home</a></li>
 			-->
           		<li><a href="/pages/features">Features</a></li>
-          		<li><a class='red bold' href="/pages/demo" target="_new">Live Demo</a></li>
+          		<li><a class='red bold' href="/pages/demo" target="_new">Example Website</a></li>
+          		<li><a class='' href="/pages/customers" target="">Existing Customers</a></li>
 			<!--
           		<li><a href="/pages/faq">FAQ</a></li>
           		<li><a href="/pages/designs">Designs</a></li>
 			-->
           		<li><a href="/pages/signup">Pricing &amp; Signup</a></li>
           		<li><a href="/pages/about">About Us</a></li>
-          		<li><a href="/contact">Contact Us</a></li>
+          		<li><a href="/consult">Contact Us</a></li>
 			<!--
           		<li>
 				<div class='padding5'>

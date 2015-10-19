@@ -1,11 +1,6 @@
 <? $this->start("title_controls"); ?>
-<? if(!empty($freetrial)) { # Only difference. Which button  text works better???? ?>
+	<b>Try it out today!</b>
 	<?= $this->Html->link("Free Trial", "/signup/trial:1",array('class'=>'btn btn-success')); ?>
-<? } else { ?>
-	<b>30-Day Free Trial</b>
-	&nbsp;
-	<?= $this->Html->link("Sign Up Now", "/signup/trial:1",array('class'=>'btn btn-success')); ?>
-<? } ?>
 <? $this->end("title_controls"); ?>
 <? $this->assign("page_title", "Website Features"); ?>
 <div class='features col-md-9 center'>
@@ -107,27 +102,7 @@
 
 	<hr/>
 
-	<h2>Like what you see?</h2>
-	<div  class='row center_align'>
-		<div class='col-md-4'>
-			<?= $this->Html->link("Pricing", "/pages/pricing",array('class'=>'btn btn-primary btn-lg')); ?>
-		</div>
-		<div class='col-md-4 padding10'>
-			<?= $this->Html->link("Live Demo", "/pages/demo",array('class'=>'red bold medium')); ?>
-		</div>
-		<div class='col-md-4'>
-		<? if(!empty($freetrial)) { # Only difference. Which button  text works better???? ?>
-			<?= $this->Html->link("Free Trial", "/signup",array('class'=>'btn btn-success btn-lg')); ?>
-			<br/>
-			<br/>
-
-		<? } else { ?>
-			<?= $this->Html->link("Sign Up Now", "/signup",array('class'=>'btn btn-success btn-lg')); ?>
-			<br/>
-			<b>30-Day Free Trial</b>
-		<? } ?>
-		</div>
-	</div>
+	<?= $this->element("Www.cta_footer"); ?>
 
 <?/*
 

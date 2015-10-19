@@ -1,3 +1,9 @@
+<? 
+Configure::load("Stripe.billing");
+$billing = Configure::read("Billing");
+extract($billing);
+if(empty($plan)) { $plan  = null; }
+?>
 <div class='row'>
 
 	<? foreach($planList as $planId=>$enabled) { if(!$enabled) { continue; }; $planDetails = $plans[$planId]; ?>
@@ -25,7 +31,7 @@
 			<? if(!empty($plan) && $planId == $plan && !$disabled) { ?>
 				<b>Current Plan</b>
 			<? } else if (!empty($signup)) { ?>
-				<?= $this->Html->link("Free Trial ".$this->Html->g("chevron-right"), "/signup/$planId",array('class'=>'btn btn-success')); ?>
+				<?= $this->Html->link("Free Trial ".$this->Html->g("chevron-right"), "/signup/$planId",array('class'=>'btn btn-primary')); ?>
 			<? } else { ?>
 				<?= $this->Html->add("Monthly Plan", array('action'=>'upgrade',$planId),array('class'=>'btn-primary')); ?>
 			<? } ?>
@@ -39,6 +45,8 @@
 			<? if($yearlyPlanId == $plan) { ?>
 			<br/>
 				<b>Current Plan</b>
+			<? } else if (!empty($signup)) { ?>
+				<?= $this->Html->link("Free Trial ".$this->Html->g("chevron-right"), "/signup/$yearlyPlanId",array('class'=>'btn btn-success')); ?>
 			<? } else { ?>
 				<?= $this->Html->add("Annual Plan", array('action'=>'upgrade',$yearlyPlanId), array('class'=>'btn-success')); ?>
 			<?  } ?>

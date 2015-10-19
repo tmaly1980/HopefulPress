@@ -254,12 +254,22 @@ class AppController extends AppCoreController {
 			$notices[] = 'trial';
 		}
 
+		# If created within 24 hours, show hint at settings/edit page.
+		$created = $this->site("created");
+		if(strtotime($created) > strtotime("24 hours ago"))
+		{
+			$notices[] = 'settings';
+		}
+
+		/*
 		$design = $this->_viewVars['siteDesign'];
 
 		if(empty($design['modified']) || $design['created'] == $design['modified']) # Never changed any part of design
 		{
 			$notices[] = 'design';
 		}
+		*/
+
 		$this->set("adminNotices", $notices);
 	}
 
@@ -668,6 +678,8 @@ class AppController extends AppCoreController {
 			$this->set("nav", $nav);
 
 			Configure::write("site_title", $rescue['Rescue']['title']);
+
+			$this->loadAdminNotices(); # AFTER design since we may want to mention changing it.
 		}
 	}
 
@@ -740,30 +752,46 @@ class AppController extends AppCoreController {
 	function dedicated_redirect()
 	{
 		if(!$this->rescue_dedicated()) { return false; } # Not on site or not dedicated.
+		$url = $this->request->params;
+		# Clean up.
+		unset($url['rescue']);
+		unset($url['orig_action']);
+		unset($url['named']); # Redundant.
+
+		# Fix 'pass'
+		if(!empty($url['pass']))
+		{
+			foreach($url['pass'] as $p)
+			{
+				$url[] = $p;
+			}
+			unset($url['pass']);
+		}
+		return $this->rescue_redirect($url, $this->rescue);
+	}
+
+	function rescue_redirect($url="/", $rescue=null)
+	{
 
 		# Go to dedicated site if not currently.
 		list($hostname,$domain) = HostInfo::hostparts();
-		if($hostname != $this->rescue['Rescue']['hostname'] &&
-			$domain != $this->rescue['Rescue']['domain'])
+		if($hostname != $rescue['Rescue']['hostname'] &&
+			$domain != $rescue['Rescue']['domain'])
 		{ # We know the rescue but we're clearly not on a hostname/domain of theirs.
-			$url = $this->request->params;
-			$url['?'] = array('HOPEFULPRESS'=>session_id());
-			# Clean up.
-			unset($url['rescue']);
-			unset($url['orig_action']);
-			unset($url['named']); # Redundant.
 
-			# Fix 'pass'
-			if(!empty($url['pass']))
+			# TRANSFER SESSION, ie user logged in.
+			if(is_string($url))
 			{
-				foreach($url['pass'] as $p)
-				{
-					$url[] = $p;
+				if(preg_match("/\?/", $url)) {
+					$url  .= '&HOPEFULPRESS='.session_id();
+				} else {
+					$url  .= '?HOPEFULPRESS='.session_id();
 				}
-				unset($url['pass']);
+			} else if (is_array($url)) {
+				$url['?'] = array('HOPEFULPRESS'=>session_id());
 			}
 
-			$host = $this->hostname($this->rescue);
+			$host = $this->hostname($rescue);
 			$urlstring = Router::url($url);
 			error_log("GOING TO $host $urlstring,  URL=".print_r($url,true));
 
