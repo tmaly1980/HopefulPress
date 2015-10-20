@@ -187,6 +187,13 @@ body {
 
 @media (max-width: 767px)
 {
+	body #main #navbar  .nav .dropdown > a,
+	.navbar  .nav .dropdown > a
+	{
+		padding-top: 1em;
+		padding-bottom: 1em;
+	}
+
 	.navbar  .nav .dropdown-menu
 	{
 		position: relative;
