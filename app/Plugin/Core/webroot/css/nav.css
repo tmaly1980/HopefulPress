@@ -193,12 +193,18 @@ body {
 		padding-top: 1em;
 		padding-bottom: 1em;
 	}
+	
+	.navbar  .nav .dropdown
+	{
+		position: relative;
+		z-index: 0;
+	}
 
 	.navbar  .nav .dropdown-menu
 	{
 		position: relative;
 		float: none;
-		z-index: initial;
+		z-index: 1;
 	}
 	.navbar .nav .dropdown-menu > li
 	{
