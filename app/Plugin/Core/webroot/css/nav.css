@@ -187,12 +187,13 @@ body {
 
 @media (max-width: 767px)
 {
-	#navbar  .nav .dropdown-menu
+	.navbar  .nav .dropdown-menu
 	{
 		position: relative;
 		float: none;
+		z-index: inherit;
 	}
-	#navbar .nav .dropdown-menu > li
+	.navbar .nav .dropdown-menu > li
 	{
 		margin-left: 2em; 
 	}

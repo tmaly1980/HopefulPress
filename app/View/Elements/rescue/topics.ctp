@@ -61,7 +61,7 @@ $foster_summary = !empty($rescueHomepage['RescueHomepage']['foster_summary']) ? 
 				Donations are not currently enabled.
 				<?= $this->Html->add("Enable donations", array('plugin'=>'donations','controller'=>'donations')); ?>
 		<? } else { ?>
-		<?= $this->Html->link($donate_img, "/donate",array('class'=>'block font64 center_align')); ?>
+		<?= $this->Html->link($donate_img, array('plugin'=>'donations','controller'=>'donations'),array('class'=>'block font64 center_align')); ?>
 		<p  id="RescueHomepage_DonateSummary">
 			<?= $donate_summary ?>
 		</p>
