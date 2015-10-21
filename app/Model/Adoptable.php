@@ -32,7 +32,7 @@ class Adoptable extends AppModel
 	);
 
 	var $belongsTo = array(
-		'Owner'=>array('className'=>'Adopter','foreignKey'=>'adopter_id'),
+		'Owner'=>array('className'=>'Adopter','foreignKey'=>'adopter_id','conditions'=>array('Owner.status'=>'Approved')),
 		'AdoptablePhoto'=>array('className'=>'AdoptablePhoto'),
 		'Rescue'=>array('className'=>'Rescue'),
 		'SuccessStoryPhoto'=>array('className'=>'SuccessStoryPhoto','foreignKey'=>'success_story_photo_id'),

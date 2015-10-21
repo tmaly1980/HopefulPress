@@ -1,6 +1,6 @@
 		<div class='social-icons'>
 		<? if(!empty($nav['donationsEnabled'])) { ?>
-		        <?= $this->Html->link("Donate", "/donation", array('class'=>'btn btn-warning controls')); ?>
+		        <?= $this->Html->link("Donate", array('plugin'=>'donation','controller'=>'donation_pages','action'=>'view'), array('class'=>'btn btn-warning controls')); ?>
 		<? } ?>
 
 		<? if($fb = $rescue['Rescue']['facebook_url']) { ?>

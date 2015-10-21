@@ -22,7 +22,7 @@ $foster_summary = !empty($rescueHomepage['RescueHomepage']['foster_summary']) ? 
 
 ?>
 <div id='topics' class='row row-centered margintop25'>
-	<? if(!empty($nav['adoptionEnabled']) || $this->Html->can_edit()) { ?>
+	<? if(!empty($nav['adoptionEnabled']) || $this->Html->admin()) { ?>
 	<div class='col-md-3 padding0 col-centered'>
 	<div class='<?= empty($nav['adoptionEnabled']) ? "dashed margin5 alert alert-info" : "widget" ?>'>
 	<div>
@@ -49,7 +49,7 @@ $foster_summary = !empty($rescueHomepage['RescueHomepage']['foster_summary']) ? 
 	</div>
 	<? } ?>
 
-	<? if(!empty($nav['donationsEnabled']) || $this->Html->can_edit()) { ?>
+	<? if(!empty($nav['donationsEnabled']) || $this->Html->admin()) { ?>
 	<div class='col-md-3 padding0 col-centered'>
 	<div class='<?= empty($nav['donationsEnabled']) ? "dashed margin5 alert alert-info" : "widget" ?>'>
 	<div>
@@ -59,15 +59,15 @@ $foster_summary = !empty($rescueHomepage['RescueHomepage']['foster_summary']) ? 
 		<div class='clear'></div>
 		<? if(empty($nav['donationsEnabled'])) { ?>
 				Donations are not currently enabled.
-				<?= $this->Html->add("Enable donations", array('plugin'=>'donations','controller'=>'donations')); ?>
+				<?= $this->Html->add("Enable donations", array('admin'=>1,'plugin'=>'donations','controller'=>'donation_pages','action'=>'enable')); ?>
 		<? } else { ?>
-		<?= $this->Html->link($donate_img, array('plugin'=>'donations','controller'=>'donations'),array('class'=>'block font64 center_align')); ?>
+		<?= $this->Html->link($donate_img, array('plugin'=>'donations','controller'=>'donation_pages','action'=>'view'),array('class'=>'block font64 center_align')); ?>
 		<p  id="RescueHomepage_DonateSummary">
 			<?= $donate_summary ?>
 		</p>
 		<? if(empty($editable)) { ?>
 		<div align='center'>
-			<?= $this->Html->link("Donate Now", array('plugin'=>'donations','controller'=>'donations'), array('class'=>'btn theme')); ?>
+			<?= $this->Html->link("Donate Now", array('plugin'=>'donations','controller'=>'donation_pages','action'=>'view'), array('class'=>'btn theme')); ?>
 		</div>
 		<? } ?>
 
@@ -78,7 +78,7 @@ $foster_summary = !empty($rescueHomepage['RescueHomepage']['foster_summary']) ? 
 	</div>
 	<? } ?>
 
-	<? if(!empty($nav['volunteerEnabled']) || $this->Html->can_edit()) { ?>
+	<? if(!empty($nav['volunteerEnabled']) || $this->Html->admin()) { ?>
 	<div class='col-md-3 padding0 col-centered'>
 	<div class='<?= empty($nav['volunteerEnabled']) ? "dashed margin5 alert alert-info" : "widget" ?>'>
 	<div>
@@ -105,7 +105,7 @@ $foster_summary = !empty($rescueHomepage['RescueHomepage']['foster_summary']) ? 
 	</div>
 	<? } ?>
 
-	<? if($rescue && (!empty($nav['fosterEnabled']) || $this->Html->can_edit())) { ?>
+	<? if($rescue && (!empty($nav['fosterEnabled']) || $this->Html->admin())) { ?>
 	<div class='col-md-3 padding0 col-centered'>
 	<div class='<?= empty($nav['fosterEnabled']) ? "dashed margin5 alert alert-info" : "widget" ?>'>
 	<div>
@@ -134,7 +134,7 @@ $foster_summary = !empty($rescueHomepage['RescueHomepage']['foster_summary']) ? 
 	</div>
 	<? } ?>
 </div>
-<? if(!empty($editable) && $this->Html->can_edit()) { ?>
+<? if(!empty($editable) && $this->Html->admin()) { ?>
 <script>
 <? if(!empty($nav['adoptionEnabled'])) { ?>
 $('#RescueHomepage_AdoptTitle').inline_edit({plugin: "rescue", prefix: "admin", link: '', inline: 'after'});

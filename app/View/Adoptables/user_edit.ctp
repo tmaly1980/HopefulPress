@@ -186,7 +186,7 @@
 
 		-->
 
-		<?= $this->Form->input("Owner.status", array('label'=>'Adoption Status','note'=>"Make sure you change the adoptable's status as well",'default'=>'Adopted','options'=>$adoptionStatuses,'empty'=>' - ')); # Let stay pending if so... ?>
+		<?#= $this->Form->input("Owner.status", array('label'=>'Adoption Status','note'=>"Make sure you change the adoptable's status as well",'default'=>'Adopted','options'=>$adoptionStatuses,'empty'=>' - ')); # Let stay pending if so... ?>
 </div>
 
 </div>

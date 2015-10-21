@@ -112,6 +112,7 @@ class PhotoAlbumsController extends AppController {
 
 				# Vars for view file
 				$this->set("photo", $photo['Photo']);
+				$this->set("edit", true);
 				$this->set("ix", $ix); # For rendering....
 				return $this->Json->render("../PhotoAlbums/view_photo");
 			}

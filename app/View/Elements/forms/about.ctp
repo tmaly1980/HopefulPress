@@ -16,7 +16,7 @@ if(!isset($required)) { $required = 1; }
 			<?= $this->Form->input("{$model}.cell_phone", array('div'=>'col-md-3')); ?>
 			<?= $this->Form->input("{$model}.work_phone", array('div'=>'col-md-3')); ?>
 			<?= $this->Form->input("{$model}.best_time_to_call", array('div'=>'col-md-3')); ?>
-			<?= $this->Form->input("{$model}.email", array('required'=>$required,'div'=>'col-md-6')); ?>
+			<?= $this->Form->input("{$model}.email", array('type'=>'email','required'=>$required,'div'=>'col-md-6')); ?>
 		</div>
 		<div class='row'>
 			<?= $this->Form->input("{$model}.address", array('required'=>$required,'label'=>'Street address','div'=>'col-md-6')); ?>

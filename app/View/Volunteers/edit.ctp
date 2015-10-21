@@ -37,7 +37,7 @@ $id = !empty($this->request->data['Volunteer']['id']) ? $this->request->data['Vo
 		<?= nl2br($volunteerForm['VolunteerForm']['introduction']) ?>
 	</p>
 
-	<?= $this->Form->create("Volunteer"); ?>
+	<?= $this->Form->create("Volunteer",array('url'=>array('controller'=>'volunteers','action'=>'add'))); ?>
 		<?= $this->Form->hidden("id"); ?>
 
 		<?= $this->element("forms/admin_status"); ?>

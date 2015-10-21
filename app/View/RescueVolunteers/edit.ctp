@@ -34,7 +34,7 @@ if(false) {#!$this->Rescue->dedicated()) { # Will have to figure out how to hand
 		<?= nl2br($volunteerForm['VolunteerForm']['introduction']) ?>
 	</p>
 
-	<?= $this->Form->create("RescueVolunteer"); ?>
+	<?= $this->Form->create("RescueVolunteer",array('url'=>array('controller'=>'rescue_volunteers','action'=>'add'))); ?>
 		<?= $this->Form->hidden("RescueVolunteer.id"); ?>
 		<?= $this->Form->hidden("Volunteer.id"); ?>
 

@@ -34,7 +34,7 @@ if(false) {#!$this->Rescue->dedicated()) { # Will have to figure out how to hand
 		<?= nl2br($fosterForm['FosterForm']['introduction']) ?>
 	</p>
 
-	<?= $this->Form->create("RescueFoster"); ?>
+	<?= $this->Form->create("RescueFoster",array('url'=>array('controller'=>'rescue_fosters','action'=>'add'))); ?>
 		<?= $this->Form->hidden("RescueFoster.id"); ?>
 		<?= $this->Form->hidden("Foster.id"); ?>
 
