@@ -1,5 +1,5 @@
 <? $ix = !empty($this->request->data['ix']) ? $this->request->data['ix'] : 0; ?>
-<? if(!empty($photo['Photo'])) { $photo = $photo['Photo']; } ?>
+<? if(!empty($photo['Photo'])) { $photo = $photo['Photo']; } # ... ?>
 <? if(!empty($photo['filename'])) { # Skip broken/bogus pics ?>
 <div id="Photo_<?= $photo['id'] ?>" class='left margintop5 marginright15 height150 relative'>
 	<?= $this->Form->hidden("Photo.$ix.id", array('value'=>$photo['id'])); ?>
