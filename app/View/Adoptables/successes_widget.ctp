@@ -14,9 +14,9 @@
 	{
 		$imgurl = array('controller'=>'success_story_photos','action'=>'thumb',$story['Adoptable']['success_story_photo_id'],'200x200',1);
 	}
-	else if(!empty($story['Adoptable']['rescue_photo_id']))
+	else if(!empty($story['Adoptable']['adoptable_photo_id']))
 	{
-		$imgurl = array('controller'=>'adoptable_photos','action'=>'thumb',$story['Adoptable']['rescue_photo_id'],'200x200',1);
+		$imgurl = array('controller'=>'adoptable_photos','action'=>'thumb',$story['Adoptable']['adoptable_photo_id'],'200x200',1);
 	}
 	else if(!empty($story['Photos'][0]['id']))
 	{

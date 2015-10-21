@@ -147,7 +147,7 @@
 
 	<div class='row'>
 		<div class='col-md-4'>
-			<?= $this->element("PagePhotos.edit",array('modelClass'=>'Adoptable.SuccessStoryPhoto')); ?>
+			<?= $this->element("PagePhotos.edit",array('parentClass'=>'Adoptable','photoModel'=>'SuccessStoryPhoto')); ?>
 		</div>
 		<div class='col-md-8'>
 			<?= $this->Form->input("success_story",array('rows'=>5)); ?>
