@@ -61,9 +61,16 @@ if(false) {#!$this->Rescue->dedicated()) { # Will have to figure out how to hand
 	</div>
 
 	<hr/>
+	<div class='row'>
+		<? if(!empty($this->request->data['Volunteer']['id'])) { ?>
+		<div class='col-md-6'>
+			<?= $this->Html->delete("Delete volunteer", array('action'=>'delete', $this->request->data['Volunteer']['id']),array('confirm'=>'Are you sure you want to remove this volunteer? Once it is deleted it cannot be recovered')); ?>
+		</div>
+		<? } ?>
 
-	<div class='right_align'>
+	<div class='col-md-6 right_align'>
 		<?= $this->Form->save(!empty($id)?"Update Application":"Submit Application",array('cancel'=>false)); ?>
+	</div>
 	</div>
 
 		<?= $this->Form->end(); ?>
