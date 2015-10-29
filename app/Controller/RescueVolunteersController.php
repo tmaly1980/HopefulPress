@@ -167,6 +167,12 @@ class RescueVolunteersController extends AppController #UsersController # Easy i
 		$this->set("statuses", $this->{$this->rescueThing}->statuses);
 	}
 
+	function admin_delete($id)
+	{
+		$this->RescueVolunteer->delete($id);
+		return $this->setSuccess("The volunteer/application has been deleted", array('action'=>'index'));
+	}
+
 	function admin_index()
 	{
 		$this->set("{$this->thing}s", $this->{$this->rescueThing}->find('all',array('conditions'=>array("{$this->rescueThing}.status"=>'Active'))));

@@ -10,7 +10,14 @@
 	<div id="InviteCheckbox" style="<?= $this->request->data['Volunteer']['status'] != 'Active' ? "display:none;":"" ?>">
 	<?= $this->Form->input("invite",array('label'=>'Send account sign in email','type'=>'checkbox')); ?>
 	</div>
-	<?= $this->Form->save("Update",array('cancel_js'=>"$.dialogclose();")); ?>
+	<div class='row'>
+		<? if(!empty($this->request->data['Volunteer']['id'])) { ?>
+		<div class='col-md-6'>
+			<?= $this->Html->delete("Delete volunteer", array('action'=>'delete', $this->request->data['Volunteer']['id']),array('confirm'=>'Are you sure you want to remove this volunteer? Once it is deleted it cannot be recovered')); ?>
+		</div>
+		<? } ?>
+		<?= $this->Form->save("Update",array('div'=>'col-md-6 right_align','cancel_js'=>"$.dialogclose();")); ?>
+	</div>
 <?= $this->Form->end(); ?>
 </div>
 <script>
