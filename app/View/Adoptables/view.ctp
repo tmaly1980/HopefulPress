@@ -31,9 +31,10 @@ $this->assign("browser_title", $title_string);
 $this->assign("meta_description", $adoptable['Adoptable']['biography']);
 
 $statusClasses = array(
+	'Not Available Yet'=>'btn-info',
 	'Available'=>'btn-success',
 	'Pending Adoption'=>'btn-warning',
-	'Adopted'=>'btn-primary'
+	'Adopted'=>'btn-warning'
 );
 $status = $adoptable['Adoptable']['status'];
 $statusClass = $statusClasses[$status];
@@ -82,6 +83,8 @@ $statusClass = $statusClasses[$status];
 <div align='center'>
 	<? if($status == 'Available') { ?>
 		<?= $this->Html->link("Adopt Me", array('action'=>'adopt','id'=>$id), array('class'=>'controls btn btn-primary btn-lg bold')); ?>
+	<? } ?>
+	<? if(!in_array($status,array('Adopted','List','Deceased'))) { ?>
 		<? if(!empty($rescue['Rescue']['always_enable_sponsorship']) || !empty($adoptable['Adoptable']['enable_sponsorship'])) { ?>
 		&nbsp;
 		&nbsp;
