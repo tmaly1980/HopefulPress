@@ -1,5 +1,5 @@
 <? $animal = "adoptable" ; ?>
-<? $this->assign("page_title", "Find your next companion animal"); ?>
+<? $this->assign("page_title", "Find Your Next Family Member"); ?>
 <? $this->start("title_controls"); ?>
 <? if($this->Html->me() && (!empty($rescuename) || ($rescuename = $this->Html->user("Rescue.hostname")))) { ?>
 	<?= $this->Html->add("Add an $animal", array('user'=>1,'action'=>'edit')); ?>
