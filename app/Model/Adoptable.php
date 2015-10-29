@@ -12,7 +12,7 @@ class Adoptable extends AppModel
 	var $genders = array('Male','Female');
 	var $adult_sizes = array('Small','Medium','Large');
 	var $age_groups = array('Baby','Youth','Young Adult','Adult','Senior'); #  Lifespan varies so much it's easier to just ask
-	var $statuses = array('Not Available Yet','Retreived','Pending Adoption','Adopted','Lost','Deceased');
+	var $statuses = array('Not Available Yet','Available','Retreived','Pending Adoption','Adopted','Lost','Deceased');
 	var $sanctuary_statuses = array('Featured','Private');
 	var $energy_levels = array('','Low','Medium','High');
 
