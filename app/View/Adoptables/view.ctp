@@ -82,7 +82,7 @@ $statusClass = $statusClasses[$status];
 <div align='center'>
 	<? if($status == 'Available') { ?>
 		<?= $this->Html->link("Adopt Me", array('action'=>'adopt','id'=>$id), array('class'=>'controls btn btn-primary btn-lg bold')); ?>
-		<? if(!empty($adoptable['Adoptable']['enable_sponsorship'])) { ?>
+		<? if(!empty($rescue['Rescue']['always_enable_sponsorship']) || !empty($adoptable['Adoptable']['enable_sponsorship'])) { ?>
 		&nbsp;
 		&nbsp;
 			<?= $this->Html->link(!empty($rescue['Rescue']['sponsor_label']) ? $rescue['Rescue']['sponsor_label'] : "Sponsor Me", array('action'=>'sponsor','id'=>$id), array('class'=>'controls btn btn-warning btn-lg')); ?>

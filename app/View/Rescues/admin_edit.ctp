@@ -108,6 +108,8 @@
 <div id='donations' class='tab-pane'>
 	<?= $this->Form->input_group("paypal_email",array('type'=>'email','size'=>30,'before'=>$this->Html->fa('gift'),'note'=>'To enable donations, please provide your PayPal email')); ?>
 	<?= $this->Form->input("sponsor_label",array('size'=>24,'label'=>'Button text for sponsoring','default'=>'Sponsor Me','note'=>'When you enable sponsorship for an adoptable, they will click on a button with this wording')); ?>
+	<?= $this->Form->input("always_enable_sponsorship"); ?>
+	<div class='alert alert-info'>Enable this so all adoptables always have a 'Sponsor Me' button. You can still enable them on a case-by-case basis</div>
 </div>
 <div id='mailinglist' class='tab-pane'>
 	<?= $this->element("../Rescues/rescuer_edit_mailinglist"); ?>

@@ -117,16 +117,18 @@
 </div>
 
 <div id='sponsorship' class='tab-pane'>
-	<div class='alert alert-info'>
-		By enabling this animal's sponsorship, visitors will be able to donate to this animal's extraordinary needs via a 'Sponsor Me' button.
-	</div>
 	<? if(empty($nav['donationsEnabled'])) { ?>
 	<div class='alert alert-warning'>
 		Please add your PayPal email to your <?=$this->Html->link("rescue's account page",array('controller'=>'rescues','action'=>'edit','#'=>'donations')); ?> to enable sponsorships and donations.
 	</div>
 	<? } else { ?>
-	<?= $this->Form->input("enable_sponsorship",array('id'=>"EnableSponsorship")); ?>
-		<div id="SponsorshipDetails" style="<?= empty($this->request->data['Adoptable']['enable_sponsorship']) ? "display:none;":"" ?>">
+	<? if(empty($rescue['Rescue']['always_enable_sponsorship'])) { ?>
+	<div class='alert alert-info'>
+		By enabling this animal's sponsorship, visitors will be able to donate to this animal's extraordinary needs via a 'Sponsor Me' button.
+	</div>
+		<?= $this->Form->input("enable_sponsorship",array('id'=>"EnableSponsorship")); ?>
+	<? } ?>
+		<div id="SponsorshipDetails" style="<?= empty($rescue['Rescue']['always_enable_sponsorship']) && empty($this->request->data['Adoptable']['enable_sponsorship']) ? "display:none;":"" ?>">
 			<?= $this->Form->input("sponsorship_details", array('label'=>'Specific Needs/Details','tip'=>"What are the extraordinary needs and expenses of this $animal?")); ?>
 			<div class='alert alert-info'>
 			These details will be listed on the donation page alongside the animal's main picture after someone clicks on 'Sponsor Me'.
