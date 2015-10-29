@@ -42,6 +42,13 @@ class AdoptersController extends AppController
 		$this->set("statuses", $this->Adopter->dropdown('statuses'));
 	}
 
+	function user_delete($id)
+	{
+		$this->Adopter->delete($id);
+		return $this->setSuccess("The adoption application has been deleted", array('action'=>'index'));
+	}
+
+
 	function user_index()
 	{
 		$this->set("received", $this->Adopter->find('all',array('conditions'=>array('Adopter.status'=>'Received'))));

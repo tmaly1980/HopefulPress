@@ -218,7 +218,9 @@ Configure::write('Routing.prefixes', array('user','admin','rescuer','volunteer',
  */
 	Configure::write('Session', array(
 		'cookie' => "HOPEFULPRESS",
-		'defaults' => 'php'
+		'defaults' => 'php',
+		'cookieTimeout'=>60*60*24*365,
+		'timeout'=>60*60*24*365,
 	));
 
 /**

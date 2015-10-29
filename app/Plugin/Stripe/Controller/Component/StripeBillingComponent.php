@@ -69,6 +69,8 @@ class StripeBillingComponent extends Component
 
 		# Passing plan to the customer object will ADD a new subscription, NOT replace it...
 
+		# XXX this double charges as 'plan' is passed to customer call.
+
 		$customer = $this->customer($custId,$data); # Create if needed.
 		if(is_string($customer))
 		{
@@ -76,6 +78,7 @@ class StripeBillingComponent extends Component
 		}
 		$custId = $customer['id'];
 		$this->controller->site('stripe_id',$custId); # Save...
+
 
 		$sub = $this->subscription($customer,$subId,array('plan'=>$data['plan']));
 		if(is_string($sub))
