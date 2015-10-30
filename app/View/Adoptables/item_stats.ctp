@@ -2,10 +2,12 @@
 			$stats = array();
 			if(!empty($adoptable['Adoptable']['breed'])) { 
 				$breed = $adoptable['Adoptable']['breed'];
-				if(!empty($adoptable['Adoptable']['breed2'])) {
-					$breed .= "/".$adoptable['Adoptable']['breed2'];
-				} else if (!empty($adoptable['Adoptable']['mixed_breed'])) { 
-					$breed .= " (mix)";
+				if (!empty($adoptable['Adoptable']['mixed_breed'])) { 
+					if(!empty($adoptable['Adoptable']['breed2'])) {
+						$breed .= "/".$adoptable['Adoptable']['breed2'];
+					} else { 
+						$breed .= " (mix)";
+					}
 				}
 				$stats[] = $breed;
 			}
