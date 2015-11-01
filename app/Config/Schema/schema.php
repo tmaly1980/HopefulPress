@@ -1,6 +1,4 @@
 <?php 
-# SET MY ACCOUNT/PASSWORD:
-# INSERT INTO users SET email='tomas@hopefulpress.com', first_name = 'Tomas', last_name = 'Maly', manager = 1, password='e6a5472d23cce177738cacbf7b1b80d17ef2cea1dcfd2c8c3d17ed3400bac510';
 class AppSchema extends CakeSchema {
 
 	public $users = array(

@@ -1,6 +1,9 @@
 # User specific & automatically generated files #
 #################################################
-#/app/Config/database.php
+/app/Config/database.php
+/app/Plugin/Stripe/Config/bootstrap.php
+/app/Plugin/Dns/Config/domain.php
+/app/Plugin/Donation/Config/bootstrap.php
 app/webroot/uploads/*
 /app/tmp
 /logs
