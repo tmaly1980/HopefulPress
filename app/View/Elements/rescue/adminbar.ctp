@@ -3,11 +3,8 @@
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
+      <button type="button" class="padding0 navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar">
+      	<?= $this->Html->g("cog btn btn-primary"); ?>
       </button>
       <? $logo = !empty($rescue['RescueLogo']['id']) ? $this->Html->image("/rescue_logos/image/{$rescue['RescueLogo']['id']}/x24",array('class'=>'left paddingright10')) : null; ?>
       <?= $this->Html->link($logo.$rescue['Rescue']['title'], array('plugin'=>null,'prefix'=>false,'controller'=>'rescues','action'=>'view'),array('class'=>'navbar-brand')); ?>
