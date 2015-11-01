@@ -4,7 +4,7 @@
 /app/Plugin/Stripe/Config/bootstrap.php
 /app/Plugin/Dns/Config/domain.php
 /app/Plugin/Donation/Config/bootstrap.php
-/app/Plugin/Geo/worldcitiespop.txt
+/app/Plugin/Geo/*.txt
 app/webroot/uploads/*
 /app/tmp
 /logs
